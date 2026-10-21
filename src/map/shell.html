@@ -141,7 +141,8 @@ body.m3d .attr{bottom:auto;top:calc(112px + env(safe-area-inset-top,0px));left:a
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12131A;--surface:#1B1D27;--surface-2:#242733;--glass:#1B1D27;--ink:#FFFDF5;--ink-2:#C9C5B8;--line:#FFFDF5;--forest:#FFD43B;--on-forest:#111;--shadow:3px 3px 0 #000;--bd:2px solid #FFFDF5}}
 :root[data-theme="dark"]{--bg:#12131A;--surface:#1B1D27;--surface-2:#242733;--glass:#1B1D27;--ink:#FFFDF5;--ink-2:#C9C5B8;--line:#FFFDF5;--forest:#FFD43B;--on-forest:#111;--shadow:3px 3px 0 #000;--bd:2px solid #FFFDF5}
 .brand,.search .box,.modes,.moods button,.layers,.ctrl button,.bar,.attr,.sugg,.l3{backdrop-filter:none;border:var(--bd)}
-.brand{background:var(--yellow);color:#111;border:2px solid #111;font-weight:900;font-size:12px;transform:rotate(-1.5deg)}.brand svg{color:#111}
+.brand{background:var(--yellow);color:#111;border:2px solid #111;font-weight:900;font-size:11px;box-sizing:border-box;height:46px;overflow:hidden}
+.moods{top:calc(70px + env(safe-area-inset-top,0px))}.brand svg{color:#111}
 .modes button{color:var(--ink)}.modes button[aria-pressed="true"]{background:#111;color:#FFFDF5}
 :root[data-theme="dark"] .modes button[aria-pressed="true"]{background:#FFD43B;color:#111}
 .moods button{box-shadow:none;font-weight:800;color:var(--ink);background:var(--surface)}.moods button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}

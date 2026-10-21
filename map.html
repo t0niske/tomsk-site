@@ -1,14 +1,4 @@
-<!doctype html>
-<html lang="ru">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Карта Томска</title>
-<meta name="description" content="Карта Томска в 2D и 3D: реальные здания, рельеф, знаковые места и режим погружения.">
-<meta name="theme-color" content="#FFD43B">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<style>:root{color-scheme:light}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Golos+Text:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap">
 <style>
@@ -151,7 +141,8 @@ body.m3d .attr{bottom:auto;top:calc(112px + env(safe-area-inset-top,0px));left:a
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12131A;--surface:#1B1D27;--surface-2:#242733;--glass:#1B1D27;--ink:#FFFDF5;--ink-2:#C9C5B8;--line:#FFFDF5;--forest:#FFD43B;--on-forest:#111;--shadow:3px 3px 0 #000;--bd:2px solid #FFFDF5}}
 :root[data-theme="dark"]{--bg:#12131A;--surface:#1B1D27;--surface-2:#242733;--glass:#1B1D27;--ink:#FFFDF5;--ink-2:#C9C5B8;--line:#FFFDF5;--forest:#FFD43B;--on-forest:#111;--shadow:3px 3px 0 #000;--bd:2px solid #FFFDF5}
 .brand,.search .box,.modes,.moods button,.layers,.ctrl button,.bar,.attr,.sugg,.l3{backdrop-filter:none;border:var(--bd)}
-.brand{background:var(--yellow);color:#111;border:2px solid #111;font-weight:900;font-size:12px;transform:rotate(-1.5deg)}.brand svg{color:#111}
+.brand{background:var(--yellow);color:#111;border:2px solid #111;font-weight:900;font-size:11px;box-sizing:border-box;height:46px;overflow:hidden}
+.moods{top:calc(70px + env(safe-area-inset-top,0px))}.brand svg{color:#111}
 .modes button{color:var(--ink)}.modes button[aria-pressed="true"]{background:#111;color:#FFFDF5}
 :root[data-theme="dark"] .modes button[aria-pressed="true"]{background:#FFD43B;color:#111}
 .moods button{box-shadow:none;font-weight:800;color:var(--ink);background:var(--surface)}.moods button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
@@ -172,8 +163,6 @@ body.m3d .attr{bottom:auto;top:calc(112px + env(safe-area-inset-top,0px));left:a
 .loading .m{border:2px solid var(--line);height:12px}.loading .m i{background:var(--yellow)}.loading svg{color:#111}
 .stream{border:2px solid #111;box-shadow:3px 3px 0 #111;background:#FFFDF5;color:#111}
 </style>
-</head>
-<body>
 
 <div id="app"><canvas id="c2d" aria-label="Карта Томска"></canvas><div id="v3d"><div id="labels3d"></div></div></div>
 <div id="frame"><div class="strip t"></div><div class="strip b"></div></div>
@@ -1245,7 +1234,7 @@ function cardCur(c){const st=curStatus(c);const near=DATA.pois.filter(p=>Math.hy
     <button class="b" data-visit="${c.id}" aria-pressed="${APP.visited.has(c.id)}">${ico('check')}${APP.visited.has(c.id)?'Я здесь был':'Отметить: был'}</button></div>
    ${near.length?`<div><b style="font-size:13px">Рядом, до 6 минут пешком</b><div class="near" style="margin-top:8px">${near.map(o=>`<button data-poi="${DATA.pois.indexOf(o.p)}">${esc(o.p.t.name)}<span>${KIND_RU[o.p.t.amenity||o.p.t.tourism||o.p.t.historic||o.p.t.shop||o.p.t.leisure]||''} · ${Math.max(1,Math.round(o.d/75))} мин</span></button>`).join('')}</div></div>`:''}
   </div>`}
-const MAIN_URL='index.html';
+const MAIN_URL='https://claude.ai/artifact/NRBXkQy6oUrTvm3eW1DtuS';
 const CUIS={russian:'русская',regional:'местная',italian:'итальянская',georgian:'грузинская',japanese:'японская',sushi:'суши',pizza:'пицца',burger:'бургеры',coffee_shop:'кофе',european:'европейская',asian:'азиатская',chinese:'китайская',turkish:'турецкая',uzbek:'узбекская',caucasian:'кавказская',steak_house:'стейки',grill:'гриль',bbq:'гриль',seafood:'морепродукты',vegetarian:'вегетарианская',cake:'торты',dessert:'десерты',pancake:'блины',sandwich:'сэндвичи',breakfast:'завтраки',international:'интернациональная',french:'французская',korean:'корейская',thai:'тайская',vietnamese:'вьетнамская',indian:'индийская',mexican:'мексиканская',american:'американская',shawarma:'шаурма',kebab:'кебаб',bakery:'выпечка',pie:'пироги',ice_cream:'мороженое',tea:'чай',chicken:'курица',noodle:'лапша',ramen:'рамен',pasta:'паста',fish:'рыба',bubble_tea:'бабл-ти',donut:'пончики'};
 function cardPoi(p){const t=p.t,cat=PCAT[p.cat],K=p.pick;const kind=K?K.kind:KIND_RU[t.amenity]||KIND_RU[t.tourism]||KIND_RU[t.historic]||KIND_RU[t.shop]||KIND_RU[t.leisure]||cat.t;const st=osmHours(t.opening_hours);
   const addr=K&&K.addr&&K.addr!=='Томск'?K.addr:t['addr:street']?`${t['addr:street']}${t['addr:housenumber']?', '+t['addr:housenumber']:''}`:'';const web=t.website||t['contact:website']||(K&&K.web);
@@ -1336,6 +1325,3 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',syncDark);n
   else if(h==='3d')setMode('3d');else{const c=CUR.find(c=>c.id===h);if(c)APP.select({type:'c',c})}})();
 
 </script>
-
-</body>
-</html>

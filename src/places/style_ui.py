@@ -82,8 +82,11 @@ body{font-family:var(--font-body)}
 .h2-wx{margin:0;font-weight:700;font-size:16px}
 .hero2 .search{background:var(--surface);border:var(--bd);box-shadow:var(--pop);max-width:none;width:100%;min-width:0}
 .hero2 .search input{color:var(--ink)}.hero2 .search input::placeholder{color:var(--ink-2)}
-.hero2 .search .btn{background:#111;color:#FFFDF5;border-color:#111}
-.h2-card{position:relative;margin-top:22px;border:var(--bd);border-radius:32px;overflow:hidden;height:clamp(280px,36vw,440px);background:#9FD8FF;box-shadow:var(--pop)}
+.hero2 .search .btn{background:var(--forest);color:var(--on-forest);border-color:var(--line)}.hero2 .search .btn:hover{background:var(--forest-2)}
+section[id],main [id]{scroll-margin-top:92px}
+.h2-card{position:relative;margin-top:22px;border:var(--bd);border-radius:32px;overflow:hidden;height:clamp(300px,38vw,470px);background:#9FD8FF;box-shadow:var(--pop)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .h2-card{box-shadow:6px 6px 0 var(--yellow);border-color:#FFFDF5}}
+:root[data-theme="dark"] .h2-card{box-shadow:6px 6px 0 var(--yellow);border-color:#FFFDF5}
 .h2-card .hero-art{position:absolute;inset:0}.h2-card .hero-art svg{width:100%;height:100%;display:block}
 .h2-card .live-pill{position:absolute;left:18px;top:18px;z-index:3;background:#FFFDF5;color:#111;border:2px solid #111;backdrop-filter:none}
 .h2-sticker{position:absolute;right:20px;top:20px;z-index:3;max-width:min(320px,60%);transform:rotate(4deg);background:#FFFDF5;color:#111;border:2px solid #111;border-radius:16px;padding:10px 16px;font-family:var(--font-display);font-weight:800;font-size:clamp(14px,1.6vw,19px);line-height:1.15;box-shadow:3px 3px 0 #111}
@@ -98,7 +101,7 @@ body{font-family:var(--font-body)}
 .hero2 .chips{max-width:none;margin-top:18px}
 .chip{height:40px;padding:0 16px;font-size:14px;font-weight:800;background:var(--surface);color:var(--ink);border:var(--bd)}
 .chip:hover,.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-@media (max-width:640px){.h2-card{border-radius:24px;height:300px}.h2-sticker{max-width:58%;right:12px;top:58px}.h2-card .live-pill{left:12px;top:12px;max-width:calc(100% - 24px)}.h2-bottom{left:12px;right:12px;bottom:12px}.h2-go{height:44px;font-size:14px}}
+@media (max-width:640px){.h2-card{border-radius:24px;height:340px}.h2-sticker{max-width:58%;right:12px;top:58px}.h2-card .live-pill{left:12px;top:12px;max-width:calc(100% - 24px)}.h2-bottom{left:12px;right:12px;bottom:12px}.h2-bottom .live-sub{display:none}.h2-go{height:42px;font-size:13.5px;padding-inline:14px}.h2-sticker{font-size:13px;padding:7px 12px}}
 .live-panel{border:var(--bd);box-shadow:var(--pop)}.lp-row button{border:2px solid var(--line);background:var(--surface)}
 
 /* полоса «сейчас» */

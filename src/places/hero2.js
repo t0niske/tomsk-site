@@ -56,7 +56,7 @@ const HERO=(()=>{
   /* ================= СЦЕНА: улица деревянного Томска на фоне города =================
      Слои: 0 — дальний (левый берег Томи), 1 — средний (город на холме), 2 — ближний (деревянная улица).
      Цвет каждого элемента = базовый (data-c или сезонный data-s) → дымка для дальних слоёв → ночь/погода. */
-  const VW=1600,VH=640;
+  const VW=1600,VH=640,X0=-400,X1=2000,Y0=-460;
   const sw=w=>`stroke="${INK}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
   const f1=n=>Math.round(n*10)/10;
   const P=(d,c,l,w,extra='')=>`<path d="${d}" data-c="${c}" data-l="${l}" ${w?sw(w):''} ${extra}/>`;
@@ -118,24 +118,24 @@ const HERO=(()=>{
     const B=[];const add=s=>B.push(s);
     add(`<defs><radialGradient id="gLamp"><stop offset="0" stop-color="#FFD46B" stop-opacity=".75"/><stop offset=".45" stop-color="#FFC24A" stop-opacity=".22"/><stop offset="1" stop-color="#FFC24A" stop-opacity="0"/></radialGradient>
       <radialGradient id="gSun"><stop offset="0" stop-color="#FFF2C2" stop-opacity=".9"/><stop offset="1" stop-color="#FFF2C2" stop-opacity="0"/></radialGradient></defs>`);
-    add(`<rect id="sSky" width="${VW}" height="${VH}"/><path id="sHz" d="M0 250Q400 228 800 246T1600 240V600H0Z"/>`);
+    add(`<rect id="sSky" x="${X0}" y="${Y0}" width="${X1-X0}" height="${VH-Y0}"/><path id="sHz" d="M${X0} 236Q0 214 400 230T1200 236T2000 232V640H${X0}Z"/>`);
     // звёзды-искорки
-    let st='';for(let i=0;i<46;i++){const x=R()*VW,y=R()*240+8,k=R()*3.2+2.4,a=k*.28;st+=`<path class="st" d="M${f1(x)} ${f1(y-k)}L${f1(x+a)} ${f1(y-a)}L${f1(x+k)} ${f1(y)}L${f1(x+a)} ${f1(y+a)}L${f1(x)} ${f1(y+k)}L${f1(x-a)} ${f1(y+a)}L${f1(x-k)} ${f1(y)}L${f1(x-a)} ${f1(y-a)}Z" fill="#FFFDF5" style="animation-delay:${(R()*3).toFixed(2)}s"/>`}
+    let st='';for(let i=0;i<110;i++){const x=X0+R()*(X1-X0),y=Y0+30+R()*(240-Y0-30),k=R()*3.2+2.4,a=k*.28;st+=`<path class="st" d="M${f1(x)} ${f1(y-k)}L${f1(x+a)} ${f1(y-a)}L${f1(x+k)} ${f1(y)}L${f1(x+a)} ${f1(y+a)}L${f1(x)} ${f1(y+k)}L${f1(x-a)} ${f1(y+a)}L${f1(x-k)} ${f1(y)}L${f1(x-a)} ${f1(y-a)}Z" fill="#FFFDF5" style="animation-delay:${(R()*3).toFixed(2)}s"/>`}
     add(`<g id="sStars">${st}</g>`);
     add(`<g id="sSun"><circle r="120" fill="url(#gSun)" id="sSunGlow"/><path id="sRays" d="${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6;return `M${f1(Math.cos(a)*60)} ${f1(Math.sin(a)*60)}L${f1(Math.cos(a)*78)} ${f1(Math.sin(a)*78)}`}).join('')}" ${sw(3.2)}/><circle r="48" id="sSunDisc" ${sw(3)}/><path d="M-22 -14q8 -14 26 -16" fill="none" stroke="#FFFDF5" stroke-width="5" stroke-linecap="round" opacity=".7"/></g>`);
     add(`<g id="sMoon"><circle r="36" id="sMoonDisc" ${sw(3)}/><circle cx="-11" cy="-9" r="7" fill="#000" opacity=".08" ${sw(1.6)}/><circle cx="12" cy="10" r="5" fill="#000" opacity=".08" ${sw(1.6)}/><circle cx="10" cy="-14" r="3" fill="#000" opacity=".08"/></g>`);
-    let cl='';for(let i=0;i<8;i++)cl+=`<g class="cl" data-i="${i}"><path class="clb" d="M0 0a38 38 0 0 1 66 -26a50 50 0 0 1 92 14a34 34 0 0 1 12 64H6a30 30 0 0 1 -6 -52z" ${sw(3)}/><path d="M28 -10q16 -20 40 -12M100 -18q22 -6 36 10" fill="none" stroke="#FFFDF5" stroke-width="4" stroke-linecap="round" opacity=".55"/></g>`;
+    let cl='';for(let i=0;i<12;i++)cl+=`<g class="cl" data-i="${i}"><path class="clb" d="M0 0a38 38 0 0 1 66 -26a50 50 0 0 1 92 14a34 34 0 0 1 12 64H6a30 30 0 0 1 -6 -52z" ${sw(3)}/><path d="M28 -10q16 -20 40 -12M100 -18q22 -6 36 10" fill="none" stroke="#FFFDF5" stroke-width="4" stroke-linecap="round" opacity=".55"/></g>`;
     add(`<g id="sClouds">${cl}</g>`);
     // ---- дальний план: левый берег, тайга, мост, Томь
-    add(PS(curve(farY,0,VW,20,430),'farhill',0,1.6,'id="sFar"'));
-    let fo='';for(let x=-6;x<VW;x+=13+R()*6){const y=farY(x)+4,h=12+R()*14;fo+=`M${f1(x-5)} ${f1(y)}L${f1(x)} ${f1(y-h)}L${f1(x+5)} ${f1(y)}Z`}
+    add(PS(curve(farY,X0,X1,20,430),'farhill',0,1.6,'id="sFar"'));
+    let fo='';for(let x=X0-6;x<X1;x+=13+R()*6){const y=farY(x)+4,h=12+R()*14;fo+=`M${f1(x-5)} ${f1(y)}L${f1(x)} ${f1(y-h)}L${f1(x+5)} ${f1(y)}Z`}
     add(PS(fo,'taiga',0,0));
-    add(PS('M0 366Q300 358 700 370T1600 362V430H0Z','river',1,1.8,'id="sRiver"'));
+    add(PS('M-400 368Q-100 358 300 366T1100 368T2000 364V430H-400Z','river',1,1.8,'id="sRiver"'));
     let br='M30 368H430';for(let x=40;x<=420;x+=48)br+=`M${x} 368V384`;add(P(`M24 362H436V369H24Z`,'#6B7480',0,1.4)+`<path d="${br}" ${sw(1.4)} fill="none"/>`);
-    let sh='';for(let i=0;i<14;i++){const x=40+R()*1500,y=374+R()*18;sh+=`<path class="shim" d="M${f1(x)} ${f1(y)}h${f1(14+R()*30)}" stroke="#FFFDF5" stroke-width="2.4" stroke-linecap="round" style="animation-delay:${(R()*3).toFixed(2)}s"/>`}
+    let sh='';for(let i=0;i<22;i++){const x=X0+40+R()*2300,y=374+R()*18;sh+=`<path class="shim" d="M${f1(x)} ${f1(y)}h${f1(14+R()*30)}" stroke="#FFFDF5" stroke-width="2.4" stroke-linecap="round" style="animation-delay:${(R()*3).toFixed(2)}s"/>`}
     add(`<g id="sShim">${sh}</g>`);
     // ---- средний план: город на холме
-    add(PS(curve(midY,0,VW,20,600),'midhill',1,2,'id="sMid"'));
+    add(PS(curve(midY,X0,X1,20,600),'midhill',1,2,'id="sMid"'));
     // Воскресенская церковь
     {const b=midY(220)+10,c='#F4F0E6',r='#2F5A4E';
       add(RC(110,b-56,58,56,c,1,1.6)+RC(160,b-86,110,86,c,1,1.6)+P(`M156 ${b-86}L215 ${b-108}L274 ${b-86}Z`,r,1,1.6));
@@ -168,17 +168,35 @@ const HERO=(()=>{
     // телевышка
     {const x=1566,b=midY(1566)+14;let d=`M${x-12} ${b}L${x-2} ${b-230}h4L${x+12} ${b}`;for(let y=b-20;y>b-220;y-=22)d+=`M${f1(x-12+10*(b-y)/230)} ${y}L${f1(x+12-10*(b-y)/230)} ${y-22}`;
       add(`<path d="${d}" fill="none" stroke="#B5432F" stroke-width="2"/><path d="M${x} ${b-230}v-40" ${sw(1.6)}/><circle id="sTvLight" cx="${x}" cy="${b-272}" r="4" fill="#FF3B30"/>`);}
+    // окраины второго плана: панельки и деревянная церковка
+    [[-330,56,72,'#E3DDCF'],[-270,44,96,'#D9D4C8'],[1640,60,78,'#E8E2D4'],[1702,46,104,'#D9D4C8'],[1930,56,66,'#E3DDCF']].forEach(([x,w,h,c])=>{const b=midY(x)+14;add(RC(x,b-h,w,h,c,1,1.4));let wn='';for(let yy=b-h+8;yy<b-6;yy+=12)for(let xx=x+6;xx<x+w-6;xx+=11)wn+=`<rect class="win" data-r="${R().toFixed(3)}" x="${xx}" y="${yy}" width="6" height="7" ${sw(.8)}/>`;add(wn)});
+    {const x0=1790,b=midY(1820)+14,c='#9A6B45',g='#3E5A7E';add(RC(x0,b-60,90,60,c,1,1.6)+P(`M${x0-4} ${b-60}L${x0+45} ${b-84}L${x0+94} ${b-60}Z`,g,1,1.5)+RC(x0+30,b-120,30,40,c,1,1.4)+P(`M${x0+26} ${b-120}Q${x0+45} ${b-170} ${x0+64} ${b-120}Z`,g,1,1.5)+`<path d="M${x0+45} ${b-160}v-16M${x0+39} ${b-170}h12" stroke="#E2B44A" stroke-width="2.4" stroke-linecap="round"/>`);
+      for(let i=0;i<3;i++)add(`<path class="win" data-r="${R().toFixed(3)}" d="M${x0+12+i*26} ${b-10}V${b-34}a6 6 0 0 1 12 0V${b-10}Z" ${sw(1.1)}/>`);}
     // деревья второго плана
+    [[-380,28],[-200,30],[-150,24],[-90,32],[-20,26],[1620,26],[1770,30],[1900,24],[1980,30]].forEach(([x,h])=>add(R()<.6?pine(x,midY(x)+16,h*1.6,1):`<path d="M${x} ${f1(midY(x)+16)}V${f1(midY(x)-h*.4)}" ${sw(1.2)}/><circle class="crown" data-s="crown" data-i="${Math.floor(R()*6)}" data-l="1" cx="${x}" cy="${f1(midY(x)-h*.6)}" r="${f1(h*.55)}" ${sw(1.3)}/>`));
     [[60,32],[340,24],[400,30],[530,22],[880,28],[930,22],[1210,26],[1400,30],[1520,24]].forEach(([x,h])=>add(R()<.5?pine(x,midY(x)+16,h*1.6,1):`<path d="M${x} ${f1(midY(x)+16)}V${f1(midY(x)-h*.4)}" ${sw(1.2)}/><circle class="crown" data-s="crown" data-i="${Math.floor(R()*6)}" data-l="1" cx="${x}" cy="${f1(midY(x)-h*.6)}" r="${f1(h*.55)}" ${sw(1.3)}/>`));
     // туман
-    add(`<g id="sFog"><path d="M-20 330Q300 310 640 330T1620 320V362Q1200 376 800 360T-20 370Z" fill="#FFFDF5" opacity=".55"/><path d="M-20 392Q400 380 800 398T1620 390V420Q1200 430 800 418T-20 424Z" fill="#FFFDF5" opacity=".45"/></g>`);
+    add(`<g id="sFog"><path d="M-420 334Q-60 312 300 330T1020 326T2020 322V362Q1600 378 1200 362T400 364T-420 372Z" fill="#FFFDF5" opacity=".55"/><path d="M-420 394Q0 380 400 396T1200 392T2020 390V420Q1600 432 1200 418T400 420T-420 426Z" fill="#FFFDF5" opacity=".45"/></g>`);
     // ---- ближний план: тротуар и дорога
-    add(PS('M0 506C300 500 700 512 1000 504S1400 502 1600 507V640H0Z','street',2,2.6,'id="sStreet"'));
-    let pl='';for(let x=8;x<VW;x+=16)pl+=`M${x} ${f1(522+Math.sin(x/90)*2)}v14`;add(TEX(pl+'M0 520C400 514 900 526 1600 518M0 538C400 532 900 544 1600 536'));
-    add(PS('M0 546C400 540 900 552 1600 545V640H0Z','road',2,2.6,'id="sRoad"'));
-    add(TEX('M60 570C400 564 900 576 1560 568M120 596C500 590 1000 602 1520 594M40 620C450 614 950 626 1580 618'));
+    add(PS('M-400 508C-100 500 300 512 700 506S1300 502 1600 507S1900 510 2000 506V640H-400Z','street',2,2.6,'id="sStreet"'));
+    let pl='';for(let x=X0+8;x<X1;x+=16)pl+=`M${x} ${f1(522+Math.sin(x/90)*2)}v14`;add(TEX(pl+'M-400 520C200 514 900 526 2000 518M-400 538C200 532 900 544 2000 536'));
+    add(PS('M-400 546C200 540 900 552 2000 545V640H-400Z','road',2,2.6,'id="sRoad"'));
+    add(TEX('M-360 570C300 564 900 576 1960 568M-300 596C400 590 1000 602 1920 594M-380 620C350 614 950 626 1980 618'));
     // лужи после дождя
     add(`<g id="sPuddles">${[[260,572,70],[880,580,90],[1330,568,60]].map(([x,y,w])=>`<ellipse cx="${x}" cy="${y}" rx="${w}" ry="7" data-c="#7FA6C9" data-l="2" ${sw(2)}/><path d="M${x-w*.5} ${y-1}h${w*.4}" stroke="#FFFDF5" stroke-width="2" stroke-linecap="round"/>`).join('')}</g>`);
+    // типовая изба с наличниками и причелинами
+    function izba(x,w,c,t,r,sh){const m=x+w/2,ap=444-w*.31,n=Math.max(2,Math.floor((w-24)/50));
+      add(chimney(x+w*.72,ap+16,'#A9503C'));
+      add(RC(x,444,w,78,c,2,2.6)+TEX(Array.from({length:6},(_,i)=>`M${x+2} ${456+i*11}H${x+w-2}`).join('')));
+      add(P(`M${x} 444L${m} ${f1(ap)}L${x+w} 444Z`,c,2,2.6)+TEX(`M${x+w*.15} 430H${x+w*.85}M${x+w*.3} 414H${x+w*.7}`));
+      add(P(`M${x-14} 448L${m} ${f1(ap-14)}L${x+w+14} 448L${x+w+6} 454L${m} ${f1(ap-2)}L${x-6} 454Z`,r,2,2.4)+P(`M${x-8} 446L${m} ${f1(ap-8)}L${x+w+8} 446L${x+w+2} 450L${m} ${f1(ap+2)}L${x-2} 450Z`,t,2,1.6));
+      add(`<circle class="win" data-r="${R().toFixed(3)}" cx="${m}" cy="${f1(ap+28)}" r="8" ${sw(2)}/>`);
+      const gap=w/n;for(let i=0;i<n;i++){const wx=x+gap*i+gap/2-12;add(nal(wx,462,24,36,t,2,i%2));if(sh)add(RC(wx-16,462,9,38,sh,2,1.6)+RC(wx+31,462,9,38,sh,2,1.6))}
+      CAPS.push(`<path d="M${x-16} 448L${m} ${f1(ap-18)}L${x+w+16} 448L${x+w+6} 442L${m} ${f1(ap-8)}L${x-6} 442Z"/>`)}
+    izba(-380,176,'#C9675A','#FFFDF5','#2E6B4E');
+    add(fence(-196,-130,482,40,'#B88B5E'));
+    add(lamp(-112,418));
+    add(fence(-96,24,482,40,'#C69A6B'));
     // берёзы по краям
     add(birch(34,524,300));
     // ===== дом A: бирюзовая изба с причелинами
@@ -252,8 +270,12 @@ const HERO=(()=>{
       [1322,1370,1418].forEach(x=>{add(nal(x,462,24,36,t,2,0));add(RC(x-18,462,10,38,sh,2,1.6)+RC(x+32,462,10,38,sh,2,1.6)+`<path d="M${x-13} 476l-3 5l3 5l3 -5ZM${x+37} 476l-3 5l3 5l3 -5Z" fill="${INK}"/>`)});
       add(RC(1316,506,70,5,'#8A5A3A',2,1.6)+`<path d="M1322 511v10M1380 511v10" ${sw(2.2)}/>`);
       CAPS.push('<path d="M1284 448L1382 376L1480 448L1470 442L1382 386L1294 442Z"/>');}
-    add(fence(1476,1600,482,40,'#C69A6B'));
+    add(fence(1476,1640,482,40,'#C69A6B'));
     add(birch(1560,524,280));
+    izba(1650,170,'#9C86C9','#FFFDF5','#3E5A7E','#FFD43B');
+    add(lamp(1860,418));
+    add(fence(1876,2000,482,40,'#B88B5E'));
+    add(birch(1950,524,290));
     // прохожие: зонт в дождь, шапка и санки зимой
     const person=(x,coat,dir,id)=>`<g id="${id}" class="ppl" data-x="${x}"><g transform="translate(${x} 530) scale(${dir} 1)">
       <path d="M-5 -2l-3 -16M5 -2l2 -16" ${sw(3)}/><path d="M-9 -2h6M3 -2h6" ${sw(3)}/>
@@ -267,7 +289,7 @@ const HERO=(()=>{
     add(person(276,'#3B2BD9',1,'pA')+person(1258,'#2E8A5C',-1,'pB'));
     add(`<g id="sSled"><path d="M1196 528h34q6 0 6 -6" fill="none" ${sw(2.2)}/><path d="M1198 522h30v-6h-30Z" data-c="#C8463A" data-l="2" ${sw(1.8)}/><path d="M1230 520L1250 498" ${sw(1.6)}/></g>`);
     // сугробы и снег на крышах
-    add(`<g id="sDrifts">${[[60,520,90],[300,522,60],[600,520,70],[1000,522,60],[1260,520,80],[1500,520,110]].map(([x,y,w])=>`<path d="M${x-w/2} ${y+4}Q${x-w/4} ${y-14} ${x} ${y-8}Q${x+w/4} ${y-16} ${x+w/2} ${y+4}Z" fill="#FFFDF5" ${sw(2.2)}/>`).join('')}</g>`);
+    add(`<g id="sDrifts">${[[-330,520,110],[-60,522,80],[60,520,90],[300,522,60],[600,520,70],[1000,522,60],[1260,520,80],[1500,520,110],[1740,520,100],[1920,522,90]].map(([x,y,w])=>`<path d="M${x-w/2} ${y+4}Q${x-w/4} ${y-14} ${x} ${y-8}Q${x+w/4} ${y-16} ${x+w/2} ${y+4}Z" fill="#FFFDF5" ${sw(2.2)}/>`).join('')}</g>`);
     add(`<g id="sCaps" fill="#FFFDF5" ${sw(2)}>${CAPS.join('')}</g>`);
     // клумбы летом
     let fl='';[[110,524],[180,526],[700,526],[1120,526],[1170,524],[1350,526]].forEach(([x,y])=>{for(let i=0;i<5;i++){const xx=x+i*9;fl+=`<path d="M${xx} ${y}v-10" ${sw(1.4)}/><circle cx="${xx}" cy="${y-12}" r="3.6" data-c="${['#FF5A8A','#FFD43B','#FFFDF5','#FF5A36'][i%4]}" data-l="2" ${sw(1.2)}/>`}});
@@ -277,7 +299,7 @@ const HERO=(()=>{
     // ночь: свечение фонарей поверх
     add(`<g id="sGlows">${GLOWS.join('')}</g>`);
     // ---- праздники
-    let gar='';const tops=LAMPS.map(([x,y])=>[x,y-4]);tops.unshift([34,300]);tops.push([1560,320]);
+    let gar='';const tops=[...LAMPS.map(([x,y])=>[x,y-4]),[34,300],[1560,320]].sort((a,b)=>a[0]-b[0]);
     for(let i=0;i<tops.length-1;i++){const[a,ay]=tops[i],[b,by]=tops[i+1];const sag=46;gar+=`<path d="M${a} ${ay}Q${(a+b)/2} ${Math.max(ay,by)+sag} ${b} ${by}" fill="none" ${sw(1.6)}/>`;
       for(let k=1;k<9;k++){const t=k/9,x=(1-t)*(1-t)*a+2*(1-t)*t*(a+b)/2+t*t*b,y=(1-t)*(1-t)*ay+2*(1-t)*t*(Math.max(ay,by)+sag)+t*t*by;gar+=`<circle class="gb" data-p="${k%3}" cx="${f1(x)}" cy="${f1(y+6)}" r="5" fill="${['#FF5A36','#FFD43B','#3B2BD9'][k%3]}" ${sw(1.4)}/>`}}
     const tree=`<g transform="translate(1268 0)">${[0,1,2,3].map(i=>`<path d="M${-52+i*10} ${520-i*30}L0 ${450-i*30}L${52-i*10} ${520-i*30}Z" fill="#2E6B4E" ${sw(2.2)}/>`).join('')}${[[-24,500,'#FF5A36'],[20,492,'#FFD43B'],[-8,466,'#3B2BD9'],[14,440,'#FFC3D0'],[-12,420,'#FFD43B'],[6,396,'#FF5A36']].map(([x,y,c])=>`<circle class="gb" data-p="1" cx="${x}" cy="${y}" r="5.5" fill="${c}" ${sw(1.4)}/>`).join('')}<path d="M0 334l7 14h15l-12 9 5 15-15-9-15 9 5-15-12-9h15z" fill="#FFD43B" ${sw(1.8)}/></g>`;
@@ -286,17 +308,17 @@ const HERO=(()=>{
     add(`<g id="dHw" class="deco">${pumpkin(900,512,1)}${pumpkin(1212,514,.8)}${pumpkin(330,514,.9)}${pumpkin(130,516,.7)}</g>`);
     const flag=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><path d="M0 0V-46" ${sw(2.4)}/><g class="fl"><path d="M0 -46h34v8H0z" fill="#FFFFFF" ${sw(1.6)}/><path d="M0 -38h34v8H0z" fill="#1C57A5" ${sw(1.6)}/><path d="M0 -30h34v8H0z" fill="#D52B1E" ${sw(1.6)}/></g></g>`;
     add(`<g id="dFlag" class="deco">${flag(1130,322)}${flag(380,410,.8)}${flag(1382,394,.8)}</g>`);
-    let tu='';for(let i=0;i<30;i++){const x=40+i*52+(i%2)*14;const c=['#FF5A8A','#FFD43B','#FF5A36','#FFC3D0','#FFFDF5'][i%5];tu+=`<path d="M${x} 532v-22" ${sw(1.6)}/><path d="M${x-8} 512q0-15 8-17q8 2 8 17q-8 6-16 0z" fill="${c}" ${sw(1.6)}/>`}
+    let tu='';for(let i=0;i<46;i++){const x=-370+i*52+(i%2)*14;const c=['#FF5A8A','#FFD43B','#FF5A36','#FFC3D0','#FFFDF5'][i%5];tu+=`<path d="M${x} 532v-22" ${sw(1.6)}/><path d="M${x-8} 512q0-15 8-17q8 2 8 17q-8 6-16 0z" fill="${c}" ${sw(1.6)}/>`}
     add(`<g id="dMar" class="deco">${tu}</g>`);
-    let ca='';for(let i=0;i<22;i++){const x=60+i*70;ca+=`<path d="M${x} 532v-22" ${sw(1.6)}/><circle cx="${x}" cy="508" r="7" fill="#D52B1E" ${sw(1.6)}/>`}
+    let ca='';for(let i=0;i<34;i++){const x=-350+i*70;ca+=`<path d="M${x} 532v-22" ${sw(1.6)}/><circle cx="${x}" cy="508" r="7" fill="#D52B1E" ${sw(1.6)}/>`}
     add(`<g id="dMay" class="deco">${ca}</g>`);
     const bal=(x,y)=>[[-26,-40,'#FF5A36'],[0,-58,'#FFD43B'],[24,-42,'#3B2BD9'],[-10,-80,'#C9F2D2'],[16,-86,'#FFC3D0']].map(([dx,dy,c],i)=>`<g class="bl" data-i="${i}"><path d="M${x} ${y}Q${x+dx*.4} ${y+dy*.5} ${x+dx} ${y+dy+20}" fill="none" ${sw(1.3)}/><ellipse class="blb" cx="${x+dx}" cy="${y+dy}" rx="15" ry="19" fill="${c}" ${sw(1.8)}/></g>`).join('');
     add(`<g id="dBal" class="deco">${bal(588,420)}${bal(1268,420)}</g>`);
-    return `<svg viewBox="0 0 ${VW} ${VH}" preserveAspectRatio="xMidYMax slice" aria-hidden="true">${B.join('')}</svg>`}
+    return `<svg viewBox="${X0} ${Y0} ${X1-X0} ${VH-Y0}" preserveAspectRatio="xMidYMax slice" aria-hidden="true">${B.join('')}</svg>`}
 
   /* облака */
   const CL=[];
-  function placeClouds(){document.querySelectorAll('#heroArt .cl').forEach((g,i)=>{CL[i]={x:R()*1900-260,y:22+R()*80,s:.5+R()*.42,v:5+R()*9}})}
+  function placeClouds(){document.querySelectorAll('#heroArt .cl').forEach((g,i)=>{CL[i]={x:-600+R()*2700,y:-330+R()*420,s:.5+R()*.5,v:5+R()*9}})}
 
   const S={ov:{time:null,wx:null,hol:null},live:{wx:null,temp:null},cur:null};
   async function fetchWeather(){try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),5000);
@@ -337,7 +359,7 @@ const HERO=(()=>{
     const wxCol=mix(WXDAY[c.wx],WXNIGHT[c.wx],dk);
     let sky=mix(c.ph.sky,wxCol,W.k),hz=mix(c.ph.hz,wxCol,W.k*.8);
     const hwNight=c.hol==='hw'&&dk>.3;if(hwNight){sky=mix(sky,'#3A1F4A',.45);hz=mix(hz,'#6A2F6A',.4)}
-    el('sSky').setAttribute('fill',sky);el('sHz').setAttribute('fill',hz);
+    el('sSky').setAttribute('fill',sky);el('hero2').style.backgroundColor=sky;el('hero2').style.setProperty('--h2-sky',sky);el('sHz').setAttribute('fill',hz);
     el('sStars').style.opacity=c.ph.stars*(c.wx==='clear'||c.wx==='snow'?1:.15);
     const snowy=c.sea==='winter'||(c.snowFx&&c.sea!=='summer');
     const sea=snowy?'winter':c.sea;
@@ -373,10 +395,10 @@ const HERO=(()=>{
     el('sCat').querySelectorAll('.eye').forEach(e=>e.setAttribute('r',dk>.4?2.6:1.8));
     // солнце и луна по реальному времени (восток справа)
     const dayLen=c.st.set-c.st.rise;const p=(c.mins-c.st.rise)/dayLen;
-    const sunVis=p>-.04&&p<1.04,sx=1420-p*1240,sy=340-Math.sin(Math.PI*Math.max(0,Math.min(1,p)))*250;
+    const sunVis=p>-.04&&p<1.04,sx=1700-p*1800,sy=330-Math.sin(Math.PI*Math.max(0,Math.min(1,p)))*420;
     el('sSun').setAttribute('transform',`translate(${sx.toFixed(0)} ${sy.toFixed(0)})`);el('sSun').style.opacity=sunVis?(c.wx==='clear'?1:c.wx==='cloudy'?.75:0):0;
     const low=p<.12||p>.85;el('sSunDisc').setAttribute('fill',low?'#FF9A3B':'#FFD43B');el('sSunGlow').style.opacity=low?1:.55;el('sRays').style.display=p>.1&&p<.9?'':'none';
-    const q=((c.mins-c.st.set+1440)%1440)/(1440-dayLen);const mx=1420-q*1240,my=320-Math.sin(Math.PI*Math.min(1,q))*230;
+    const q=((c.mins-c.st.set+1440)%1440)/(1440-dayLen);const mx=1700-q*1800,my=320-Math.sin(Math.PI*Math.min(1,q))*400;
     el('sMoon').setAttribute('transform',`translate(${mx.toFixed(0)} ${my.toFixed(0)}) scale(${c.hol==='hw'?1.5:1})`);el('sMoon').style.opacity=sunVis?0:(c.wx==='clear'||c.wx==='snow'?1:c.wx==='cloudy'?.6:0);
     el('sMoonDisc').setAttribute('fill',c.hol==='hw'?'#FF9A3B':'#FFF6D8');
     // облака
@@ -448,7 +470,7 @@ const HERO=(()=>{
   let last=performance.now(),WH=null;
   const QC={},Q=sel=>QC[sel]||(QC[sel]=[...document.querySelectorAll(sel)]);
   function animScene(t,dt){
-    Q('#heroArt .cl').forEach((g,i)=>{const c=CL[i];if(!c)return;c.x+=c.v*dt*(S.cur&&S.cur.wx==='storm'?3:1);if(c.x>1700)c.x=-260;g.setAttribute('transform',`translate(${c.x.toFixed(1)} ${(c.y+Math.sin(t*.6+i)*3).toFixed(1)}) scale(${c.s})`)});
+    Q('#heroArt .cl').forEach((g,i)=>{const c=CL[i];if(!c)return;c.x+=c.v*dt*(S.cur&&S.cur.wx==='storm'?3:1);if(c.x>2100)c.x=-600;g.setAttribute('transform',`translate(${c.x.toFixed(1)} ${(c.y+Math.sin(t*.6+i)*3).toFixed(1)}) scale(${c.s})`)});
     const rot=t*.07;el('sWheel').setAttribute('transform',`rotate(${(rot*57.3).toFixed(2)} 470 284)`);
     WH.forEach(([e,a])=>{e.setAttribute('cx',(470+Math.cos(a+rot)*62).toFixed(1));e.setAttribute('cy',(284+Math.sin(a+rot)*62+8).toFixed(1))});
     if(el('sSmoke').style.display!=='none')Q('#sSmoke .smk').forEach(e=>{const ph=(t*.18+ +e.dataset.k*4)%1;

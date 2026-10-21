@@ -21,7 +21,12 @@ H = re.sub(r'<a class="logo" href="#top"([^>]*)>\s*<svg.*?</svg>\s*<span>Куд�
 # новая шапка-открытка
 i0 = H.index('<section class="hero" style="padding:0">'); i1 = H.index('</section>', i0) + len('</section>')
 HERO_HTML = '''<section class="hero2" id="hero2">
-  <div class="wrap">
+  <div class="h2-bg" aria-hidden="true">
+    <div class="hero-art" id="heroArt"></div>
+    <canvas id="heroFx"></canvas><div id="heroFlash"></div>
+  </div>
+  <div class="wrap h2-in">
+    <button class="live-pill" id="livePill" aria-expanded="false" title="Картинка следует за временем, погодой и праздниками Томска"><span class="pulse"></span><span id="liveTxt">Томск</span></button>
     <div class="h2-head">
       <h1><span id="hGreet">Добрый день</span><br>в Томске <span class="h2-temp" id="hTemp" hidden></span></h1>
       <div class="h2-side">
@@ -31,18 +36,13 @@ HERO_HTML = '''<section class="hero2" id="hero2">
           <input id="q" type="search" placeholder="Кафе, музей, улица…" aria-label="Поиск мест, событий или идей">
           <button class="btn" type="submit">Найти</button>
         </form>
+        <div class="h2-sticker" id="hand" aria-live="polite"></div>
       </div>
     </div>
-    <div class="h2-card">
-      <div class="hero-art" id="heroArt"></div>
-      <canvas id="heroFx" aria-hidden="true"></canvas><div id="heroFlash"></div>
-      <button class="live-pill" id="livePill" aria-expanded="false" title="Картинка следует за временем, погодой и праздниками Томска"><span class="pulse"></span><span id="liveTxt">Томск</span></button>
-      <div class="h2-sticker" id="hand" aria-live="polite"></div>
-      <div class="h2-bottom"><button class="h2-go" id="heroGo"><span id="heroGoTxt">Куда пойти сейчас</span> →</button><span class="live-sub" id="liveSub"></span></div>
-    </div>
-    <div class="chips" id="heroChips"></div>
+    <div class="h2-bottom"><button class="h2-go" id="heroGo"><span id="heroGoTxt">Куда пойти сейчас</span> →</button><span class="live-sub" id="liveSub"></span></div>
   </div>
-</section>'''
+</section>
+<div class="wrap h2-chips"><div class="chips" id="heroChips"></div></div>'''
 H = H[:i0] + HERO_HTML + H[i1:]
 
 # новый модуль шапки вместо старого
@@ -71,37 +71,42 @@ body{font-family:var(--font-body)}
 .sec-head h2{font-weight:900;font-size:clamp(24px,3vw,36px);letter-spacing:-.02em;text-transform:uppercase}
 .link-more{color:var(--ink);font-weight:800;text-decoration:underline;text-underline-offset:4px}
 
-/* шапка-открытка */
-.hero2{padding-block:22px 10px}
-.h2-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px 32px;flex-wrap:wrap}
-.hero2 h1{font-family:var(--font-display);font-weight:900;font-size:clamp(38px,6.4vw,84px);line-height:.92;letter-spacing:-.035em;text-transform:uppercase;max-width:none}
-.h2-temp{display:inline-block;background:var(--yellow);color:#111;padding:0 .16em;border-radius:.2em;border:2px solid #111;transform:rotate(2deg);font-size:.86em}
+/* шапка: живая иллюстрация Томска на весь фон */
+body{margin:0}
+.hero2{position:relative;isolation:isolate;overflow:hidden;color:#111;background:#9FD8FF;border-bottom:var(--bd);
+  height:clamp(600px,calc(100svh - 66px),900px);transition:background-color 1s}
+.h2-bg{position:absolute;inset:0;z-index:0}
+.h2-bg .hero-art{position:absolute;inset:0}.h2-bg .hero-art svg{width:100%;height:100%;display:block}
+.h2-in{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;padding-block:clamp(18px,3.2vh,40px) clamp(14px,2.4vh,26px)}
+.h2-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,410px);align-items:start;gap:18px 40px;margin-top:14px}
+.hero2 h1{font-family:var(--font-display);font-weight:900;font-size:clamp(38px,5.6vw,82px);line-height:.92;letter-spacing:-.035em;text-transform:uppercase;max-width:none;margin:0;color:inherit;
+  text-shadow:0 0 22px color-mix(in srgb,var(--h2-sky,#9FD8FF) 70%,transparent)}
+.hero2.dark{color:#FFFDF5}
+.h2-temp{display:inline-block;background:var(--yellow);color:#111;padding:0 .16em;border-radius:.2em;border:2px solid #111;transform:rotate(2deg);font-size:.86em;text-shadow:none;box-shadow:3px 3px 0 #111}
 .h2-temp[hidden]{display:none}
 .h2-temp[data-cold="1"]{background:var(--blue);color:#FFFDF5}
-.h2-side{flex:1 1 300px;min-width:0;max-width:460px;display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
-.h2-wx{margin:0;font-weight:700;font-size:16px}
-.hero2 .search{background:var(--surface);border:var(--bd);box-shadow:var(--pop);max-width:none;width:100%;min-width:0}
-.hero2 .search input{color:var(--ink)}.hero2 .search input::placeholder{color:var(--ink-2)}
-.hero2 .search .btn{background:var(--forest);color:var(--on-forest);border-color:var(--line)}.hero2 .search .btn:hover{background:var(--forest-2)}
+.h2-side{min-width:0;display:flex;flex-direction:column;gap:12px;padding-top:6px}
+.h2-wx{margin:0;font-weight:800;font-size:16px;color:inherit}
+.hero2 .search{background:#FFFDF5;border:2px solid #111;box-shadow:4px 4px 0 #111;max-width:none;width:100%;min-width:0}
+.hero2 .search .ico{color:#111}.hero2 .search input{color:#111}.hero2 .search input::placeholder{color:#55554D}
+.hero2 .search .btn{background:var(--yellow);color:#111;border:2px solid #111}.hero2 .search .btn:hover{background:#FFE27A}
 section[id],main [id]{scroll-margin-top:92px}
-.h2-card{position:relative;margin-top:22px;border:var(--bd);border-radius:32px;overflow:hidden;height:clamp(300px,38vw,470px);background:#9FD8FF;box-shadow:var(--pop)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .h2-card{box-shadow:6px 6px 0 var(--yellow);border-color:#FFFDF5}}
-:root[data-theme="dark"] .h2-card{box-shadow:6px 6px 0 var(--yellow);border-color:#FFFDF5}
-.h2-card .hero-art{position:absolute;inset:0}.h2-card .hero-art svg{width:100%;height:100%;display:block}
-.h2-card .live-pill{position:absolute;left:18px;top:18px;z-index:3;background:#FFFDF5;color:#111;border:2px solid #111;backdrop-filter:none}
-.h2-sticker{position:absolute;right:20px;top:20px;z-index:3;max-width:min(320px,60%);transform:rotate(4deg);background:#FFFDF5;color:#111;border:2px solid #111;border-radius:16px;padding:10px 16px;font-family:var(--font-display);font-weight:800;font-size:clamp(14px,1.6vw,19px);line-height:1.15;box-shadow:3px 3px 0 #111}
+.hero2 .live-pill{position:relative;align-self:flex-start;background:#FFFDF5;color:#111;border:2px solid #111;backdrop-filter:none;box-shadow:3px 3px 0 #111}
+.h2-sticker{align-self:flex-end;margin-top:8px;max-width:100%;transform:rotate(3deg);background:#FFFDF5;color:#111;border:2px solid #111;border-radius:16px;padding:9px 16px;font-family:var(--font-display);font-weight:800;font-size:clamp(14px,1.4vw,18px);line-height:1.15;box-shadow:3px 3px 0 #111}
 .h2-sticker:empty{display:none}
-.h2-bottom{position:absolute;left:18px;right:18px;bottom:18px;z-index:3;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.h2-go{height:50px;padding:0 22px;border-radius:999px;background:#111;color:#FFFDF5;border:2px solid #111;font-weight:800;font-size:15px}
+.h2-bottom{margin-top:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.h2-go{height:50px;padding:0 22px;border-radius:999px;background:#111;color:#FFFDF5;border:2px solid #111;font-weight:800;font-size:15px;box-shadow:3px 3px 0 rgba(0,0,0,.25)}
 .h2-go:hover{background:var(--yellow);color:#111}
 .h2-bottom .live-sub{background:#FFFDF5;color:#111;border:2px solid #111;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;opacity:1}
 .h2-bottom .live-sub:empty{display:none}
 #heroArt .st{animation:tw 2.6s ease-in-out infinite}
 #heroArt svg *{transition:fill 1s,opacity .8s}
-.hero2 .chips{max-width:none;margin-top:18px}
+.h2-chips{padding-block:18px 4px}.h2-chips .chips{max-width:none;margin:0}
 .chip{height:40px;padding:0 16px;font-size:14px;font-weight:800;background:var(--surface);color:var(--ink);border:var(--bd)}
 .chip:hover,.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-@media (max-width:640px){.h2-card{border-radius:24px;height:340px}.h2-sticker{max-width:58%;right:12px;top:58px}.h2-card .live-pill{left:12px;top:12px;max-width:calc(100% - 24px)}.h2-bottom{left:12px;right:12px;bottom:12px}.h2-bottom .live-sub{display:none}.h2-go{height:42px;font-size:13.5px;padding-inline:14px}.h2-sticker{font-size:13px;padding:7px 12px}}
+@media (max-width:900px){.h2-head{grid-template-columns:minmax(0,1fr)}.h2-sticker{align-self:flex-start;transform:rotate(-2deg)}}
+@media (max-width:640px){.hero2{height:clamp(580px,calc(100svh - 60px),720px)}.h2-head{margin-top:10px;gap:12px}.h2-wx{font-size:14px}
+  .h2-bottom .live-sub{display:none}.h2-go{height:44px;font-size:14px;padding-inline:16px}.h2-sticker{font-size:13px;padding:7px 12px;margin-top:2px}}
 .live-panel{border:var(--bd);box-shadow:var(--pop)}.lp-row button{border:2px solid var(--line);background:var(--surface)}
 
 /* полоса «сейчас» */

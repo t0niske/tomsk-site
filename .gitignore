@@ -1,0 +1,13 @@
+# рабочие данные хостинга — не в репозиторий
+data/backup/*.json
+data/.lock
+data/.login_*
+uploads/*
+!uploads/.htaccess
+reports/*
+!reports/.htaccess
+# промежуточные файлы сборки
+src/tomsk.html
+src/map/map.html
+src/map/all.js
+__pycache__/

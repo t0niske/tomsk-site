@@ -16,7 +16,7 @@ def photo(key):
 
 items = []
 # 1) главные места первой версии (с их текстами) — «на главной»
-H = open(D + '/base.html').read()
+H = open(D + '/tomsk.pre-places.html').read()
 m = re.search(r'const PLACES = \[\n(.*?)\n\];', H, re.S)
 FEAT_XY = {'nab': (-847, 1724), 'shatr': (486, -634), 'kraev': (-381, 115), 'bot': (-627, -1010), 'lager': (-351, -2440), 'roshcha': (-585, -671),
            'dragon': (559, -359), 'art': (-596, 796), 'chekhov': (-741, 1098), 'gorsad': (-107, -237)}

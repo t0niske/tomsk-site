@@ -7,12 +7,12 @@
 <meta name="description" content="Куда сходить в Томске: места, афиша, идеи для выходных, план дня и карта города.">
 <meta property="og:title" content="Куда сходить в Томске">
 <meta property="og:description" content="Куда сходить в Томске: места, афиша, идеи для выходных, план дня и карта города.">
-<meta name="theme-color" content="#1D5A42">
+<meta name="theme-color" content="#FFD43B">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>:root{color-scheme:light}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Manrope:wght@400;500;600;700;800&family=Caveat:wght@600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&family=Golos+Text:wght@400;500;600;700;800&display=swap">
 <style>
 /* Layout: портал-витрина. Иллюстрированный закатный герой с деревянным особняком, дальше ритм секций «заголовок + лента карточек», мотив резного наличника как фирменный знак. */
 :root{
@@ -340,16 +340,144 @@ footer nav a{text-decoration:none}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;transition:.25s;z-index:80;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== стиль «Яркий город» ===== */
+:root{--bg:#FFFDF5;--surface:#FFFFFF;--surface-2:#F4EFE0;--ink:#111111;--ink-2:#4A4A44;--line:#111111;--soft:#E6E0CF;
+  --forest:#111111;--forest-2:#2A2A2A;--on-forest:#FFFDF5;--amber:#FF5A36;--wood:#FF5A36;--yellow:#FFD43B;--coral:#FF5A36;--blue:#3B2BD9;--sky:#B9E4FF;--mint:#C9F2D2;--pink:#FFC3D0;
+  --map-land:#F4EFE0;--map-road:#FFFFFF;--map-block:#E6E0CF;--river:#6FB7F2;--shadow:none;--bd:2px solid var(--line);--pop:4px 4px 0 var(--line);
+  --font-body:'Golos Text',system-ui,-apple-system,'Segoe UI',sans-serif;--r:22px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#12131A;--surface:#1B1D27;--surface-2:#242733;--ink:#FFFDF5;--ink-2:#C9C5B8;--line:#FFFDF5;--soft:#33374A;--forest:#FFD43B;--forest-2:#FFE27A;--on-forest:#111111;--map-land:#1B1D27;--map-road:#33374A;--map-block:#242733;--river:#2F5C8A}}
+:root[data-theme="dark"]{--bg:#12131A;--surface:#1B1D27;--surface-2:#242733;--ink:#FFFDF5;--ink-2:#C9C5B8;--line:#FFFDF5;--soft:#33374A;--forest:#FFD43B;--forest-2:#FFE27A;--on-forest:#111111;--map-land:#1B1D27;--map-road:#33374A;--map-block:#242733;--river:#2F5C8A}
+body{font-family:var(--font-body)}
+.top{background:color-mix(in srgb,var(--bg) 92%,transparent);border-bottom:var(--bd)}
+.logo{gap:8px;align-items:center}
+.logo-st{font-family:var(--font-display);font-weight:900;font-size:16px;letter-spacing:0;background:var(--yellow);color:#111;padding:5px 10px;border-radius:10px;border:2px solid #111;transform:rotate(-2deg);display:inline-block}
+.logo-sub{font-family:var(--font-body);font-weight:700;font-size:13px;text-transform:none;letter-spacing:0}
+.nav{gap:2px}.nav a{color:var(--ink);font-weight:700;font-size:14px;padding:6px 10px;border-radius:999px;border:2px solid transparent;white-space:nowrap}
+@media (max-width:1180px) and (min-width:901px){.nav a{font-size:13px;padding:6px 7px}.logo-sub{display:none}}
+.nav a:hover{border-color:var(--line)}
+.icon-btn{border:2px solid transparent}.icon-btn:hover{background:var(--yellow);border-color:#111;color:#111}
+.btn{border:var(--bd);font-weight:800}.btn-primary{background:var(--forest);color:var(--on-forest)}.btn-primary:hover{background:var(--forest-2)}
+.btn-ghost{background:var(--surface);color:var(--ink)}.btn-ghost:hover{background:var(--yellow);color:#111}
+.sec-head h2{font-weight:900;font-size:clamp(24px,3vw,36px);letter-spacing:-.02em;text-transform:uppercase}
+.link-more{color:var(--ink);font-weight:800;text-decoration:underline;text-underline-offset:4px}
+
+/* шапка-открытка */
+.hero2{padding-block:22px 10px}
+.h2-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px 32px;flex-wrap:wrap}
+.hero2 h1{font-family:var(--font-display);font-weight:900;font-size:clamp(38px,6.4vw,84px);line-height:.92;letter-spacing:-.035em;text-transform:uppercase;max-width:none}
+.h2-temp{display:inline-block;background:var(--yellow);color:#111;padding:0 .16em;border-radius:.2em;border:2px solid #111;transform:rotate(2deg);font-size:.86em}
+.h2-temp[hidden]{display:none}
+.h2-temp[data-cold="1"]{background:var(--blue);color:#FFFDF5}
+.h2-side{flex:1 1 300px;min-width:0;max-width:460px;display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
+.h2-wx{margin:0;font-weight:700;font-size:16px}
+.hero2 .search{background:var(--surface);border:var(--bd);box-shadow:var(--pop);max-width:none;width:100%;min-width:0}
+.hero2 .search input{color:var(--ink)}.hero2 .search input::placeholder{color:var(--ink-2)}
+.hero2 .search .btn{background:#111;color:#FFFDF5;border-color:#111}
+.h2-card{position:relative;margin-top:22px;border:var(--bd);border-radius:32px;overflow:hidden;height:clamp(280px,36vw,440px);background:#9FD8FF;box-shadow:var(--pop)}
+.h2-card .hero-art{position:absolute;inset:0}.h2-card .hero-art svg{width:100%;height:100%;display:block}
+.h2-card .live-pill{position:absolute;left:18px;top:18px;z-index:3;background:#FFFDF5;color:#111;border:2px solid #111;backdrop-filter:none}
+.h2-sticker{position:absolute;right:20px;top:20px;z-index:3;max-width:min(320px,60%);transform:rotate(4deg);background:#FFFDF5;color:#111;border:2px solid #111;border-radius:16px;padding:10px 16px;font-family:var(--font-display);font-weight:800;font-size:clamp(14px,1.6vw,19px);line-height:1.15;box-shadow:3px 3px 0 #111}
+.h2-sticker:empty{display:none}
+.h2-bottom{position:absolute;left:18px;right:18px;bottom:18px;z-index:3;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.h2-go{height:50px;padding:0 22px;border-radius:999px;background:#111;color:#FFFDF5;border:2px solid #111;font-weight:800;font-size:15px}
+.h2-go:hover{background:var(--yellow);color:#111}
+.h2-bottom .live-sub{background:#FFFDF5;color:#111;border:2px solid #111;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;opacity:1}
+.h2-bottom .live-sub:empty{display:none}
+#heroArt .st{animation:tw 2.6s ease-in-out infinite}
+#heroArt svg *{transition:fill 1s,opacity .8s}
+.hero2 .chips{max-width:none;margin-top:18px}
+.chip{height:40px;padding:0 16px;font-size:14px;font-weight:800;background:var(--surface);color:var(--ink);border:var(--bd)}
+.chip:hover,.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+@media (max-width:640px){.h2-card{border-radius:24px;height:300px}.h2-sticker{max-width:58%;right:12px;top:58px}.h2-card .live-pill{left:12px;top:12px;max-width:calc(100% - 24px)}.h2-bottom{left:12px;right:12px;bottom:12px}.h2-go{height:44px;font-size:14px}}
+.live-panel{border:var(--bd);box-shadow:var(--pop)}.lp-row button{border:2px solid var(--line);background:var(--surface)}
+
+/* полоса «сейчас» */
+.nowbar{margin-top:14px}.nowbar .pill{border:var(--bd);box-shadow:none;background:var(--surface)}.nowbar .pill b{color:var(--ink)}
+
+/* категории — цветные плитки */
+.cat .tile{border:var(--bd);border-radius:20px;color:#111}
+.cat:nth-child(5n+1) .tile{background:var(--yellow)}.cat:nth-child(5n+2) .tile{background:var(--sky)}.cat:nth-child(5n+3) .tile{background:var(--mint)}.cat:nth-child(5n+4) .tile{background:var(--pink)}.cat:nth-child(5n+5) .tile{background:#FFB38A}
+.cat:hover .tile{transform:translate(-2px,-2px);box-shadow:var(--pop)}
+.cat[aria-pressed="true"] .tile{background:#111;color:#FFFDF5}
+.cat{font-weight:800}
+
+/* фильтры и переключатели */
+.seg{background:var(--surface);border:var(--bd);padding:3px}
+.seg button{color:var(--ink);font-weight:800}.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg);box-shadow:none}
+.active-filter{background:var(--yellow);color:#111;border:2px solid #111}
+.count{font-weight:700}
+
+/* карточки */
+.card{border:var(--bd);border-radius:22px;box-shadow:none;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translate(-3px,-3px);box-shadow:var(--pop)}
+.media{border-bottom:var(--bd)}
+.card h3{font-family:var(--font-display);font-weight:800;font-size:16px;letter-spacing:-.01em}
+.meta{font-weight:600}
+.fav{background:#FFFDF5;color:#111;border:2px solid #111;backdrop-filter:none}
+.fav[aria-pressed="true"]{background:var(--pink);color:#D2243A}
+.add{background:var(--surface);border:2px solid var(--line);height:32px;padding:0 12px}.add:hover{background:var(--yellow);color:#111}.add[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.empty{border:2px dashed var(--line);border-radius:22px}
+.tag{background:var(--surface);border:2px solid var(--line);color:var(--ink)}.tag.free{background:var(--mint);color:#111}
+
+/* события */
+.date{border:var(--bd);border-radius:14px}.date[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.date.has::after{background:var(--coral)}.date.weekend small{color:var(--coral)}
+.ev-date{border:2px solid #111;background:var(--yellow)}
+
+/* «Удиви меня» */
+.surprise{border:var(--bd);border-radius:28px;box-shadow:var(--pop)}
+.s-left{background:var(--coral);color:#111;border-right:var(--bd)}
+.s-left h2{font-weight:900;text-transform:uppercase}
+.opt button{background:#FFFDF5;color:#111;border:2px solid #111}.opt button[aria-pressed="true"]{background:#111;color:#FFFDF5}
+.s-left .go{background:#111;color:#FFFDF5}
+.plan-step{background:var(--surface);border:var(--bd)}
+.plan-thumb{border:2px solid var(--line)}
+
+/* мини-карта */
+.mapbox{border:var(--bd);border-radius:28px;box-shadow:var(--pop)}
+.map-side{background:var(--blue);color:#FFFDF5;border-right:var(--bd)}
+.map-side h2{font-weight:900;text-transform:uppercase}
+.map-side .btn{background:var(--yellow)!important;color:#111!important;border:2px solid #111}
+.legend button{background:rgba(255,253,245,.16);color:#FFFDF5;border:2px solid rgba(255,253,245,.7)}.legend button[aria-pressed="true"]{background:#FFFDF5;color:#111;border-color:#FFFDF5}
+.pin svg.shape path{stroke:#111;stroke-width:2.5}
+.pop{border:var(--bd);box-shadow:var(--pop)}
+
+/* паспорт и подборки */
+.passport{border:var(--bd);border-radius:28px;box-shadow:none;background:var(--mint);color:#111}
+.passport p{color:#2A2A2A}.passport h2{font-weight:900;text-transform:uppercase}
+.stamp{border-color:#111;background:#FFFDF5;color:#111}.stamp small{color:#4A4A44}.stamp .seal{color:#B9B3A2}
+.stamp[aria-pressed="true"]{border-color:#111;background:var(--yellow)}.stamp[aria-pressed="true"] .seal{color:#111}
+.stamp.reward.got{background:#111;color:#FFFDF5}
+.meter{background:#FFFDF5;border:2px solid #111;height:14px}.meter i{background:#111}
+.coll{border:var(--bd);border-radius:22px}
+
+/* каталог */
+.cat-q{border:var(--bd);box-shadow:none}
+.cat-chips button{background:var(--surface);border:2px solid var(--line);color:var(--ink);font-weight:800;height:38px}
+.cat-chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.vrow{border:var(--bd);box-shadow:none;border-radius:20px}
+.vrow h3{font-family:var(--font-display);font-weight:800;font-size:15px}
+.vrow .acts a,.vrow .acts button{border:2px solid var(--line);background:var(--surface)}
+.vrow .acts a:hover,.vrow .acts button:hover{background:var(--yellow);color:#111}
+.vthumb{border:2px solid var(--line)}
+
+/* окна */
+.sheet{border:var(--bd);box-shadow:6px 6px 0 #111;border-radius:24px}
+.sheet .media{border-bottom:var(--bd)}
+.sheet .x,.pop .x{background:#FFFDF5;color:#111;border:2px solid #111}
+.drawer{border-left:var(--bd);box-shadow:none}.r-item{background:var(--surface);border:2px solid var(--line)}.r-num{background:var(--yellow);color:#111;border:2px solid #111}
+.route-fab{box-shadow:var(--pop)!important}
+.facts>div{border:2px solid var(--line)!important;background:var(--surface)!important}
+.oh.on b{color:#1E8A4C}.oh.off b{color:#D2243A}
+footer{border-top:var(--bd);background:var(--yellow);color:#111}footer nav{color:#111}.fine{color:#2A2A2A}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Куда сходить в Томске — на главную">
-      <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M20 3v5M15 16l5-8 5 8M13 16h14v8H13zM6 24h28v12H6zM10 24l4-6M30 24l-4-6M17 36v-6a3 3 0 0 1 6 0v6M10 29h3M27 29h3"/></svg>
-      <span>Куда сходить<br>в Томске?</span>
-    </a>
+    <a class="logo" href="#top" aria-label="Куда сходить в Томске — на главную"><span class="logo-st">КУДА СХОДИТЬ</span><span class="logo-sub">в Томске</span></a>
     <nav class="nav" id="nav">
       <a href="#places">Места</a><a href="#all">Все заведения</a><a href="#events">События</a><a href="#surprise">Удиви меня</a><a href="#map">Карта</a><a href="#passport">Деревянный Томск</a><a href="#collections">Подборки</a>
     </nav>
@@ -363,21 +491,28 @@ footer nav a{text-decoration:none}
 </header>
 
 <main id="top">
-<section class="hero" style="padding:0">
-  <div class="hero-art" id="heroArt"></div>
-  <canvas id="heroFx" aria-hidden="true"></canvas><div id="heroFlash"></div>
+<section class="hero2" id="hero2">
   <div class="wrap">
-    <h1>Куда сходить в&nbsp;Томске?</h1>
-    <p class="hero-sub">Афиша, интересные места, события и идеи для выходных в любимом городе</p>
-    <form class="search" id="searchForm" role="search">
-      <svg class="ico" viewBox="0 0 24 24" style="color:#5A5060"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-      <input id="q" type="search" placeholder="Поиск мест, событий или идей…" aria-label="Поиск мест, событий или идей">
-      <button class="btn" type="submit">Найти</button>
-    </form>
+    <div class="h2-head">
+      <h1><span id="hGreet">Добрый день</span><br>в Томске <span class="h2-temp" id="hTemp" hidden></span></h1>
+      <div class="h2-side">
+        <p class="h2-wx" id="hWx">Афиша, места и идеи для выходных</p>
+        <form class="search" id="searchForm" role="search">
+          <svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input id="q" type="search" placeholder="Кафе, музей, улица…" aria-label="Поиск мест, событий или идей">
+          <button class="btn" type="submit">Найти</button>
+        </form>
+      </div>
+    </div>
+    <div class="h2-card">
+      <div class="hero-art" id="heroArt"></div>
+      <canvas id="heroFx" aria-hidden="true"></canvas><div id="heroFlash"></div>
+      <button class="live-pill" id="livePill" aria-expanded="false" title="Картинка следует за временем, погодой и праздниками Томска"><span class="pulse"></span><span id="liveTxt">Томск</span></button>
+      <div class="h2-sticker" id="hand" aria-live="polite"></div>
+      <div class="h2-bottom"><button class="h2-go" id="heroGo"><span id="heroGoTxt">Куда пойти сейчас</span> →</button><span class="live-sub" id="liveSub"></span></div>
+    </div>
     <div class="chips" id="heroChips"></div>
-    <div class="live"><button class="live-pill" id="livePill" aria-expanded="false" title="Картинка следует за временем, погодой и праздниками Томска"><span class="pulse"></span><span id="liveTxt">Томск</span></button><span class="live-sub" id="liveSub"></span></div>
   </div>
-  <div class="hand" id="hand">Томск<br>вдохновляет ♡</div>
 </section>
 
 <div class="wrap">
@@ -647,15 +782,15 @@ function scene(kind){
 
 /* ================= ЖИВОЙ ГЕРОЙ: реальное время, погода, сезон, праздники ================= */
 const HERO=(()=>{
-  const LAT=56.4977,LNG=84.9744,TZ=7; // Томск, UTC+7
+  /* Живая «открытка» Томска в стиле наклеек: время суток (по солнцу), настоящая погода, сезон и праздники. */
+  const LAT=56.4977,LNG=84.9744,TZ=7;
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hexA=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
   const toHex=a=>'#'+a.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
   const mix=(a,b,t)=>{const A=hexA(a),B=hexA(b);return toHex(A.map((v,i)=>v+(B[i]-v)*t))};
-  const rgba=(c,a)=>{const[r,g,b]=hexA(c);return `rgba(${r},${g},${b},${a})`};
   const R=Math.random,el=id=>document.getElementById(id);
+  const INK='#111111';
 
-  /* --- солнце: восход и закат по алгоритму SunCalc --- */
   function sunMinutes(date){const rad=Math.PI/180,J1970=2440588,J2000=2451545,dayMs=864e5,e=rad*23.4397,J0=.0009;
     const d=date.valueOf()/dayMs-.5+J1970-J2000,lw=rad*-LNG,phi=rad*LAT;
     const n=Math.round(d-J0-lw/(2*Math.PI)),ds=J0+lw/(2*Math.PI)+n;
@@ -664,249 +799,230 @@ const HERO=(()=>{
     const noon=J2000+ds+.0053*Math.sin(M)-.0069*Math.sin(2*L),set=J2000+J0+(w+lw)/(2*Math.PI)+n+.0053*Math.sin(M)-.0069*Math.sin(2*L),rise=noon-(set-noon);
     const toMin=J=>{const ms=(J+.5-J1970)*dayMs+TZ*3600e3;return((ms/6e4)%1440+1440)%1440};
     return{rise:toMin(rise),set:toMin(set)}}
-  const tomskDate=()=>new Date(Date.now()+TZ*3600e3); // читать через getUTC*
+  const tomskDate=()=>new Date(Date.now()+TZ*3600e3);
   const fmt=m=>String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(Math.floor(m%60)).padStart(2,'0');
 
-  /* --- палитры неба по фазам дня --- */
+  /* плоские цвета неба по фазам дня */
   const PH={
-    night:{sky:['#0A1130','#16204A','#26305E','#343A68'],water:['#1C2545','#0F1530'],shade:.62,lit:.55,stars:1,cloud:'#394166'},
-    predawn:{sky:['#1D2556','#4A4880','#9A7194','#D89A8C'],water:['#5A5A80','#2A2E50'],shade:.38,lit:.35,stars:.35,cloud:'#7A6E92'},
-    dawn:{sky:['#6E86C0','#C9A0B8','#F4B596','#F9D9AE'],water:['#C9A6B0','#7E7A9E'],shade:.08,lit:.08,stars:0,cloud:'#F6D7CE'},
-    day:{sky:['#4D8FD0','#83B9E4','#BCDBEF','#E4EFEA'],water:['#8DBAD6','#5E8DB0'],shade:0,lit:0,stars:0,cloud:'#FFFFFF'},
-    golden:{sky:['#8E7FB9','#C996B6','#EFA894','#F6C58E'],water:['#B98EA8','#7B6E95'],shade:.06,lit:.25,stars:0,cloud:'#F6D6C8'},
-    evening:{sky:['#2C3468','#5E5590','#B67C98','#E19C86'],water:['#6E5E86','#3A3A62'],shade:.34,lit:.7,stars:.3,cloud:'#8A7896'}
-  };
-  function lerpPh(a,b,t){const o={};o.sky=a.sky.map((c,i)=>mix(c,b.sky[i],t));o.water=a.water.map((c,i)=>mix(c,b.water[i],t));
-    ['shade','lit','stars'].forEach(k=>o[k]=a[k]+(b[k]-a[k])*t);o.cloud=mix(a.cloud,b.cloud,t);return o}
+    night:{sky:'#23307A',hz:'#34428F',dark:1,lit:.6,stars:1},
+    predawn:{sky:'#4B3F8C',hz:'#C97A9A',dark:.6,lit:.4,stars:.4},
+    dawn:{sky:'#FFC9A0',hz:'#FFE3B8',dark:0,lit:.1,stars:0},
+    day:{sky:'#9FD8FF',hz:'#D6EEFF',dark:0,lit:0,stars:0},
+    golden:{sky:'#FFAE6B',hz:'#FFD59A',dark:0,lit:.25,stars:0},
+    evening:{sky:'#FF7F66',hz:'#6E55C2',dark:.45,lit:.75,stars:.3}};
+  const lerpPh=(a,b,t)=>({sky:mix(a.sky,b.sky,t),hz:mix(a.hz,b.hz,t),dark:a.dark+(b.dark-a.dark)*t,lit:a.lit+(b.lit-a.lit)*t,stars:a.stars+(b.stars-a.stars)*t});
   const smooth=t=>t*t*(3-2*t);
 
-  /* --- погода --- */
-  const WX={clear:{t:'ясно',k:0,to:'#000000'},cloudy:{t:'облачно',k:.35,to:'#9AA4B0'},rain:{t:'дождь',k:.55,to:'#7F8896'},storm:{t:'гроза',k:.72,to:'#363B4C'},snow:{t:'снег',k:.42,to:'#C8D0DA'},fog:{t:'туман',k:.6,to:'#C9CDD2'}};
+  const WX={clear:{t:'ясно',k:0},cloudy:{t:'облачно',k:.25},rain:{t:'дождь',k:.55},storm:{t:'гроза',k:.75},snow:{t:'снег',k:.45},fog:{t:'туман',k:.6}};
+  const WXDAY={rain:'#8FA3B8',storm:'#5D6A86',snow:'#D6E4EE',fog:'#CDD5DC',cloudy:'#BFD3E2',clear:'#9FD8FF'};
+  const WXNIGHT={rain:'#2A3150',storm:'#1C2038',snow:'#3A4680',fog:'#3A4060',cloudy:'#2C3770',clear:'#23307A'};
   function wmo(c){if(c<=1)return'clear';if(c<=3)return'cloudy';if(c<=48)return'fog';if(c>=95)return'storm';if((c>=71&&c<=77)||c===85||c===86)return'snow';return'rain'}
 
-  /* --- праздники --- */
   const HOL={
-    ny:{t:'Новый год',d:[12,31],hand:'С Новым годом,<br>Томск! ✦',pre:'Скоро Новый год,<br>Томск ✦'},
-    tat:{t:'Татьянин день',d:[1,25],hand:'С Днём студента!<br>Томск, ты молод ♡'},
-    feb23:{t:'23 февраля',d:[2,23],hand:'С Днём защитника<br>Отечества!'},
-    mar8:{t:'8 Марта',d:[3,8],hand:'С 8 Марта,<br>милые томички ♡'},
-    may9:{t:'9 Мая',d:[5,9],hand:'С Днём Победы!<br>Помним ♡'},
-    jun12:{t:'День России',d:[6,12],hand:'С Днём России!'},
-    sep1:{t:'1 сентября',d:[9,1],hand:'С Днём знаний!<br>Удачи, студенты ♡'},
-    hw:{t:'Хеллоуин',d:[10,31],hand:'Жутко красивый<br>Хеллоуин ♡'}
-  };
-  function autoHoliday(m,d){ // m: 1..12
+    ny:{t:'Новый год',d:[12,31],s:'С Новым годом!',pre:'Скоро Новый год!'},
+    tat:{t:'Татьянин день',d:[1,25],s:'С Днём студента!'},
+    feb23:{t:'23 февраля',d:[2,23],s:'С 23 Февраля!'},
+    mar8:{t:'8 Марта',d:[3,8],s:'С 8 Марта!'},
+    may9:{t:'9 Мая',d:[5,9],s:'С Днём Победы!'},
+    jun12:{t:'День России',d:[6,12],s:'С Днём России!'},
+    sep1:{t:'1 сентября',d:[9,1],s:'С Днём знаний!'},
+    hw:{t:'Хеллоуин',d:[10,31],s:'Жуткий Хеллоуин!'}};
+  function autoHoliday(m,d){
     if((m===12&&d>=20)||(m===1&&d<=10))return'ny';
     if(m===1&&d===25)return'tat';if(m===2&&d===23)return'feb23';if(m===3&&d>=6&&d<=8)return'mar8';
     if(m===5&&d===9)return'may9';if(m===6&&d===12)return'jun12';if(m===9&&d===1)return'sep1';if((m===10&&d>=29)||(m===11&&d===1))return'hw';return null}
   function nextHoliday(now){let best=null;for(const k in HOL){if(k==='ny')continue;const[m,d]=HOL[k].d;let dt=Date.UTC(now.getUTCFullYear(),m-1,d);if(dt<now)dt=Date.UTC(now.getUTCFullYear()+1,m-1,d);
       const days=Math.ceil((dt-now)/864e5);if(!best||days<best.days)best={k,days}}
     const ny=Date.UTC(now.getUTCFullYear(),11,31);const nd=Math.ceil((ny-now)/864e5);if(nd>=0&&nd<best.days)best={k:'ny',days:nd};return best}
-  function season(m,d){if(m===12||m<=2||(m===3&&d<25)||(m===11&&d>=10))return'winter';if((m===3)||m===4||m===5)return m===5||(m===4&&d>20)?'spring':'thaw';if(m<=8)return'summer';return'autumn'}
+  function season(m,d){if(m===12||m<=2||(m===3&&d<25)||(m===11&&d>=10))return'winter';if(m===3||m===4||m===5)return m===5||(m===4&&d>20)?'spring':'thaw';if(m<=8)return'summer';return'autumn'}
 
-  /* --- сцена --- */
-  const FOL={summer:['#2F5A3E','#3B6B48','#2A4E36'],spring:['#5E8F4E','#7AA85A','#4E7A42'],thaw:['#4A5A50','#3E4E44'],autumn:['#C9782E','#D99A3C','#B5651D','#3B5A40'],winter:['#3E4E46','#46564C']};
-  const trees=[[700,300,70],[1170,250,90],[1110,190,70],[660,350,50],[612,388,32],[1192,340,46]];
-  const winList=[];
-  function buildSVG(){
-    let w='',lace='';
-    const addW=(x,y,ww,hh)=>{winList.push([x,y,ww,hh]);lace+=`<path d="M${x-4} ${y-1}Q${x+ww/2} ${y-14} ${x+ww+4} ${y-1}" stroke="#F4E6CF" stroke-width="3" fill="none" data-s="#F4E6CF"/><rect x="${x-4}" y="${y+hh}" width="${ww+8}" height="4" fill="#F4E6CF" data-c="#F4E6CF"/>`};
-    addW(925,190,22,46);addW(961,190,22,46);addW(788,226,26,32);addW(1090,226,26,32);
-    for(let i=0;i<9;i++){addW(770+i*42,300,20,44);addW(770+i*42,372,20,40)}
-    w=winList.map((a,i)=>`<rect class="hw" data-r="${R().toFixed(3)}" x="${a[0]}" y="${a[1]}" width="${a[2]}" height="${a[3]}"/>`).join('');
-    const stars=Array.from({length:70},()=>`<circle cx="${(R()*1200).toFixed(0)}" cy="${(R()*300).toFixed(0)}" r="${(R()*1.4+.4).toFixed(1)}" fill="#FFF8E8" style="animation-delay:${(R()*4).toFixed(2)}s"/>`).join('');
-    const fol=trees.map(([x,y,r],i)=>`<circle class="hf" data-i="${i}" cx="${x}" cy="${y}" r="${r}"/>`).join('');
-    const tsnow=trees.map(([x,y,r])=>`<ellipse cx="${x}" cy="${y-r*.55}" rx="${r*.72}" ry="${r*.28}" fill="#F2F6FA" data-c="#F2F6FA"/>`).join('');
-    const fence=Array.from({length:70},(_,i)=>`<rect x="${600+i*9}" y="424" width="5" height="22" fill="#5C4030" data-c="#5C4030"/>`).join('');
-    // гирлянда
-    let gar='';for(let i=0;i<=24;i++){const t=i/24,x=740+420*t,y=274+Math.sin(t*Math.PI*4)*-6+8*Math.sin(t*Math.PI);gar+=`<circle class="gb" data-p="${i%3}" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="4.5" fill="${['#FF5A5A','#FFD24A','#5AD1FF'][i%3]}"/>`}
-    for(let i=0;i<=8;i++){const t=i/8;gar+=`<circle class="gb" data-p="${i%3}" cx="${(955-62*t).toFixed(0)}" cy="${(40+120*t).toFixed(0)}" r="4" fill="${['#FFD24A','#5AD1FF','#FF5A5A'][i%3]}"/><circle class="gb" data-p="${(i+1)%3}" cx="${(955+62*t).toFixed(0)}" cy="${(40+120*t).toFixed(0)}" r="4" fill="${['#5AD1FF','#FF5A5A','#FFD24A'][i%3]}"/>`}
-    const fir=`<g id="hFir"><rect x="632" y="420" width="10" height="20" fill="#5A3A22"/>${[[637,300,26],[637,340,38],[637,380,50]].map(([x,y,h],i)=>`<path d="M${x} ${y}L${x+h*.9} ${y+h*1.05}H${x-h*.9}Z" fill="#1F4D36"/><path d="M${x-h*.5} ${y+h*.6}l${h*.25} -6 ${h*.25} 6 ${h*.25} -6 ${h*.25} 6" stroke="#F2F6FA" stroke-width="4" fill="none"/>`).join('')}
-      ${[[625,345,'#FF5A5A'],[650,370,'#FFD24A'],[620,400,'#5AD1FF'],[655,410,'#FF5A5A'],[640,322,'#5AD1FF'],[630,375,'#FFD24A']].map(([x,y,c],i)=>`<circle class="gb" data-p="${i%3}" cx="${x}" cy="${y}" r="5" fill="${c}"/>`).join('')}
-      <path d="M637 284l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" fill="#FFD24A"/></g>`;
-    const pumpkin=(x,s=1)=>`<g transform="translate(${x} 430) scale(${s})"><path d="M-2 -14q2-8 8-9" stroke="#3E5A2A" stroke-width="3" fill="none"/><ellipse rx="19" ry="14" fill="#E07A1E"/><ellipse rx="9" ry="14" fill="#C9661A"/><ellipse rx="2.5" ry="14" fill="#E07A1E"/>
-      <path class="pf" d="M-11 -4l5-6 5 6zM1 -4l5-6 5 6zM-10 4q10 7 20 0l-4 4-3-3-3 3-3-3-3 3z" fill="#FFD24A"/></g>`;
-    const flag=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M0 0V-52" stroke="#3A2A20" stroke-width="2.5"/><g class="hflag"><rect x="0" y="-52" width="34" height="7.3" fill="#FFFFFF"/><rect x="0" y="-44.7" width="34" height="7.3" fill="#1C57A5"/><rect x="0" y="-37.4" width="34" height="7.3" fill="#D52B1E"/></g></g>`;
-    const tulips=Array.from({length:26},(_,i)=>{const x=606+i*23,c=['#E8476A','#F06A9A','#FFD24A','#E8476A','#FFFFFF'][i%5];return `<path d="M${x} 446v-22" stroke="#3E7A3A" stroke-width="2.5"/><path d="M${x-6} 424q0-12 6-14q6 2 6 14q-6 5-12 0z" fill="${c}"/>`}).join('');
-    const mimosa=Array.from({length:40},()=>`<circle cx="${(600+R()*600).toFixed(0)}" cy="${(410+R()*14).toFixed(0)}" r="3" fill="#F6D33C"/>`).join('');
-    const carn=Array.from({length:20},(_,i)=>{const x=612+i*29;return `<path d="M${x} 446v-24" stroke="#3E6A3A" stroke-width="2"/><circle cx="${x}" cy="420" r="6" fill="#C8102E"/><circle cx="${x-3}" cy="417" r="3" fill="#E8304A"/>`}).join('');
-    const balloons=Array.from({length:7},(_,i)=>{const x=670+(i%4)*22-(i>3?-11:0),y=280+(i>3?-34:0)+(i%2)*10;return `<g class="hb" data-i="${i}"><path d="M${x} ${y+20}Q${x+6} ${y+80} 690 430" stroke="#5A4A40" stroke-width="1.2" fill="none"/><ellipse class="hbb" cx="${x}" cy="${y}" rx="15" ry="19"/><path d="M${x-3} ${y+19}h6l-3 5z" class="hbb"/></g>`}).join('');
-    return `<svg viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs><linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1"><stop id="hs0" offset="0"/><stop id="hs1" offset=".42"/><stop id="hs2" offset=".74"/><stop id="hs3" offset="1"/></linearGradient>
-      <linearGradient id="hWat" x1="0" y1="0" x2="0" y2="1"><stop id="hw0" offset="0"/><stop id="hw1" offset="1"/></linearGradient>
-      <radialGradient id="hGlow"><stop offset="0" stop-color="#FFE9C0" stop-opacity=".75"/><stop offset="1" stop-color="#FFE9C0" stop-opacity="0"/></radialGradient></defs>
-    <rect width="1200" height="520" fill="url(#hSky)"/>
-    <g id="hStars">${stars}</g>
-    <g id="hSun"><circle r="160" fill="url(#hGlow)" id="hSunGlow"/><circle r="56" fill="#FFE5B6" id="hSunDisc"/></g>
-    <g id="hMoon"><circle r="110" fill="url(#hGlow)" opacity=".35"/><circle r="32" fill="#F4EEDC" id="hMoonDisc"/><circle cx="-9" cy="-7" r="5" fill="#000" opacity=".07"/><circle cx="9" cy="9" r="4" fill="#000" opacity=".07"/><circle cx="12" cy="-10" r="2.5" fill="#000" opacity=".07"/></g>
-    <g id="hClouds"></g>
-    <path d="M0 398Q120 368 260 386T510 380T740 388T970 382T1200 388V432H0Z" fill="#4D5B57" data-c="#4D5B57" data-w="#D7DEE5"/>
-    <rect y="410" width="1200" height="110" fill="url(#hWat)"/>
-    <g id="hIce" opacity="0"><rect y="410" width="1200" height="110" fill="#E3EBF2"/><path d="M40 440l90 12 60-8M300 470l120-10 40 16M560 450l70 14M200 500l140-6" stroke="#B8C8D6" stroke-width="2" fill="none"/></g>
-    <g id="hShim" stroke-linecap="round" stroke-width="4"></g>
-    <g id="hFol">${fol}</g><g id="hTreeSnow">${tsnow}</g>
-    <rect x="740" y="270" width="420" height="170" fill="#7A3E22" data-c="#7A3E22"/><path d="M720 272h460l-46-52H766z" fill="#28443A" data-c="#28443A"/>
-    <rect x="900" y="160" width="110" height="280" fill="#8A4728" data-c="#8A4728"/><path d="M888 162h134l-67-130z" fill="#28443A" data-c="#28443A"/><path d="M955 32V4" stroke="#28443A" stroke-width="5" data-s="#28443A"/><circle cx="955" cy="4" r="5" fill="#C9A15A" data-c="#C9A15A"/>
-    <rect x="770" y="200" width="66" height="72" fill="#8A4728" data-c="#8A4728"/><path d="M760 202h86l-43-74z" fill="#28443A" data-c="#28443A"/><rect x="1070" y="200" width="66" height="72" fill="#8A4728" data-c="#8A4728"/><path d="M1060 202h86l-43-74z" fill="#28443A" data-c="#28443A"/>
-    <g id="hRoofSnow"><path d="M770 220h360l10 12H760z" fill="#F2F6FA"/><path d="M955 34l16 34h-32z" fill="#F2F6FA"/><path d="M803 130l12 26h-24z" fill="#F2F6FA"/><path d="M1103 130l12 26h-24z" fill="#F2F6FA"/><rect x="600" y="430" width="600" height="8" fill="#F2F6FA"/></g>
-    <g id="hWin">${w}</g><g>${lace}</g>
-    <path d="M740 272h420" stroke="#F4E6CF" stroke-width="4" data-s="#F4E6CF"/><path d="M740 352h420" stroke="#5A2C14" stroke-width="3" data-s="#5A2C14"/>
-    <rect y="436" width="1200" height="84" fill="#3A4F42" data-c="#3A4F42" data-w="#E6ECF1" id="hGround"/>
-    <g>${fence}</g><rect x="600" y="430" width="600" height="4" fill="#5C4030" data-c="#5C4030"/>
-    <g id="dNy" class="deco">${gar}${fir}</g>
-    <g id="dHw" class="deco">${pumpkin(760)}${pumpkin(842,.8)}${pumpkin(1015,1.1)}${pumpkin(1120,.85)}</g>
-    <g id="dFlag" class="deco">${flag(803,128)}${flag(1103,128)}</g>
-    <g id="dMar" class="deco">${mimosa}${tulips}</g>
-    <g id="dMay" class="deco">${carn}</g>
-    <g id="dBal" class="deco">${balloons}</g>
+  /* ---------- сцена-наклейка ---------- */
+  const S_=`stroke="${INK}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"`;
+  const WIN=[];const winRect=(x,y,w,h)=>{WIN.push([x,y,w,h]);return''};
+  const CAPS=[];
+  function house(x,base,w,h,wall,roof){ // изба: стены, двускатная крыша с напуском, окна с наличниками
+    const top=base-h,rt=top-w*.45;
+    let s=`<path d="M${x} ${base}V${top}H${x+w}V${base}Z" fill="${wall}" ${S_}/>`;
+    s+=`<path d="M${x-10} ${top+2}L${x+w/2} ${rt}L${x+w+10} ${top+2}Z" fill="${roof}" ${S_}/>`;
+    CAPS.push(`<path d="M${x-12} ${top+3}L${x+w/2} ${rt-2}L${x+w+12} ${top+3}L${x+w+2} ${top+5}L${x+w/2} ${rt+12}L${x-2} ${top+5}Z"/>`);
+    const n=w>90?2:1,ww=22,wy=top+Math.max(14,(h-36)/2);
+    for(let i=0;i<n;i++){const wx=n===1?x+w/2-ww/2:x+(i?w*.66:w*.34)-ww/2;winRect(wx,wy,ww,32);s+=`<path d="M${wx-4} ${wy-3}q${ww/2+4} -14 ${ww+8} 0" fill="none" ${S_}/>`}
+    return s}
+  function build(){
+    let w='';const stars=Array.from({length:26},()=>{const x=R()*1200,y=R()*190+10,k=R()*3+3,a=k*.3,f=n=>n.toFixed(1);return `<path class="st" d="M${f(x)} ${f(y-k)}L${f(x+a)} ${f(y-a)}L${f(x+k)} ${f(y)}L${f(x+a)} ${f(y+a)}L${f(x)} ${f(y+k)}L${f(x-a)} ${f(y+a)}L${f(x-k)} ${f(y)}L${f(x-a)} ${f(y-a)}Z" fill="#FFFDF5" style="animation-delay:${(R()*3).toFixed(2)}s"/>`}).join('');
+    const clouds=Array.from({length:7},(_,i)=>`<g class="cl" data-i="${i}"><path d="M0 0a36 36 0 0 1 62 -26a46 46 0 0 1 84 18a30 30 0 0 1 8 58H8a28 28 0 0 1 -8 -50z" ${S_}/></g>`).join('');
+    // дом с шатром (Красноармейская, 71) — герой картинки
+    const shatr=`<g id="sShatr"><path d="M520 330V200L600 160L680 200V330Z" fill="#C8763E" ${S_}/>
+      <path d="M560 168V120H640V176" fill="#C8763E" ${S_}/><path d="M552 122L600 20L648 122Z" fill="#3B2BD9" ${S_}/><path d="M600 20V2" ${S_}/><circle cx="600" cy="2" r="5" fill="#FFD43B" ${S_}/>
+      <path d="M512 204L600 156L688 204" fill="none" ${S_} stroke-width="6"/><path d="M548 124h104" ${S_}/>
+      <path d="M540 236q22 -18 44 0M616 236q22 -18 44 0M584 146q16 -14 32 0" fill="none" ${S_}/></g>`;
+    winRect(546,240,32,46);winRect(622,240,32,46);winRect(588,150,24,22);
+    const hs=house(330,330,120,86,'#FF5A36','#111111')+house(760,330,140,96,'#FFD43B','#2E8A5C')+house(930,330,96,70,'#B9E4FF','#3B2BD9')+house(200,330,100,64,'#C9F2D2','#FF5A36');
+    w=WIN.map(a=>`<rect class="win" data-r="${R().toFixed(3)}" x="${a[0]}" y="${a[1]}" width="${a[2]}" height="${a[3]}" rx="4" ${S_}/>`).join('');
+    const firs=[[120,330,46],[470,330,34],[715,330,30],[1080,330,52],[1150,330,36]].map(([x,b,h])=>`<path d="M${x} ${b}L${x-h*.45} ${b}L${x} ${b-h*1.6}L${x+h*.45} ${b}Z" fill="#2E8A5C" ${S_}/>`).join('');
+    const decs=[[60,330,30],[1010,330,26],[280,330,22]].map(([x,b,r],i)=>`<path d="M${x} ${b}V${b-r}" ${S_}/><circle class="dec" data-i="${i}" cx="${x}" cy="${b-r-r*.8}" r="${r}" ${S_}/>`).join('');
+    const caps=`<g id="sCaps" fill="#FFFDF5" ${S_}>${CAPS.join('')}
+      <path d="M508 206L600 154L692 206L686 212L600 168L514 212Z"/><path d="M548 124L600 18L652 124L644 126L600 36L556 126Z"/>
+      ${[[120,330,46],[1080,330,52]].map(([x,b,h])=>`<path d="M${x} ${b-h*1.6}L${x-h*.2} ${b-h*.9}L${x+h*.2} ${b-h*.9}Z"/>`).join('')}</g>`;
+    // праздники
+    let gar='';for(let i=0;i<=20;i++){const t=i/20,x=40+1120*t,y=30+Math.sin(t*Math.PI*6)*-4+26*Math.sin(t*Math.PI*3)**2;gar+=`<circle class="gb" data-p="${i%3}" cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" r="9" fill="${['#FF5A36','#FFD43B','#3B2BD9'][i%3]}" ${S_}/>`}
+    const tree=`<path d="M1080 330L1022 330L1080 214L1138 330Z" fill="#2E8A5C" ${S_}/>${[[1062,300,'#FF5A36'],[1096,292,'#FFD43B'],[1078,262,'#3B2BD9'],[1104,318,'#FFC3D0'],[1056,322,'#FFD43B']].map(([x,y,c])=>`<circle class="gb" data-p="1" cx="${x}" cy="${y}" r="7" fill="${c}" ${S_}/>`).join('')}<path d="M1080 196l7 14h15l-12 9 5 15-15-9-15 9 5-15-12-9h15z" fill="#FFD43B" ${S_}/>`;
+    const pumpkin=(x,s)=>`<g transform="translate(${x} 336) scale(${s})"><path d="M0 -22v-12" ${S_}/><ellipse rx="30" ry="22" fill="#FF8A1F" ${S_}/><path d="M-10 -21q-6 21 0 42M10 -21q6 21 0 42" fill="none" ${S_}/><path class="pf" d="M-16 -6l7 -8 7 8zM4 -6l7 -8 7 8zM-14 6q14 10 28 0l-6 6-4-4-4 4-4-4-4 4z" fill="#FFD43B" ${S_} stroke-width="2"/></g>`;
+    const flag=(x,y)=>`<g transform="translate(${x} ${y})"><path d="M0 0V-58" ${S_}/><g class="fl"><path d="M0 -58h40v10H0z" fill="#FFFFFF" ${S_} stroke-width="2"/><path d="M0 -48h40v10H0z" fill="#1C57A5" ${S_} stroke-width="2"/><path d="M0 -38h40v10H0z" fill="#D52B1E" ${S_} stroke-width="2"/></g></g>`;
+    const tulips=Array.from({length:12},(_,i)=>{const x=60+i*96+(i%2)*22;const c=['#FF5A8A','#FFD43B','#FF5A36','#FFC3D0'][i%4];return `<path d="M${x} 344v-34" ${S_}/><path d="M${x-11} 312q0-20 11-22q11 2 11 22q-11 8-22 0z" fill="${c}" ${S_}/>`}).join('');
+    const carn=Array.from({length:10},(_,i)=>{const x=80+i*112;return `<path d="M${x} 344v-30" ${S_}/><circle cx="${x}" cy="308" r="10" fill="#D52B1E" ${S_}/>`}).join('');
+    const balloons=[[300,96,'#FF5A36'],[336,80,'#FFD43B'],[372,100,'#3B2BD9'],[880,90,'#C9F2D2'],[916,74,'#FFC3D0']].map(([x,y,c],i)=>`<g class="bl" data-i="${i}"><path d="M${x} ${y+34}Q${x+10} ${y+110} ${x<600?350:900} 250" fill="none" ${S_} stroke-width="2"/><ellipse class="blb" cx="${x}" cy="${y}" rx="22" ry="28" fill="${c}" ${S_}/></g>`).join('');
+    return `<svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <rect id="sSky" width="1200" height="420"/><path id="sHz" d="M0 190Q300 170 600 186T1200 180V420H0Z"/>
+      <g id="sStars">${stars}</g>
+      <g id="sSun"><circle r="54" fill="#FFD43B" ${S_} id="sSunDisc"/><path d="M-70 0h-18M70 0h18M0 -70v-18M0 70v18M-50 -50l-12 -12M50 50l12 12M50 -50l12 -12M-50 50l-12 12" ${S_} id="sRays"/></g>
+      <g id="sMoon"><circle r="40" fill="#FFFDF5" ${S_} id="sMoonDisc"/><circle cx="-12" cy="-8" r="7" fill="#E2DED2" ${S_} stroke-width="2"/><circle cx="12" cy="12" r="5" fill="#E2DED2" ${S_} stroke-width="2"/></g>
+      <g id="sClouds">${clouds}</g>
+      <path id="sHill" d="M0 300Q160 240 330 280T700 262T1000 276T1200 256V420H0Z" ${S_}/>
+      <g id="sFirs">${firs}</g><g id="sDecs">${decs}</g>
+      ${hs}${shatr}
+      <rect id="sNight" width="1200" height="420" fill="#141A4A" opacity="0"/>
+      <g id="sWin">${w}</g>${caps}
+      <path id="sGround" d="M0 330H1200V420H0Z" ${S_}/>
+      <path id="sRiver" d="M0 364Q300 350 600 366T1200 358V420H0Z" ${S_}/>
+      <g id="sIce" ${S_} fill="none"><path d="M80 392l70 8 40 -6M380 404l90 -6 30 10M760 396l60 10M980 400l90 -8"/></g>
+      <g id="dNy" class="deco">${gar}${tree}</g>
+      <g id="dHw" class="deco">${pumpkin(470,1)}${pumpkin(720,.8)}${pumpkin(1110,1.1)}</g>
+      <g id="dFlag" class="deco">${flag(390,212)}${flag(830,198)}</g>
+      <g id="dMar" class="deco">${tulips}</g><g id="dMay" class="deco">${carn}</g><g id="dBal" class="deco">${balloons}</g>
     </svg>`}
 
   /* облака */
   const CL=[];
-  function buildClouds(){const g=el('hClouds');let h='';for(let i=0;i<8;i++){const s=.6+R()*.9,y=40+R()*230;const parts=[`<ellipse cx="0" cy="0" rx="95" ry="22"/>`];
-      for(let k=0;k<4;k++)parts.push(`<circle cx="${-60+k*38+R()*10}" cy="${-14-R()*16}" r="${26+R()*20}"/>`);
-      h+=`<g class="hcl" data-i="${i}" transform="translate(${R()*1400-100} ${y}) scale(${s})">${parts.join('')}</g>`;CL.push({x:R()*1400-100,y,s,v:6+R()*10})}
-    g.innerHTML=h}
+  function placeClouds(){document.querySelectorAll('#heroArt .cl').forEach((g,i)=>{CL[i]={x:R()*1400-150,y:30+R()*120,s:.55+R()*.6,v:5+R()*8}})}
 
-  /* состояние */
   const S={ov:{time:null,wx:null,hol:null},live:{wx:null,temp:null},cur:null};
   async function fetchWeather(){try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),5000);
       const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&current=temperature_2m,weather_code&timezone=Asia%2FTomsk`,{signal:ctl.signal});
-      const j=await r.json();S.live.wx=wmo(j.current.weather_code);S.live.temp=Math.round(j.current.temperature_2m);apply()}catch(e){/* нет сети или блокировка: остаёмся на ясной погоде */}}
+      const j=await r.json();S.live.wx=wmo(j.current.weather_code);S.live.temp=Math.round(j.current.temperature_2m);apply()}catch(e){/* нет сети — остаёмся без погоды */}}
 
   function compute(){
     const now=tomskDate();let mo=now.getUTCMonth()+1,day=now.getUTCDate();let mins=now.getUTCHours()*60+now.getUTCMinutes();
-    let hol=S.ov.hol===null?autoHoliday(mo,day):(S.ov.hol==='none'?null:S.ov.hol);
+    const hol=S.ov.hol===null?autoHoliday(mo,day):(S.ov.hol==='none'?null:S.ov.hol);
     let dateForSun=new Date();
     if(S.ov.hol&&S.ov.hol!=='none'){[mo,day]=HOL[S.ov.hol].d;dateForSun=new Date(Date.UTC(now.getUTCFullYear(),mo-1,day,12))}
     const st=sunMinutes(dateForSun);
-    if(S.ov.time){mins={dawn:st.rise+15,day:13*60,eve:st.set+8,night:60}[S.ov.time]}
+    if(S.ov.time)mins={dawn:st.rise+15,day:13*60,eve:st.set+8,night:60}[S.ov.time];
     const K=[[st.rise-100,'night'],[st.rise-35,'predawn'],[st.rise+25,'dawn'],[st.rise+130,'day'],[st.set-130,'day'],[st.set-30,'golden'],[st.set+25,'evening'],[st.set+100,'night']];
     let ph=PH.night,name='night';
     for(let i=0;i<K.length-1;i++){if(mins>=K[i][0]&&mins<K[i+1][0]){const t=smooth((mins-K[i][0])/(K[i+1][0]-K[i][0]));ph=lerpPh(PH[K[i][1]],PH[K[i+1][1]],t);name=t<.5?K[i][1]:K[i+1][1];break}}
-    const label={night:'ночь',predawn:'рассвет',dawn:'утро',day:'день',golden:'вечер',evening:'вечер'}[name];
-    let wx=S.ov.wx||S.live.wx||'clear';
-    const sea=season(mo,day);
+    let wx=S.ov.wx||S.live.wx||'clear';const sea=season(mo,day);
     if(sea==='winter'&&wx==='rain')wx='snow';
     const snowFx=wx==='snow'||(hol==='ny'&&wx==='clear');
-    return{mins,st,ph,name,label,wx,hol,sea,mo,day,snowFx,live:!S.ov.wx&&S.live.wx}}
+    return{mins,st,ph,name,wx,hol,sea,mo,day,snowFx}}
 
+  const GREET={night:'Доброй ночи',predawn:'Доброе утро',dawn:'Доброе утро',day:'Добрый день',golden:'Добрый вечер',evening:'Добрый вечер'};
+  const GROUND={winter:'#FFFDF5',thaw:'#C8D3C0',spring:'#9BE3A8',summer:'#7FD38F',autumn:'#FFC861'};
+  const HILL={winter:'#E6EEF6',thaw:'#A9BCA4',spring:'#6CC27E',summer:'#4FB36A',autumn:'#F29A3B'};
+  const DEC={winter:'#B8C4CC',thaw:'#7E9A7A',spring:'#8BD47A',summer:'#3FA66A',autumn:'#FF8A1F'};
   function apply(){
-    const c=S.cur=compute();const W=WX[c.wx];
-    const dark=Math.min(1,c.ph.shade+(c.wx==='storm'?.22:c.wx==='rain'?.08:0));
-    const wxTo=mix(W.to,'#121726',c.ph.shade*.9);
-    const sky=c.ph.sky.map(s=>mix(s,wxTo,W.k));
-    sky.forEach((s,i)=>el('hs'+i).setAttribute('stop-color',c.hol==='hw'&&c.ph.shade>.3?mix(s,'#3A1F4A',.35):s));
-    c.ph.water.forEach((s,i)=>el('hw'+i).setAttribute('stop-color',mix(s,wxTo,W.k*.8)));
-    const tint='#0B1026';
-    document.querySelectorAll('#heroArt [data-c]').forEach(e=>{const base=c.sea==='winter'&&e.dataset.w?e.dataset.w:e.dataset.c;e.setAttribute('fill',mix(mix(base,'#8E98A6',W.k*.25),tint,dark*.85))});
-    document.querySelectorAll('#heroArt [data-s]').forEach(e=>e.setAttribute('stroke',mix(e.dataset.s,tint,dark*.85)));
-    const fol=FOL[c.sea];document.querySelectorAll('#heroArt .hf').forEach(e=>e.setAttribute('fill',mix(mix(fol[e.dataset.i%fol.length],'#8E98A6',W.k*.2),tint,dark*.85)));
-    el('hTreeSnow').style.display=el('hRoofSnow').style.display=(c.sea==='winter'||c.sea==='thaw')?'':'none';
-    el('hIce').setAttribute('opacity',c.sea==='winter'?1:c.sea==='thaw'?.6:0);
-    // окна
-    const litC=c.hol==='hw'?'#FFB050':'#FFD27A';
-    document.querySelectorAll('#heroArt .hw').forEach(e=>{const lit=+e.dataset.r<c.ph.lit+(c.wx==='storm'||c.wx==='rain'?.15:0);e.dataset.lit=lit?1:0;e.setAttribute('fill',lit?litC:mix('#B9CCD8',tint,Math.min(1,dark*1.3)))});
-    // солнце и луна
-    const dayLen=c.st.set-c.st.rise;let p=(c.mins-c.st.rise)/dayLen;
-    const sunVis=p>-.03&&p<1.03,sx=1120-p*1000,sy=430-Math.sin(Math.PI*Math.max(0,Math.min(1,p)))*320;
-    el('hSun').setAttribute('transform',`translate(${sx} ${sy})`);el('hSun').style.opacity=sunVis?(c.wx==='clear'?1:c.wx==='cloudy'?.35:0):0;
-    el('hSunDisc').setAttribute('fill',p<.12||p>.85?'#FFC48A':'#FFF1CC');
-    let q=((c.mins-c.st.set+1440)%1440)/(1440-dayLen);const mx=1120-q*1000,my=400-Math.sin(Math.PI*Math.min(1,q))*300;
-    el('hMoon').setAttribute('transform',`translate(${mx} ${my}) scale(${c.hol==='hw'?1.5:1})`);el('hMoon').style.opacity=sunVis?0:(c.wx==='clear'?1:c.wx==='cloudy'?.4:0);
-    el('hMoonDisc').setAttribute('fill',c.hol==='hw'?'#F2A35A':'#F4EEDC');
-    el('hStars').style.opacity=c.ph.stars*(c.wx==='clear'?1:c.wx==='cloudy'?.3:0);
-    // блики на воде под светилом
-    const lx=sunVis?sx:mx,lc=sunVis?'#FFE2B0':'#E8ECFF',lo=(sunVis?(c.wx==='clear'?.7:.2):(c.wx==='clear'?.45:0))*(c.sea==='winter'?0:1);
-    el('hShim').innerHTML=[0,1,2,3,4].map(i=>`<path class="sh" d="M${lx-50+i*8+(i%2)*14} ${425+i*18}h${80-i*10}" stroke="${lc}"/>`).join('');el('hShim').style.opacity=lo;
+    const c=S.cur=compute();const W=WX[c.wx];const dk=c.ph.dark;
+    const wxCol=mix(WXDAY[c.wx],WXNIGHT[c.wx],dk);
+    const sky=mix(c.ph.sky,wxCol,W.k),hz=mix(c.ph.hz,wxCol,W.k*.8);
+    el('sSky').setAttribute('fill',c.hol==='hw'&&dk>.3?mix(sky,'#3A1F4A',.4):sky);el('sHz').setAttribute('fill',hz);
+    el('sStars').style.opacity=c.ph.stars*(c.wx==='clear'||c.wx==='snow'?1:.15);
+    const dim=x=>mix(x,'#1A2050',dk*.45);
+    el('sHill').setAttribute('fill',dim(HILL[c.sea]));el('sGround').setAttribute('fill',dim(c.snowFx&&c.sea!=='summer'?'#FFFDF5':GROUND[c.sea]));
+    el('sRiver').setAttribute('fill',dim(c.sea==='winter'?'#E3F1FF':'#6FB7F2'));el('sIce').style.display=c.sea==='winter'?'':'none';
+    document.querySelectorAll('#heroArt .dec').forEach(e=>e.setAttribute('fill',DEC[c.sea]));
+    el('sCaps').style.display=(c.sea==='winter'||c.sea==='thaw'||c.snowFx)?'':'none';
+    el('sNight').setAttribute('opacity',(dk*.38+(c.wx==='storm'?.12:c.wx==='rain'?.06:0)).toFixed(2));
+    // окна: днём голубые, в сумерках и ночью загораются
+    const litC=c.hol==='hw'?'#FF9A3B':'#FFD43B';
+    document.querySelectorAll('#heroArt .win').forEach(e=>{const lit=+e.dataset.r<c.ph.lit+(c.wx==='storm'||c.wx==='rain'?.15:0);e.dataset.lit=lit?1:0;e.setAttribute('fill',lit?litC:dk>.4?'#2A3366':'#D6EEFF')});
+    // солнце и луна по реальному времени
+    const dayLen=c.st.set-c.st.rise;const p=(c.mins-c.st.rise)/dayLen;
+    const sunVis=p>-.03&&p<1.03,sx=1100-p*1000,sy=250-Math.sin(Math.PI*Math.max(0,Math.min(1,p)))*190;
+    el('sSun').setAttribute('transform',`translate(${sx.toFixed(0)} ${sy.toFixed(0)})`);el('sSun').style.opacity=sunVis?(c.wx==='clear'?1:c.wx==='cloudy'?.7:0):0;
+    el('sSunDisc').setAttribute('fill',p<.12||p>.85?'#FF9A3B':'#FFD43B');el('sRays').style.display=p>.1&&p<.9?'':'none';
+    const q=((c.mins-c.st.set+1440)%1440)/(1440-dayLen);const mx=1100-q*1000,my=230-Math.sin(Math.PI*Math.min(1,q))*170;
+    el('sMoon').setAttribute('transform',`translate(${mx.toFixed(0)} ${my.toFixed(0)}) scale(${c.hol==='hw'?1.4:1})`);el('sMoon').style.opacity=sunVis?0:(c.wx==='clear'||c.wx==='snow'?1:c.wx==='cloudy'?.6:0);
+    el('sMoonDisc').setAttribute('fill',c.hol==='hw'?'#FF9A3B':'#FFFDF5');
     // облака
-    const nCl={clear:2,cloudy:8,rain:8,storm:8,snow:7,fog:5}[c.wx];const clC=mix(mix(c.ph.cloud,W.to==='#000000'?c.ph.cloud:W.to,W.k*.8),'#151A2C',c.wx==='storm'?.5:0);
-    document.querySelectorAll('#heroArt .hcl').forEach((g,i)=>{g.setAttribute('fill',clC);g.style.opacity=i<nCl?(c.wx==='clear'?.55:.92):0});
-    // декор праздников
+    const nCl={clear:2,cloudy:7,rain:7,storm:7,snow:6,fog:5}[c.wx];const clC=c.wx==='storm'?'#6B7590':c.wx==='rain'?'#AEB8C6':dk>.5?'#5A67B0':'#FFFDF5';
+    document.querySelectorAll('#heroArt .cl path').forEach((p,i)=>{p.setAttribute('fill',clC);p.parentNode.style.opacity=i<nCl?1:0});
+    // праздники
     const deco={dNy:c.hol==='ny',dHw:c.hol==='hw',dFlag:['feb23','may9','jun12'].includes(c.hol),dMar:c.hol==='mar8',dMay:c.hol==='may9',dBal:c.hol==='sep1'||c.hol==='tat'};
     for(const k in deco)el(k).style.display=deco[k]?'':'none';
-    const balC=c.hol==='tat'?['#3D6FD6','#FFFFFF','#8FB8FF']:['#E8476A','#FFD24A','#3D9BE9','#4FBF7A','#FF8A3A'];
-    document.querySelectorAll('#heroArt .hbb').forEach((e,i)=>e.setAttribute('fill',balC[Math.floor(i/2)%balC.length]));
-    // текст поверх
-    const heroEl=document.querySelector('.hero');heroEl.classList.toggle('dark',dark>.3);
-    const ov=mix(sky[2],dark>.3?'#0A0F24':'#FFFFFF',dark>.3?.45:.35);heroEl.style.setProperty('--ov',rgba(ov,dark>.3?.8:.88));heroEl.style.setProperty('--ov2',rgba(ov,dark>.3?.45:.5));
-    let hand;
-    if(c.hol){hand=c.hol==='ny'&&c.mo===12&&c.day<31?HOL.ny.pre:HOL[c.hol].hand}
-    else hand={storm:'Переждём грозу<br>в кофейне?',rain:'Даже под дождём<br>Томск красив ♡',snow:'Томск<br>в снегу ♡',fog:'Томск<br>в тумане…'}[c.wx]||{night:'Доброй ночи,<br>Томск ♡',predawn:'Томск<br>просыпается',dawn:'Доброе утро,<br>Томск ♡',day:'Томск<br>вдохновляет ♡',golden:'Золотой час<br>над Томью',evening:'Хорошего вечера,<br>Томск'}[c.name];
-    el('hand').innerHTML=hand;
-    // плашка «сейчас»
-    const real=!S.ov.time&&!S.ov.hol;
-    el('liveTxt').innerHTML=`${real?'Томск, '+fmt(c.mins):'Предпросмотр'} · ${c.label} · ${W.t}${S.live.temp!=null&&!S.ov.wx?`, ${S.live.temp>0?'+':''}${S.live.temp}°`:''}`;
+    if(c.hol==='tat')document.querySelectorAll('#heroArt .blb').forEach((e,i)=>e.setAttribute('fill',['#3B2BD9','#FFFDF5','#B9E4FF'][i%3]));
+    // тексты
+    const temp=S.live.temp!=null&&!S.ov.wx?(S.live.temp>0?'+':S.live.temp<0?'−':'')+Math.abs(S.live.temp)+'°':null;
+    el('hGreet').textContent=GREET[c.name];
+    const tEl=el('hTemp');tEl.hidden=!temp;if(temp){tEl.textContent=temp;tEl.dataset.cold=S.live.temp<=0||c.wx==='snow'||c.wx==='rain'?1:0}
+    const wxLine={clear:'Ясно',cloudy:'Облачно',rain:'Идёт дождь',storm:'Гроза',snow:'Идёт снег',fog:'Туман'}[c.wx];
+    el('hWx').textContent=`${S.live.wx||S.ov.wx?wxLine+' · ':''}восход ${fmt(c.st.rise)}, закат ${fmt(c.st.set)}`;
+    let sticker='';
+    if(c.hol)sticker=c.hol==='ny'&&c.mo===12&&c.day<31?HOL.ny.pre:HOL[c.hol].s;
+    else sticker={storm:'Переждём грозу в кафе?',rain:'Томск красив и под дождём',snow:'Томск в снегу ♡',fog:'Томск в тумане…'}[c.wx]||{night:'Томск не спит ♡',predawn:'Томск просыпается',dawn:'Доброе утро, Томск!',day:'Томск вдохновляет ♡',golden:'Золотой час над Томью',evening:'Хорошего вечера!'}[c.name];
+    el('hand').textContent=sticker;
+    const real=!S.ov.time&&!S.ov.hol&&!S.ov.wx;
+    el('liveTxt').textContent=`${real?'Томск, '+fmt(c.mins):'Предпросмотр'} · ${W.t}${temp?', '+temp:''}`;
     const nh=nextHoliday(tomskDate());
-    el('liveSub').textContent=c.hol?`Сегодня праздник: ${HOL[c.hol].t}`:nh&&nh.days<=30?`До праздника «${HOL[nh.k].t}» ${nh.days} ${plural(nh.days,['день','дня','дней'])}`:`Восход ${fmt(c.st.rise)} · закат ${fmt(c.st.set)}`;
-    // подсказка под героем
-    const wxp={rain:['Сейчас дождь: собрали места под крышей',{w:'in'}],storm:['Гроза: самое время для музея или кофейни',{w:'in'}],snow:['Снег идёт: тёплые места и красивые прогулки',{w:'in'}],fog:['Туман над Томью: уютные места под крышей',{w:'in'}]}[c.wx]
-      ||(c.ph.shade>.4?['Не спится? Ночные виды на Томь',{cat:'nature'}]:c.name==='golden'?['Золотой час: успейте на набережную к закату',{cat:'nature'}]:['Хорошая погода: места для прогулок',{w:'out'}]);
-    el('wxTxt').textContent=wxp[0];HERO.suggest=wxp[1];
-    // эффекты для холста
-    FX.set(c,dark);
-    syncPanel()}
+    el('liveSub').textContent=c.hol?`Сегодня: ${HOL[c.hol].t}`:nh&&nh.days<=30?`До праздника «${HOL[nh.k].t}» ${nh.days} ${plural(nh.days,['день','дня','дней'])}`:'';
+    const wxp={rain:['Дождь: места под крышей',{w:'in'}],storm:['Гроза: музей или кофейня',{w:'in'}],snow:['Снег: где тепло и вкусно',{w:'in'}],fog:['Туман: уютные места под крышей',{w:'in'}]}[c.wx]
+      ||(dk>.5?['Ночью: виды на огни Томи',{cat:'nature'}]:c.name==='golden'?['Золотой час: успейте к закату',{cat:'nature'}]:['Хорошая погода: куда прогуляться',{w:'out'}]);
+    el('heroGoTxt').textContent=wxp[0];HERO.suggest=wxp[1];if(el('wxTxt'))el('wxTxt').textContent=wxp[0];
+    el('hero2').classList.toggle('dark',dk>.5);
+    FX.set(c,dk);syncPanel()}
 
-  /* --- холст: дождь, снег, листья, лепестки, салют, летучие мыши, молния --- */
-  const FX=(()=>{const cv=el('heroFx'),ctx=cv.getContext('2d');let W=0,H=0,dpr=1;const P={rain:[],snow:[],leaf:[],petal:[],conf:[],bats:[],fw:[],birds:[]};let cfg={},flash=0,bolt=null,nextBolt=3,nextFw=1;
-    function size(){const r=cv.parentElement.getBoundingClientRect();dpr=Math.min(devicePixelRatio,2);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
-    new ResizeObserver(size).observe(el('heroFx').parentElement);size();
-    function fill(arr,n,mk){while(arr.length<n)arr.push(mk(true));arr.length=n}
-    const mk={rain:f=>({x:R()*W*1.2,y:f?R()*H:-20,v:850+R()*450,l:12+R()*12}),snow:f=>({x:R()*W,y:f?R()*H:-6,v:25+R()*55,r:1+R()*2.4,ph:R()*6}),
-      leaf:f=>({x:R()*W,y:f?R()*H:-12,v:28+R()*30,r:5+R()*4,ph:R()*6,a:R()*6,c:['#D9772B','#E3A03C','#B5551D','#E8C55A'][Math.floor(R()*4)]}),
-      petal:f=>({x:R()*W,y:f?R()*H:-10,v:30+R()*30,r:4+R()*3,ph:R()*6,a:R()*6,c:['#F7A8C0','#F06A9A','#FFD3E0'][Math.floor(R()*3)]}),
-      conf:f=>({x:R()*W,y:f?R()*H:-8,v:50+R()*60,r:3+R()*3,ph:R()*6,a:R()*6,c:['#3D6FD6','#FFFFFF','#FFD24A','#E8476A','#4FBF7A'][Math.floor(R()*5)]}),
-      bats:()=>({x:R()*W,y:30+R()*H*.4,v:40+R()*50,ph:R()*6,s:.7+R()*.6}),birds:()=>({x:R()*W,y:40+R()*H*.25,v:18+R()*14,ph:R()*6,s:.7+R()*.4})};
-    function set(c,dark){const autumnLeaves=c.sea==='autumn'&&!['rain','storm','snow'].includes(c.wx);
-      cfg={rain:c.wx==='rain'?220:c.wx==='storm'?420:0,snow:c.snowFx?(c.wx==='snow'?220:70):0,leaf:c.hol==='sep1'?26:autumnLeaves?10:0,petal:c.hol==='mar8'?46:0,conf:c.hol==='tat'?60:0,
-        bats:c.hol==='hw'?7:0,birds:c.ph.shade<.1&&c.wx==='clear'&&c.sea!=='winter'&&!c.hol?4:0,fw:(['ny','may9','jun12','feb23'].includes(c.hol)&&dark>.25),storm:c.wx==='storm',fog:c.wx==='fog',wind:c.wx==='storm'?-.35:-.15,dark};
-      for(const k of ['rain','snow','leaf','petal','conf','bats','birds'])fill(P[k],cfg[k],mk[k]);if(!cfg.fw)P.fw.length=0;if(reduce)draw(0,0)}
-    function burst(){const x=W*(.35+R()*.6),y=H*(.1+R()*.3),col=['#FFD24A','#FF5A7A','#5AD1FF','#FFFFFF','#9DFF8A','#D52B1E','#1C57A5'][Math.floor(R()*7)];
-      for(let i=0;i<70;i++){const a=R()*6.28,s=60+R()*140;P.fw.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1.4+R()*.8,t:0,c:col})}}
-    function draw(dt,t){ctx.clearRect(0,0,W,H);
-      if(cfg.fog){for(let i=0;i<4;i++){const y=H*(.45+i*.13),x=((t*12*(i%2?1:-1)+i*300)%(W+600))-300;const g=ctx.createRadialGradient(x+W*.4,y,0,x+W*.4,y,W*.6);g.addColorStop(0,'rgba(235,238,242,.35)');g.addColorStop(1,'rgba(235,238,242,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}}
-      if(cfg.rain){ctx.strokeStyle=cfg.dark>.3?'rgba(170,185,220,.45)':'rgba(215,225,240,.55)';ctx.lineWidth=1.2;ctx.beginPath();
-        P.rain.forEach((d,i)=>{d.y+=d.v*dt;d.x+=d.v*cfg.wind*dt;if(d.y>H||d.x<-20)P.rain[i]=Object.assign(d,mk.rain(false));ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.l*cfg.wind,d.y-d.l)});ctx.stroke()}
-      if(cfg.snow){ctx.fillStyle='rgba(255,255,255,.9)';P.snow.forEach((s,i)=>{s.y+=s.v*dt;s.x+=Math.sin(t+s.ph)*14*dt;if(s.y>H)P.snow[i]=mk.snow(false);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.28);ctx.fill()})}
+  /* частицы: снег, дождь, листья, лепестки, конфетти, летучие мыши, салют, молния */
+  const FX=(()=>{const cv=el('heroFx'),ctx=cv.getContext('2d');let W=0,H=0;const P={rain:[],snow:[],leaf:[],petal:[],conf:[],bats:[],fw:[]};let cfg={},flash=0,bolt=null,nextBolt=3,nextFw=1;
+    function size(){const r=cv.parentElement.getBoundingClientRect();const dpr=Math.min(devicePixelRatio,2);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+    new ResizeObserver(size).observe(cv.parentElement);size();
+    const fill=(a,n,mk)=>{while(a.length<n)a.push(mk(true));a.length=n};
+    const mk={rain:f=>({x:R()*W*1.2,y:f?R()*H:-20,v:700+R()*350,l:14+R()*10}),snow:f=>({x:R()*W,y:f?R()*H:-8,v:22+R()*40,r:3+R()*3.5,ph:R()*6}),
+      leaf:f=>({x:R()*W,y:f?R()*H:-12,v:28+R()*30,r:7+R()*4,ph:R()*6,a:R()*6,c:['#FF8A1F','#FFD43B','#FF5A36'][Math.floor(R()*3)]}),
+      petal:f=>({x:R()*W,y:f?R()*H:-10,v:30+R()*30,r:6+R()*3,ph:R()*6,a:R()*6,c:['#FF5A8A','#FFC3D0','#FFFDF5'][Math.floor(R()*3)]}),
+      conf:f=>({x:R()*W,y:f?R()*H:-8,v:50+R()*60,r:4+R()*3,ph:R()*6,a:R()*6,c:['#3B2BD9','#FFFDF5','#FFD43B','#FF5A36','#C9F2D2'][Math.floor(R()*5)]}),
+      bats:()=>({x:R()*W,y:20+R()*H*.35,v:40+R()*50,ph:R()*6,s:.8+R()*.6})};
+    function set(c,dk){const autumn=c.sea==='autumn'&&!['rain','storm','snow'].includes(c.wx);
+      cfg={rain:c.wx==='rain'?120:c.wx==='storm'?220:0,snow:c.snowFx?(c.wx==='snow'?110:40):0,leaf:c.hol==='sep1'?20:autumn?8:0,petal:c.hol==='mar8'?34:0,conf:c.hol==='tat'?44:0,
+        bats:c.hol==='hw'?6:0,fw:(['ny','may9','jun12','feb23'].includes(c.hol)&&dk>.3),storm:c.wx==='storm',dark:dk};
+      for(const k of ['rain','snow','leaf','petal','conf','bats'])fill(P[k],cfg[k],mk[k]);if(!cfg.fw)P.fw.length=0;if(reduce)draw(0,0)}
+    function burst(){const x=W*(.15+R()*.7),y=H*(.1+R()*.3),col=['#FFD43B','#FF5A36','#B9E4FF','#FFFDF5','#C9F2D2'][Math.floor(R()*5)];
+      for(let i=0;i<50;i++){const a=R()*6.28,s=50+R()*120;P.fw.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1.2+R()*.7,t:0,c:col})}}
+    function draw(dt,t){ctx.clearRect(0,0,W,H);ctx.lineJoin='round';
+      if(cfg.rain){ctx.strokeStyle=cfg.dark>.4?'rgba(214,238,255,.75)':'rgba(17,17,17,.55)';ctx.lineWidth=2.5;ctx.lineCap='round';ctx.beginPath();
+        P.rain.forEach((d,i)=>{d.y+=d.v*dt;d.x-=d.v*.2*dt;if(d.y>H||d.x<-20)P.rain[i]=Object.assign(d,mk.rain(false));ctx.moveTo(d.x,d.y);ctx.lineTo(d.x+d.l*.2,d.y-d.l)});ctx.stroke()}
+      if(cfg.snow){ctx.fillStyle='#FFFDF5';ctx.strokeStyle='#111111';ctx.lineWidth=1.5;P.snow.forEach((s,i)=>{s.y+=s.v*dt;s.x+=Math.sin(t+s.ph)*12*dt;if(s.y>H)P.snow[i]=mk.snow(false);ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.28);ctx.fill();ctx.stroke()})}
       ['leaf','petal','conf'].forEach(k=>P[k].forEach((l,i)=>{l.y+=l.v*dt;l.x+=Math.sin(t*1.2+l.ph)*30*dt-8*dt;l.a+=dt*2;if(l.y>H+10)P[k][i]=mk[k](false);
-        ctx.save();ctx.translate(l.x,l.y);ctx.rotate(l.a);ctx.scale(1,Math.abs(Math.cos(l.a*1.3))*.8+.2);ctx.fillStyle=l.c;ctx.beginPath();
-        if(k==='conf')ctx.rect(-l.r/2,-l.r,l.r,l.r*2);else ctx.ellipse(0,0,l.r,l.r*.55,0,0,6.28);ctx.fill();ctx.restore()}));
-      ctx.strokeStyle=cfg.dark>.3?'rgba(230,230,240,.7)':'rgba(40,40,50,.7)';ctx.lineWidth=1.6;
-      P.birds.forEach(b=>{b.x-=b.v*dt;if(b.x<-20)b.x=W+20;const f=Math.sin(t*6+b.ph)*4*b.s;ctx.beginPath();ctx.moveTo(b.x-7*b.s,b.y-f);ctx.quadraticCurveTo(b.x-3*b.s,b.y-2,b.x,b.y);ctx.quadraticCurveTo(b.x+3*b.s,b.y-2,b.x+7*b.s,b.y-f);ctx.stroke()});
-      ctx.fillStyle='#1A0E22';P.bats.forEach(b=>{b.x+=b.v*dt;b.y+=Math.sin(t*2+b.ph)*20*dt;if(b.x>W+20)b.x=-20;const f=Math.sin(t*14+b.ph)*6*b.s,s=b.s;
-        ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.quadraticCurveTo(b.x-8*s,b.y-6*s-f,b.x-16*s,b.y-f);ctx.quadraticCurveTo(b.x-9*s,b.y+1,b.x,b.y+3*s);ctx.quadraticCurveTo(b.x+9*s,b.y+1,b.x+16*s,b.y-f);ctx.quadraticCurveTo(b.x+8*s,b.y-6*s-f,b.x,b.y);ctx.fill()});
-      if(cfg.fw){nextFw-=dt;if(nextFw<=0){burst();nextFw=.9+R()*1.6}ctx.globalCompositeOperation='lighter';
-        P.fw=P.fw.filter(p=>{p.t+=dt;if(p.t>p.life)return false;p.vy+=60*dt;p.vx*=.985;p.vy*=.985;p.x+=p.vx*dt;p.y+=p.vy*dt;ctx.globalAlpha=1-p.t/p.life;ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,1.8,0,6.28);ctx.fill();return true});
-        ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}
-      if(cfg.storm){nextBolt-=dt;if(nextBolt<=0){flash=1;nextBolt=4+R()*6;let x=W*(.2+R()*.7),y=0;bolt=[[x,y]];while(y<H*.62){x+=(R()-.5)*50;y+=20+R()*30;bolt.push([x,y])}bolt.t=.18}
-        if(bolt&&bolt.t>0){bolt.t-=dt;ctx.strokeStyle='rgba(240,245,255,.95)';ctx.lineWidth=2.4;ctx.shadowColor='#C8D8FF';ctx.shadowBlur=14;ctx.beginPath();bolt.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();ctx.shadowBlur=0}}
-      flash=Math.max(0,flash-dt*3.2);el('heroFlash').style.opacity=flash*.55}
+        ctx.save();ctx.translate(l.x,l.y);ctx.rotate(l.a);ctx.scale(1,Math.abs(Math.cos(l.a*1.3))*.8+.2);ctx.fillStyle=l.c;ctx.strokeStyle='#111111';ctx.lineWidth=1.5;ctx.beginPath();
+        if(k==='conf')ctx.rect(-l.r/2,-l.r,l.r,l.r*2);else ctx.ellipse(0,0,l.r,l.r*.55,0,0,6.28);ctx.fill();ctx.stroke();ctx.restore()}));
+      ctx.fillStyle='#111111';P.bats.forEach(b=>{b.x+=b.v*dt;b.y+=Math.sin(t*2+b.ph)*20*dt;if(b.x>W+20)b.x=-20;const f=Math.sin(t*14+b.ph)*7*b.s,s=b.s;
+        ctx.beginPath();ctx.moveTo(b.x,b.y);ctx.quadraticCurveTo(b.x-9*s,b.y-7*s-f,b.x-18*s,b.y-f);ctx.quadraticCurveTo(b.x-10*s,b.y+1,b.x,b.y+3*s);ctx.quadraticCurveTo(b.x+10*s,b.y+1,b.x+18*s,b.y-f);ctx.quadraticCurveTo(b.x+9*s,b.y-7*s-f,b.x,b.y);ctx.fill()});
+      if(cfg.fw){nextFw-=dt;if(nextFw<=0){burst();nextFw=.9+R()*1.5}
+        P.fw=P.fw.filter(p=>{p.t+=dt;if(p.t>p.life)return false;p.vy+=60*dt;p.vx*=.985;p.vy*=.985;p.x+=p.vx*dt;p.y+=p.vy*dt;ctx.globalAlpha=1-p.t/p.life;ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,3,0,6.28);ctx.fill();return true});ctx.globalAlpha=1}
+      if(cfg.storm){nextBolt-=dt;if(nextBolt<=0){flash=1;nextBolt=4+R()*6;let x=W*(.2+R()*.6),y=0;bolt=[[x,y]];while(y<H*.55){x+=(R()-.5)*44;y+=24+R()*26;bolt.push([x,y])}bolt.t=.22}
+        if(bolt&&bolt.t>0){bolt.t-=dt;ctx.lineCap='round';ctx.strokeStyle='#111111';ctx.lineWidth=9;ctx.beginPath();bolt.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();ctx.strokeStyle='#FFD43B';ctx.lineWidth=5;ctx.stroke()}}
+      flash=Math.max(0,flash-dt*3.2);el('heroFlash').style.opacity=flash*.5}
     return{set,draw}})();
 
-  /* анимация: облака, блики, гирлянда, шары, флаги */
   let last=performance.now();
   function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;const t=now/1000;
-    document.querySelectorAll('#heroArt .hcl').forEach((g,i)=>{const c=CL[i];c.x+=c.v*dt*(S.cur&&S.cur.wx==='storm'?3:1);if(c.x>1350)c.x=-250;g.setAttribute('transform',`translate(${c.x.toFixed(1)} ${c.y}) scale(${c.s})`)});
-    document.querySelectorAll('#heroArt .sh').forEach((s,i)=>s.style.opacity=.45+.55*Math.sin(t*2+i*1.7)**2);
-    if(el('dNy').style.display!=='none')document.querySelectorAll('#dNy .gb').forEach(b=>b.style.opacity=(Math.floor(t*1.6)+ +b.dataset.p)%3===0?.25:1);
-    if(el('dBal').style.display!=='none')document.querySelectorAll('#heroArt .hb').forEach((b,i)=>b.setAttribute('transform',`translate(0 ${(Math.sin(t*1.3+i)*4).toFixed(1)})`));
-    if(el('dFlag').style.display!=='none')document.querySelectorAll('#heroArt .hflag').forEach((f,i)=>f.setAttribute('transform',`skewY(${(Math.sin(t*3+i)*6).toFixed(1)})`));
-    if(el('dHw').style.display!=='none')document.querySelectorAll('#heroArt .pf').forEach((p,i)=>p.style.opacity=.75+.25*Math.sin(t*9+i*2)*Math.sin(t*3.3+i));
-    if(S.cur&&S.cur.ph.lit>0&&Math.random()<dt*.4){const lit=[...document.querySelectorAll('#heroArt .hw[data-lit="1"]')];const w=lit[Math.floor(R()*lit.length)];if(w){w.style.opacity=.55;setTimeout(()=>w.style.opacity=1,300+R()*600)}}
+    document.querySelectorAll('#heroArt .cl').forEach((g,i)=>{const c=CL[i];if(!c)return;c.x+=c.v*dt*(S.cur&&S.cur.wx==='storm'?3:1);if(c.x>1300)c.x=-200;g.setAttribute('transform',`translate(${c.x.toFixed(1)} ${(c.y+Math.sin(t*.6+i)*3).toFixed(1)}) scale(${c.s})`)});
+    if(el('dNy').style.display!=='none')document.querySelectorAll('#dNy .gb').forEach(b=>b.style.opacity=(Math.floor(t*1.6)+ +b.dataset.p)%3===0?.35:1);
+    if(el('dBal').style.display!=='none')document.querySelectorAll('#heroArt .bl').forEach((b,i)=>b.setAttribute('transform',`translate(0 ${(Math.sin(t*1.3+i)*5).toFixed(1)})`));
+    if(el('dFlag').style.display!=='none')document.querySelectorAll('#heroArt .fl').forEach((f,i)=>f.setAttribute('transform',`skewY(${(Math.sin(t*3+i)*5).toFixed(1)})`));
+    if(el('dHw').style.display!=='none')document.querySelectorAll('#heroArt .pf').forEach((p,i)=>p.style.opacity=.7+.3*Math.sin(t*9+i*2)*Math.sin(t*3.3+i));
     FX.draw(dt,t);requestAnimationFrame(frame)}
 
-  /* панель предпросмотра */
-  const ROWS=[['time','Время',[[null,'Сейчас'],['dawn','Рассвет'],['day','День'],['eve','Вечер'],['night','Ночь']]],
+  const ROWS=[['time','Время',[[null,'Сейчас'],['dawn','Утро'],['day','День'],['eve','Вечер'],['night','Ночь']]],
     ['wx','Погода',[[null,'Как сейчас'],['clear','Ясно'],['cloudy','Облачно'],['rain','Дождь'],['snow','Снег'],['storm','Гроза'],['fog','Туман']]],
     ['hol','Праздник',[[null,'По календарю'],['none','Без праздника'],...Object.keys(HOL).map(k=>[k,HOL[k].t])]]];
   function syncPanel(){document.querySelectorAll('#livePanel [data-k]').forEach(b=>b.setAttribute('aria-pressed',String(S.ov[b.dataset.k])===String(b.dataset.v==='null'?null:b.dataset.v)))}
   function init(){
-    el('heroArt').innerHTML=buildSVG();buildClouds();
+    el('heroArt').innerHTML=build();placeClouds();
     el('livePanel').querySelector('.lp-rows').innerHTML=ROWS.map(([k,t,opts])=>`<div class="lp-row"><b>${t}</b><div>${opts.map(([v,l])=>`<button data-k="${k}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('');
     el('livePanel').addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;S.ov[b.dataset.k]=b.dataset.v==='null'?null:b.dataset.v;apply()});
     el('livePill').addEventListener('click',()=>{const p=el('livePanel');p.hidden=!p.hidden;el('livePill').setAttribute('aria-expanded',!p.hidden)});
     el('liveClose').addEventListener('click',()=>{el('livePanel').hidden=true;el('livePill').setAttribute('aria-expanded',false)});
     el('liveReset').addEventListener('click',()=>{S.ov={time:null,wx:null,hol:null};apply()});
+    el('heroGo').addEventListener('click',()=>applyFilter(HERO.suggest,true));
     apply();fetchWeather();setInterval(apply,60000);setInterval(fetchWeather,15*60000);
     if(!reduce)requestAnimationFrame(frame)}
   return{init,suggest:{w:'in'}}})();

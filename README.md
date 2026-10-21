@@ -37,7 +37,8 @@ cd src/map && python3 build.py
 # главная: из шаблона src/base.html
 cd src && cp base.html tomsk.html \
   && python3 places/main.py . && python3 places/catalog_ui.py . \
-  && python3 places/venues_ui.py . ../data/venues.json
+  && python3 places/venues_ui.py . ../data/venues.json \
+  && python3 places/style_ui.py .
 ```
 
 Собранные `src/map/map.html` и `src/tomsk.html` переносятся в корень (`map.html`, `index.html`), ссылки между страницами — относительные.

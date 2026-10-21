@@ -77,13 +77,13 @@ const M2=(()=>{
     // пины резервируют место первыми
     ctx.textAlign='center';ctx.textBaseline='middle';
     if(s>.25){paths.areaLabels.forEach(l=>{if(l.size*s<70&&!(l.k==='water'&&l.size>500))return;const[x,y]=toScreen(l.x,l.y);if(x<-50||x>W+50||y<-20||y>H+20)return;
-      ctx.font=`italic 600 ${l.k==='water'?13:12}px Manrope,sans-serif`;const w=ctx.measureText(l.n).width;if(!free(x-w/2,y-8,w,16))return;
+      ctx.font=`italic 600 ${l.k==='water'?13:12}px "Golos Text",sans-serif`;const w=ctx.measureText(l.n).width;if(!free(x-w/2,y-8,w,16))return;
       ctx.lineWidth=3;ctx.strokeStyle=C.halo;ctx.strokeText(l.n,x,y);ctx.fillStyle=l.k==='water'?C.waterLabel:C.parkLabel;ctx.fillText(l.n,x,y)})}
-    if(s>.45){ctx.font='600 11.5px Manrope,sans-serif';
+    if(s>.45){ctx.font='600 11.5px "Golos Text",sans-serif';
       paths.streetLabels.forEach(L=>{const txt=L.n;const w=ctx.measureText(txt).width;for(const g of L.segs){if(g.L*s<w+16)continue;const[x,y]=toScreen(g.x,g.y);if(x<0||x>W||y<0||y>H)continue;
         let a=g.a;if(a>Math.PI/2)a-=Math.PI;if(a<-Math.PI/2)a+=Math.PI;const bw=Math.abs(Math.cos(a))*w+12,bh=Math.abs(Math.sin(a))*w+12;if(!free(x-bw/2,y-bh/2,bw,bh))continue;
         ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.lineWidth=3;ctx.strokeStyle=C.halo;ctx.strokeText(txt,0,0);ctx.fillStyle=C.label;ctx.fillText(txt,0,0);ctx.restore();break}})}
-    else if(s>.16){ctx.font='700 11px Manrope,sans-serif';paths.streetLabels.forEach(L=>{const g=L.segs[0];if(!g||!'MTP'.includes(g.t)||g.L*s<ctx.measureText(L.n).width+10)return;const[x,y]=toScreen(g.x,g.y);if(x<0||x>W||y<0||y>H)return;let a=g.a;if(a>Math.PI/2)a-=Math.PI;if(a<-Math.PI/2)a+=Math.PI;const w=ctx.measureText(L.n).width;if(!free(x-w/2,y-8,w,16))return;ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.lineWidth=3;ctx.strokeStyle=C.halo;ctx.strokeText(L.n,0,0);ctx.fillStyle=C.label;ctx.fillText(L.n,0,0);ctx.restore()})}
+    else if(s>.16){ctx.font='700 11px "Golos Text",sans-serif';paths.streetLabels.forEach(L=>{const g=L.segs[0];if(!g||!'MTP'.includes(g.t)||g.L*s<ctx.measureText(L.n).width+10)return;const[x,y]=toScreen(g.x,g.y);if(x<0||x>W||y<0||y>H)return;let a=g.a;if(a>Math.PI/2)a-=Math.PI;if(a<-Math.PI/2)a+=Math.PI;const w=ctx.measureText(L.n).width;if(!free(x-w/2,y-8,w,16))return;ctx.save();ctx.translate(x,y);ctx.rotate(a);ctx.lineWidth=3;ctx.strokeStyle=C.halo;ctx.strokeText(L.n,0,0);ctx.fillStyle=C.label;ctx.fillText(L.n,0,0);ctx.restore()})}
   }
   const iconCache={};function iconPath(k){return iconCache[k]||(iconCache[k]=new Path2D(IC[k]))}
   let pinHits=[];
@@ -94,11 +94,11 @@ const M2=(()=>{
     // избранные места: крупные метки с подписью
     const cur=APP.curFiltered();
     cur.forEach(c=>{const[x,y]=toScreen(c.x,c.y);if(x<-40||x>W+40||y<-40||y>H+40)return;
-      ctx.font='800 12.5px Manrope,sans-serif';const w=ctx.measureText(c.name).width;const bw=w+40,bh=30;const bx=x-bw/2,by=y-bh-8;
+      ctx.font='800 12.5px "Golos Text",sans-serif';const w=ctx.measureText(c.name).width;const bw=w+40,bh=30;const bx=x-bw/2,by=y-bh-8;
       if(!free(bx,by,bw,bh+8)&&!(selected&&selected.c===c))return;
-      ctx.save();ctx.shadowColor='rgba(20,30,25,.25)';ctx.shadowBlur=10;ctx.shadowOffsetY=3;ctx.fillStyle=dark?'#1F2823':'#FFFFFF';roundRect(bx,by,bw,bh,15);ctx.fill();ctx.restore();
+      ctx.fillStyle='#111';roundRect(bx+3,by+3,bw,bh,15);ctx.fill();ctx.fillStyle=dark?'#1F2823':'#FFFDF5';roundRect(bx,by,bw,bh,15);ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#111';ctx.stroke();
       ctx.beginPath();ctx.moveTo(x-6,by+bh-1);ctx.lineTo(x,by+bh+7);ctx.lineTo(x+6,by+bh-1);ctx.fillStyle=dark?'#1F2823':'#FFFFFF';ctx.fill();
-      ctx.beginPath();ctx.arc(bx+15,by+15,11,0,6.283);ctx.fillStyle=c.col;ctx.fill();
+      ctx.beginPath();ctx.arc(bx+15,by+15,11,0,6.283);ctx.fillStyle=c.col;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#111';ctx.stroke();
       ctx.save();ctx.translate(bx+15-7,by+15-7);ctx.scale(14/24,14/24);ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke(iconPath(c.ic));ctx.restore();
       ctx.fillStyle=dark?'#EDE6DA':'#15221B';ctx.textAlign='left';ctx.fillText(c.name,bx+32,by+15.5);ctx.textAlign='center';
       if(selected&&selected.c===c){ctx.strokeStyle='#DB7F33';ctx.lineWidth=2.5;roundRect(bx-2,by-2,bw+4,bh+4,17);ctx.stroke()}
@@ -107,9 +107,9 @@ const M2=(()=>{
     visiblePOIs().forEach(p=>{const[x,y]=toScreen(p.x,p.y);if(x<-20||x>W+20||y<-20||y>H+20)return;const cat=PCAT[p.cat];
       if(!free(x-R,y-R,R*2,R*2)&&!(selected&&selected.p===p))return;
       if(p.pick){ctx.beginPath();ctx.arc(x,y,R+4.2,0,6.283);ctx.fillStyle='#E8B04A';ctx.fill()}
-      ctx.beginPath();ctx.arc(x,y,R+1.6,0,6.283);ctx.fillStyle=dark?'#151A17':'#FFFFFF';ctx.fill();ctx.beginPath();ctx.arc(x,y,R,0,6.283);ctx.fillStyle=cat.c;ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,R+1.6,0,6.283);ctx.fillStyle=dark?'#151A17':'#FFFFFF';ctx.fill();ctx.beginPath();ctx.arc(x,y,R,0,6.283);ctx.fillStyle=cat.c;ctx.fill();ctx.lineWidth=1.8;ctx.strokeStyle='#111';ctx.stroke();
       if(R>7){ctx.save();ctx.translate(x-R*.62,y-R*.62);ctx.scale(R*1.24/24,R*1.24/24);ctx.strokeStyle='#fff';ctx.lineWidth=2.6;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke(iconPath(cat.i));ctx.restore()}
-      if((s>1.1||(p.pick&&s>.45))&&p.t.name){ctx.font='700 11px Manrope,sans-serif';const w=ctx.measureText(p.t.name).width;if(free(x+R+3,y-7,w+4,14)){ctx.textAlign='left';ctx.lineWidth=3;ctx.strokeStyle=C.halo;ctx.strokeText(p.t.name,x+R+4,y);ctx.fillStyle=dark?'#E6DED0':'#3A332B';ctx.fillText(p.t.name,x+R+4,y);ctx.textAlign='center'}}
+      if((s>1.1||(p.pick&&s>.45))&&p.t.name){ctx.font='700 11px "Golos Text",sans-serif';const w=ctx.measureText(p.t.name).width;if(free(x+R+3,y-7,w+4,14)){ctx.textAlign='left';ctx.lineWidth=3;ctx.strokeStyle=C.halo;ctx.strokeText(p.t.name,x+R+4,y);ctx.fillStyle=dark?'#E6DED0':'#3A332B';ctx.fillText(p.t.name,x+R+4,y);ctx.textAlign='center'}}
       if(selected&&selected.p===p){ctx.beginPath();ctx.arc(x,y,R+5,0,6.283);ctx.strokeStyle='#DB7F33';ctx.lineWidth=2.5;ctx.stroke()}
       pinHits.push({x:x-R-3,y:y-R-3,w:R*2+6,h:R*2+6,p})});
   }

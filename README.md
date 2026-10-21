@@ -43,6 +43,12 @@ cd src && cp base.html tomsk.html \
 
 Собранные `src/map/map.html` и `src/tomsk.html` переносятся в корень (`map.html`, `index.html`), ссылки между страницами — относительные.
 
+После переноса обязательно оберните страницы в полноценный HTML-документ (doctype, кодировка, `viewport` — без него телефоны показывают десктопную версию):
+
+```bash
+python3 src/finalize.py index.html "Описание главной" map.html "Описание карты"
+```
+
 ## Данные
 
 - Здания, улицы, заведения — © участники [OpenStreetMap](https://www.openstreetmap.org/copyright), ODbL.

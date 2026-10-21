@@ -107,6 +107,10 @@ section[id],main [id]{scroll-margin-top:92px}
 @media (max-width:900px){.h2-head{grid-template-columns:minmax(0,1fr)}.h2-sticker{align-self:flex-start;transform:rotate(-2deg)}}
 @media (max-width:640px){.hero2{height:clamp(580px,calc(100svh - 60px),720px)}.h2-head{margin-top:10px;gap:12px}.h2-wx{font-size:14px}
   .h2-bottom .live-sub{display:none}.h2-go{height:44px;font-size:14px;padding-inline:16px}.h2-sticker{font-size:13px;padding:7px 12px;margin-top:2px}}
+/* узкие телефоны */
+@media (max-width:900px){.cats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cat{min-width:0;hyphens:auto;overflow-wrap:anywhere}
+@media (max-width:360px){.logo-st{font-size:13px;padding:4px 8px}.logo-sub{font-size:11px}.top-actions{gap:0;margin-left:4px}.cats{gap:6px}.cat{font-size:11px}}
 .live-panel{border:var(--bd);box-shadow:var(--pop)}.lp-row button{border:2px solid var(--line);background:var(--surface)}
 
 /* полоса «сейчас» */

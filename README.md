@@ -31,23 +31,32 @@
 ## Сборка из исходников
 
 ```bash
-# карта: склеивает src/map/*.js в один map.html (встраивает копию data/venues.json)
-cd src/map && python3 build.py
+# 1. карта: склеивает src/map/*.js в один map.html
+cd src/map && python3 build.py && cd ../..
+python3 src/finalize.py src/map/map.html "Карта Томска в 2D и 3D: заведения, знаковые здания и прогулки." && cp src/map/map.html map.html
 
-# главная: из шаблона src/base.html
+# 2. главная одним файлом (промежуточный шаг)
 cd src && cp base.html tomsk.html \
   && python3 places/main.py . && python3 places/catalog_ui.py . \
   && python3 places/venues_ui.py . ../data/venues.json \
-  && python3 places/style_ui.py .
+  && python3 places/style_ui.py . && cd ..
+
+# 3. многостраничный сайт: assets/, главная и разделы, затем страницы заведений и sitemap.xml
+python3 src/pages.py src/tomsk.html .
+python3 src/venue_pages.py src/tomsk.html .
 ```
 
-Собранные `src/map/map.html` и `src/tomsk.html` переносятся в корень (`map.html`, `index.html`), ссылки между страницами — относительные.
+### Как устроен сайт
 
-После переноса обязательно оберните страницы в полноценный HTML-документ (doctype, кодировка, `viewport` — без него телефоны показывают десктопную версию):
+| Адрес | Страница |
+|---|---|
+| `/` | Главная: живая шапка, популярные места, афиша, мини-карта, подборки |
+| `/mesta/` | Все места: выбор редакции + полная база с поиском |
+| `/sobytiya/`, `/podborki/`, `/derevyannyj-tomsk/`, `/udivi-menya/`, `/o-proekte/` | Разделы |
+| `/mesto/<адрес>/` | Страница заведения. Список — `src/venue/pages.json` |
+| `assets/site.css`, `assets/site.js`, `assets/venue.js` | Общие стили и скрипты |
 
-```bash
-python3 src/finalize.py index.html "Описание главной" map.html "Описание карты"
-```
+Страница заведения собирается из `data/venues.json`: поля `about` (подробно), `look` (что посмотреть, по строке), `tips` (советы, по строке) редактируются в админке. Готовая страница при открытии сама подтягивает свежие часы, цены и тексты из базы, поэтому правки из админки видны сразу. Чтобы добавить новую страницу, впишите место в `src/venue/pages.json` и пересоберите сайт.
 
 ## Данные
 

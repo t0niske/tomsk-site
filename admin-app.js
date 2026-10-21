@@ -91,6 +91,11 @@ function renderEditor(){const v=S.sel;$('#main').classList.add('editing');
     <div class="full frow"><label class="chk"><input type="checkbox" data-flag="pick" ${v.pick?'checked':''}><b>В подборке</b> — карточка в «Популярных местах» и золотая метка на карте</label></div>
     <div class="full frow"><label class="chk"><input type="checkbox" data-flag="feat" ${v.feat?'checked':''}><b>На главной первым</b> — и на мини-карте</label></div>
   </div></div>
+  <div class="card"><h3>Страница места <span class="help">для отдельной страницы заведения на сайте</span></h3><div class="grid">
+    <label class="f full">Подробно <small>(абзацы через пустую строку)</small><textarea class="in" data-k="about" maxlength="6000" rows="6">${esc(v.about)}</textarea></label>
+    <label class="f full">Что посмотреть / попробовать <small>(каждый пункт с новой строки)</small><textarea class="in" data-k="look" maxlength="1500" rows="4">${esc(v.look)}</textarea></label>
+    <label class="f full">Советы <small>(каждый совет с новой строки)</small><textarea class="in" data-k="tips" maxlength="1500" rows="3">${esc(v.tips)}</textarea></label>
+  </div></div>
   <div class="card"><h3>Фото <span class="help">первое — главное; ${S.gd?'большие снимки сжимаются автоматически':'сжатие недоступно на хостинге — загружайте фото до 2 МБ'}</span></h3>
     <div class="photos" id="photos"></div></div>
   <div class="bar"><span class="st" id="st"></span>${v.id?`<button class="b red" id="del">${v.hidden?'Удалено':(v.origin==='admin'?'Удалить':'Скрыть с сайта')}</button>`:''}${v.hidden?'<button class="b" id="restore">Вернуть на сайт</button>':''}<button class="b pri" id="save">Сохранить</button></div>`;

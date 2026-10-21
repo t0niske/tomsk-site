@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru" data-root="../" data-page="places">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Места Томска: кафе, музеи, парки, достопримечательности — Куда сходить в Томске</title>
+<meta name="description" content="Все места Томска в одном каталоге: выбор редакции и полная база заведений с часами работы, адресами и фильтрами.">
+<link rel="canonical" href="https://t0niske.github.io/tomsk-site/mesta/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Куда сходить в Томске">
+<meta property="og:title" content="Места Томска: кафе, музеи, парки, достопримечательности — Куда сходить в Томске"><meta property="og:description" content="Все места Томска в одном каталоге: выбор редакции и полная база заведений с часами работы, адресами и фильтрами."><meta property="og:url" content="https://t0niske.github.io/tomsk-site/mesta/">
+<meta name="theme-color" content="#FFD43B">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&family=Golos+Text:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../" aria-label="Куда сходить в Томске — на главную"><span class="logo-st">КУДА СХОДИТЬ</span><span class="logo-sub">в Томске</span></a>
+    <nav class="nav" id="nav">
+      <a href="../mesta/" aria-current="page">Места</a><a href="../sobytiya/">События</a><a href="../podborki/">Подборки</a><a href="../derevyannyj-tomsk/">Деревянный Томск</a><a href="../udivi-menya/">Удиви меня</a><a href="../map.html">Карта</a>
+    </nav>
+    <div class="top-actions">
+      <button class="icon-btn" id="searchJump" aria-label="Поиск"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+      <button class="icon-btn" id="favBtn" aria-label="Показать избранное"><svg class="ico" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-8.6C1.6 8.4 3.6 5 7 5c2 0 3.3 1.1 5 3 1.7-1.9 3-3 5-3 3.4 0 5.4 3.4 4 6.4C19 15.6 12 20 12 20z"/></svg><span class="badge" id="favCount" hidden>0</span></button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Меню"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      <button class="btn btn-primary login" id="loginBtn">Войти</button>
+    </div>
+  </div>
+</header>
+<main id="top">
+<header class="page-head"><div class="wrap"><ol class="crumbs"><li><a href="../">Главная</a></li><li><span>Места Томска</span></li></ol><h1>Места Томска</h1><p class=lead>Выбор редакции — места, которые мы проверили и описали сами. Ниже — полная база заведений города с поиском и часами работы.</p></div></header>
+<section id="cats-sec"><div class="wrap"><div class="cats" id="cats"></div></div></section>
+<section id="places"><div class="wrap">
+  <div class="sec-head"><div><h2>Выбор редакции</h2></div></div>
+  <div class="fbar">
+    <div class="seg" id="weatherSeg" role="group" aria-label="Погода">
+      <button data-w="" aria-pressed="true">Любая погода</button><button data-w="in" aria-pressed="false">Под крышей</button><button data-w="out" aria-pressed="false">На воздухе</button>
+    </div>
+    <span id="activeFilters" style="display:flex;gap:8px;flex-wrap:wrap"></span>
+    <span class="count" id="placeCount"></span>
+  </div>
+  <div class="grid5" id="placeGrid"></div>
+</div></section>
+<section id="all"><div class="wrap">
+  <div class="sec-head"><div><h2>Все заведения Томска</h2><p>Кафе, бары, музеи, гостиницы и другие места из открытой базы OpenStreetMap. Фото и отзывы смотрите по ссылкам в 2ГИС и Яндекс Картах.</p></div><span class="count" id="catCount"></span></div>
+  <div class="fbar cat-bar">
+    <label class="cat-q"><svg class="ico" viewBox="0 0 24 24"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4"/></svg><input id="catQ" type="search" placeholder="Название, кухня или улица" autocomplete="off"></label>
+    <div class="seg" id="catOpen" role="group" aria-label="Время"><button data-o="" aria-pressed="true">Любое время</button><button data-o="1" aria-pressed="false">Открыто сейчас</button></div>
+  </div>
+  <div class="cat-chips" id="catChips"></div>
+  <div class="cat-list" id="catList"></div>
+  <div style="text-align:center;margin-top:16px"><button class="btn btn-ghost" id="catMore">Показать ещё</button></div>
+  <p class="credit" style="margin-top:14px">Данные © участники <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, лицензия ODbL. Нет вашего заведения или данные устарели? <button class="linkbtn" data-report="">Напишите нам</button></p>
+</div></section>
+</main>
+<footer><div class="wrap">
+  <a class="logo" href="../"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M20 3v5M15 16l5-8 5 8M13 16h14v8H13zM6 24h28v12H6zM10 24l4-6M30 24l-4-6M17 36v-6a3 3 0 0 1 6 0v6M10 29h3M27 29h3"/></svg><span>Куда сходить<br>в Томске?</span></a>
+  <nav class="foot-nav"><a href="../o-proekte/">О проекте</a><a href="../podborki/">Гостям города</a><a href="../o-proekte/#owners">Добавить место</a><a href="../mesta/#all">Все заведения</a><a href="../map.html">Карта</a></nav>
+  <p class="fine">Данные о заведениях: OpenStreetMap и официальные сайты мест. Фото — Wikimedia Commons и сами заведения. Афиша событий пока демонстрационная.</p>
+</div></footer>
+<button class="btn btn-primary route-fab" id="routeFab"><svg class="ico" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg><span id="routeFabTxt">Мой маршрут</span></button>
+<div class="scrim" id="scrim"></div>
+<div class="sheet rep" id="rep" role="dialog" aria-label="Обновить данные о месте"></div>
+<aside class="drawer" id="drawer" aria-label="Мой маршрут">
+  <div class="d-head"><h2>Мой маршрут</h2><button class="icon-btn" id="closeDrawer" aria-label="Закрыть"><svg class="ico" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="d-body" id="routeList"></div>
+  <div class="d-foot">
+    <div class="total"><span>Займёт примерно</span><span id="routeTotal">0 мин</span></div>
+    <button class="btn btn-ghost" id="clearRoute">Очистить маршрут</button>
+  </div>
+</aside>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast"></div>
+
+<script src="../assets/site.js" defer></script>
+</body>
+</html>

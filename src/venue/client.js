@@ -12,8 +12,7 @@
     if (b) { b.hidden = !st; if (st) { b.textContent = st.txt; b.classList.toggle('open', st.open); b.classList.toggle('closed', !st.open) } }
     const now = new Date(Date.now() + (7 * 60 + new Date().getTimezoneOffset()) * 60000).getDay();
     el.querySelectorAll('.v-hours tr').forEach(tr => tr.classList.toggle('today', +tr.dataset.d === now));
-    el.querySelectorAll('.v-fav').forEach(x => { const on = favs.has(id); x.setAttribute('aria-pressed', on); x.lastChild.textContent = on ? 'В избранном' : 'В избранное' });
-    el.querySelectorAll('.v-add').forEach(x => { const on = route.includes(id); x.setAttribute('aria-pressed', on); x.lastChild.textContent = on ? 'В маршруте' : 'В маршрут' });
+    el.querySelectorAll('.v-fav').forEach(x => { const on = favs.has(id); x.setAttribute('aria-pressed', on); x.lastChild.textContent = on ? 'В списке «Хочу сходить»' : 'Хочу сходить' });
   }
   document.addEventListener('venues', () => {
     const v = VRAW.items.find(o => o.id === id);
@@ -24,7 +23,7 @@
     update();
   });
   document.addEventListener('click', e => {
-    if (e.target.closest('[data-fav],[data-add]')) setTimeout(update, 0);
+    if (e.target.closest('[data-fav]')) setTimeout(update, 0);
     const s = e.target.closest('[data-share]'); if (!s) return;
     const data = {title: document.title, url: location.href};
     if (navigator.share) navigator.share(data).catch(() => {});

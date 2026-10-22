@@ -6,7 +6,7 @@
   // фильтр раздела «Места» для хлебных крошек
   const CATF = {food:{cat:'food'},bar:{cat:'food'},culture:{cat:'culture'},church:{cat:'culture'},nature:{cat:'nature'},fun:{cat:'fun'},shop:{cat:'shop'},sight:{cat:'unusual'},stay:{cat:'unusual'}};
   const LOOK = {food:'Что попробовать',bar:'Что попробовать',culture:'Что посмотреть',church:'Что посмотреть',nature:'Чем заняться',fun:'Чем заняться',shop:'Что купить',sight:'На что обратить внимание',stay:'Что внутри'};
-  const MOOD = {date:'Для свидания',rain:'В дождь',kids:'С детьми',wood:'Деревянный Томск',night:'Вечером',free:'Бесплатно'};
+  const MOOD = {date:'Вдвоём',friends:'С друзьями',kids:'С детьми',solo:'Одному',night:'Вечером',rain:'В дождь',wood:'Деревянный Томск',free:'Бесплатно'};
   const SCHEMA = {food:'Restaurant',bar:'BarOrPub',culture:'Museum',church:'PlaceOfWorship',nature:'Park',fun:'EntertainmentBusiness',shop:'Store',sight:'TouristAttraction',stay:'Hotel'};
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const lines = s => (Array.isArray(s) ? s : String(s || '').split('\n')).map(x => String(x).trim().replace(/^[-•]\s*/, '')).filter(Boolean);
@@ -104,8 +104,7 @@
   ${v.addr ? `<p class="v-addr">${I('pin')}<span>${esc(v.addr)}</span><a href="#how">Как попасть ↓</a></p>` : ''}
   <div class="v-badges"><span class="v-badge v-status" id="vStatus" hidden></span>${price ? `<span class="v-badge">${I('rub')}${price}</span>` : ''}${mins ? `<span class="v-badge">${I('time')}${mins}</span>` : ''}${tags.map(t => `<span class="v-badge v-mood">${t}</span>`).join('')}</div>
   <div class="v-actions">
-    <button class="btn v-fav" data-fav="${esc(v.id)}" aria-pressed="false">${I('heart')}<span>В избранное</span></button>
-    <button class="btn v-add" data-add="${esc(v.id)}">${I('route')}<span>В маршрут</span></button>
+    <button class="btn v-fav" data-fav="${esc(v.id)}" aria-pressed="false">${I('heart')}<span>Хочу сходить</span></button>
     <a class="btn" href="${yandex}" target="_blank" rel="noopener">${I('walk')}<span>Как добраться</span></a>
     <button class="btn v-share" data-share>${I('share')}<span>Поделиться</span></button>
   </div>
@@ -174,8 +173,7 @@ ${sim.length ? `<section class="wrap v-more"><h2>Похожие места</h2><
     if (b) { b.hidden = !st; if (st) { b.textContent = st.txt; b.classList.toggle('open', st.open); b.classList.toggle('closed', !st.open) } }
     const now = new Date(Date.now() + (7 * 60 + new Date().getTimezoneOffset()) * 60000).getDay();
     el.querySelectorAll('.v-hours tr').forEach(tr => tr.classList.toggle('today', +tr.dataset.d === now));
-    el.querySelectorAll('.v-fav').forEach(x => { const on = favs.has(id); x.setAttribute('aria-pressed', on); x.lastChild.textContent = on ? 'В избранном' : 'В избранное' });
-    el.querySelectorAll('.v-add').forEach(x => { const on = route.includes(id); x.setAttribute('aria-pressed', on); x.lastChild.textContent = on ? 'В маршруте' : 'В маршрут' });
+    el.querySelectorAll('.v-fav').forEach(x => { const on = favs.has(id); x.setAttribute('aria-pressed', on); x.lastChild.textContent = on ? 'В списке «Хочу сходить»' : 'Хочу сходить' });
   }
   document.addEventListener('venues', () => {
     const v = VRAW.items.find(o => o.id === id);
@@ -186,7 +184,7 @@ ${sim.length ? `<section class="wrap v-more"><h2>Похожие места</h2><
     update();
   });
   document.addEventListener('click', e => {
-    if (e.target.closest('[data-fav],[data-add]')) setTimeout(update, 0);
+    if (e.target.closest('[data-fav]')) setTimeout(update, 0);
     const s = e.target.closest('[data-share]'); if (!s) return;
     const data = {title: document.title, url: location.href};
     if (navigator.share) navigator.share(data).catch(() => {});

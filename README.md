@@ -35,26 +35,22 @@
 cd src/map && python3 build.py && cd ../..
 python3 src/finalize.py src/map/map.html "Карта Томска в 2D и 3D: заведения, знаковые здания и прогулки." && cp src/map/map.html map.html
 
-# 2. главная одним файлом (промежуточный шаг)
-cd src && cp base.html tomsk.html \
-  && python3 places/main.py . && python3 places/catalog_ui.py . \
-  && python3 places/venues_ui.py . ../data/venues.json \
-  && python3 places/style_ui.py . && cd ..
-
-# 3. многостраничный сайт: assets/, главная и разделы, затем страницы заведений и sitemap.xml
-python3 src/pages.py src/tomsk.html .
-python3 src/venue_pages.py src/tomsk.html .
+# 2. весь сайт: главная, разделы, страницы мест и страницы «куда сходить …»
+./build.sh
 ```
 
 ### Как устроен сайт
 
 | Адрес | Страница |
 |---|---|
-| `/` | Главная: живая шапка, популярные места, афиша, мини-карта, подборки |
+| `/` | Главная: живая шапка с подбором «с кем / когда» и варианты под ней |
+| `/kuda-shodit/` и `/kuda-shodit/<сценарий>/` | Ответы на запросы: с девушкой, с друзьями, с детьми, вечером, на выходных, бесплатно (`src/scenarios.py`) |
 | `/mesta/` | Все места: выбор редакции + полная база с поиском |
-| `/sobytiya/`, `/podborki/`, `/derevyannyj-tomsk/`, `/udivi-menya/`, `/o-proekte/` | Разделы |
+| `/sobytiya/`, `/derevyannyj-tomsk/`, `/o-proekte/` | Разделы |
 | `/mesto/<адрес>/` | Страница заведения. Список — `src/venue/pages.json` |
 | `assets/site.css`, `assets/site.js`, `assets/venue.js` | Общие стили и скрипты |
+
+Подбор работает по меткам мест (поле `moods`): `date` — вдвоём, `friends` — с друзьями, `kids` — с детьми, `solo` — одному, `night` — вечером, `free` — бесплатно. Метки ставятся в админке.
 
 Страница заведения собирается из `data/venues.json`: поля `about` (подробно), `look` (что посмотреть, по строке), `tips` (советы, по строке) редактируются в админке. Готовая страница при открытии сама подтягивает свежие часы, цены и тексты из базы, поэтому правки из админки видны сразу. Чтобы добавить новую страницу, впишите место в `src/venue/pages.json` и пересоберите сайт.
 

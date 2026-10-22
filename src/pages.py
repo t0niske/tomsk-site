@@ -13,8 +13,8 @@ import os, re, sys
 
 SITE_URL = os.environ.get('SITE_URL', 'https://t0niske.github.io/tomsk-site/')
 
-NAV = [('mesta/', 'Места', 'places'), ('sobytiya/', 'События', 'events'), ('podborki/', 'Подборки', 'collections'),
-       ('derevyannyj-tomsk/', 'Деревянный Томск', 'wood'), ('udivi-menya/', 'Удиви меня', 'surprise'), ('map.html', 'Карта', 'map')]
+NAV = [('kuda-shodit/', 'Куда сходить', 'ideas'), ('mesta/', 'Места', 'places'), ('sobytiya/', 'События', 'events'),
+       ('derevyannyj-tomsk/', 'Деревянный Томск', 'wood'), ('map.html', 'Карта', 'map')]
 
 SRC = {}
 
@@ -71,8 +71,8 @@ def site_js():
     rep("const photo=p=>p.ph||PHOTOS[p.id]||PHOTOS[p.name]||null;",
         "const photo=p=>{const f=p.ph||PHOTOS[p.id]||PHOTOS[p.name]||null;return f?[url(f[0]),...f.slice(1)]:null};")
     # первый запуск: каждый блок отдельно, чтобы ошибка одного не ломала остальные
-    rep("HERO.init();renderDates();renderAll();renderRoute();renderMap();renderStamps();roll();",
-        "[HERO.init,renderDates,renderAll,renderRoute,renderMap,renderStamps].forEach(safe);if(PLACES.length)safe(roll);\n"
+    rep("HERO.init();renderDates();renderAll();renderPick();renderRoute();renderMap();renderStamps();roll();",
+        "[HERO.init,renderDates,renderAll,renderPick,renderMap,renderStamps].forEach(safe);if(PLACES.length)safe(roll);\n"
         "if(PAGE==='places'){F.showAll=true;const P=new URLSearchParams(location.search);try{const f=JSON.parse(P.get('f')||'null');"
         "if(f){applyFilter(f,false);if(f.q){CF.q=f.q;$('#catQ').value=f.q;renderCatalog()}}}catch(e){}}")
     # страницы заведений: карточка ведёт на страницу места, если она есть (карту id→адрес заполняет venue_pages.py)
@@ -83,6 +83,7 @@ def site_js():
     rep("<h3>${p.name}</h3>${p.why?",
         "<h3>${p.name}</h3>${VSLUG[p.id]?`<p><a class=\"btn btn-primary\" style=\"text-decoration:none\" href=\"${ROOT}mesto/${VSLUG[p.id]}/\">Страница места →</a></p>`:''}${p.why?")
     rep("then(V=>{if(!V||!V.items)return;applyVenues(V);", "then(V=>{if(!V||!V.items)return;window.VRAW=V;applyVenues(V);")
+    js += "\ndocument.querySelectorAll('[data-st]').forEach(e=>{const s=OH.status(e.dataset.st);if(s){e.textContent=s.txt;e.classList.add(s.open?'on':'off')}});\n"
     js = "const safe=f=>{try{f()}catch(e){console.warn(e)}};\nconst VSLUG={};\n" + js
     return js
 
@@ -121,7 +122,7 @@ def shell(*, title, desc, root, page, active, body, head_extra='', live=False):
     nav = ''.join(f'<a href="{root}{h}"{" aria-current=\"page\"" if k == active else ""}>{t}</a>' for h, t, k in NAV)
     header = re.sub(r'<nav class="nav" id="nav">.*?</nav>', f'<nav class="nav" id="nav">\n      {nav}\n    </nav>', SRC['header'], flags=re.S)
     header = header.replace('<a class="logo" href="#top"', f'<a class="logo" href="{root or "./"}"')
-    foot_links = (f'<a href="{root}o-proekte/">О проекте</a><a href="{root}podborki/">Гостям города</a>'
+    foot_links = (f'<a href="{root}o-proekte/">О проекте</a><a href="{root}kuda-shodit/">Куда сходить</a>'
                   f'<a href="{root}o-proekte/#owners">Добавить место</a><a href="{root}mesta/#all">Все заведения</a><a href="{root}map.html">Карта</a>')
     footer = re.sub(r'<nav>.*?</nav>', f'<nav class="foot-nav">{foot_links}</nav>', SRC['footer'], flags=re.S)
     footer = footer.replace('<a class="logo" href="#top">', f'<a class="logo" href="{root or "./"}">')
@@ -175,21 +176,20 @@ def build(out):
     home_crumb = [('', 'Главная')]
     pages = []
 
-    # главная: живая шапка, категории, популярные места, мини-карта, события, подборки и анонсы разделов
-    places_home = S['places'].replace(
-        re.search(r'<button class="link-more" id="morePlaces">.*?</button>', S['places'], re.S).group(0),
-        '<a class="link-more" href="mesta/">Все места <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>')
+    # главная: живая шапка с подбором «с кем / когда», варианты, сценарии, афиша, деревянный Томск и карта
+    import scenarios
     more = lambda h, t: f'<a class="link-more" href="{h}">{t} <svg class="ico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>'
     events_home = S['events'].replace('</p></div></div>', '</p></div>' + more('sobytiya/', 'Вся афиша') + '</div>', 1)
-    coll_home = S['collections'].replace('<h2>Подборки и идеи</h2></div></div>', '<h2>Подборки и идеи</h2></div>' + more('podborki/', 'Все подборки') + '</div>', 1)
+    ideas = ('<section id="ideas"><div class="wrap"><div class="sec-head"><div><h2>Идеи на любой случай</h2></div>'
+             + more('kuda-shodit/', 'Все идеи') + '</div>' + scenarios.tiles('') + '</div></section>')
     promo = '''<section id="promo"><div class="wrap"><div class="promo">
-  <a class="p1" href="udivi-menya/"><b>Удиви меня</b><span>Выберите, с кем идёте и какой бюджет, а мы соберём план дня из трёх шагов.</span><i>Собрать план →</i></a>
   <a class="p2" href="derevyannyj-tomsk/"><b>Деревянный Томск</b><span>Резные дома, терема и наличники. Найдите все и соберите штампы в паспорт.</span><i>Открыть паспорт →</i></a>
-  <a class="p3" href="map.html"><b>Карта 2D и 3D</b><span>Весь город с домами, рельефом и заведениями. Можно облететь центр в 3D.</span><i>Открыть карту →</i></a>
+  <a class="p3" href="mesta/"><b>Выбор редакции</b><span>Все места, которые мы проверили и описали сами, и полная база заведений города.</span><i>Смотреть места →</i></a>
+  <a class="p1" href="map.html"><b>Карта 2D и 3D</b><span>Весь город с домами, рельефом и заведениями. Можно облететь центр в 3D.</span><i>Открыть карту →</i></a>
 </div></div></section>'''
-    home = '\n'.join([S['hero2'], SRC['chips'], SRC['nowbar'], S['cats-sec'], places_home, promo, events_home, S['map'], coll_home])
-    pages.append(('', shell(title='Куда сходить в Томске — места, события и карта города', root='', page='', active='home', live=True,
-                            desc='Городской гид без рекламы: куда сходить в Томске сегодня — места, события, подборки, деревянный Томск и карта города.', body=home)))
+    home = '\n'.join([S['hero2'], S['pickRes'], ideas, events_home, promo])
+    pages.append(('', shell(title='Куда сходить в Томске — идеи на сегодня, вечер и выходные', root='', page='', active='home', live=True,
+                            desc='Куда сходить в Томске сегодня: подберём места под компанию и время — вдвоём, с друзьями, с детьми, вечером или в выходные. Без рекламы.', body=home)))
 
     def inner(slug, active, title, desc, h1, lead, body, crumbs_extra=(), tag=''):
         r = '../'
@@ -205,15 +205,10 @@ def build(out):
     inner('sobytiya/', 'events', 'Афиша событий Томска — Куда сходить в Томске', 'Концерты, спектакли, выставки и прогулки в Томске по дням.',
           'Афиша событий', 'Выберите день: точки под датами отмечают дни, когда что-то происходит. Афиша пока демонстрационная — скоро подключим настоящую.',
           drop_head(S['events']))
-    inner('podborki/', 'collections', 'Подборки мест Томска — Куда сходить в Томске', 'Готовые подборки мест Томска: для свидания, с детьми, в дождь, бесплатно и другие.',
-          'Подборки и идеи', 'Готовые наборы мест под настроение. Нажмите на подборку, и мы покажем подходящие места.', drop_head(S['collections']))
     inner('derevyannyj-tomsk/', 'wood', 'Деревянный Томск: резные дома и паспорт прогулки — Куда сходить в Томске',
           'Деревянное зодчество Томска: Дом с шатром, Дом с драконами, Дом с жар-птицами и другие резные дома. Паспорт со штампами.',
           'Деревянный Томск', 'В Томске сохранилось одно из лучших в России собраний деревянного зодчества. Пройдитесь по резным домам и соберите штампы.',
           S['passport'] + '\n<section><div class="wrap"><a class="btn btn-primary" href="../mesta/?f=%7B%22q%22%3A%22%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%22%7D">Показать деревянные дома в каталоге →</a></div></section>')
-    inner('udivi-menya/', 'surprise', 'Удиви меня: план дня в Томске за минуту — Куда сходить в Томске',
-          'Не знаете, чем заняться в Томске? Выберите пару условий, и мы соберём план дня из трёх шагов.',
-          'Удиви меня', 'План дня из трёх шагов: прогулка, где поесть и чем закончить вечер.', S['surprise'])
     about = '''<section><div class="wrap prose">
   <p><b>«Куда сходить в Томске»</b> — некоммерческий городской гид. Без рекламы и платных мест в выдаче: мы показываем то, что сами считаем интересным.</p>
   <h2>Откуда данные</h2>

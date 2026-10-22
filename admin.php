@@ -59,7 +59,7 @@ function clean_item($it) {
   foreach (['kind' => 80, 'addr' => 200, 'hours' => 300, 'prices' => 300, 'phone' => 60, 'web' => 300, 'why' => 300, 'desc' => 4000, 'cuisine' => 120, 'checked' => 10, 'src' => 300, 'scene' => 20, 'origin' => 10, 'about' => 6000, 'look' => 1500, 'tips' => 1500] as $k => $n) { $v = $s($k, $n); if ($v !== '') $o[$k] = $v; }
   foreach (['price', 'mins', 'mx', 'my'] as $k) if (isset($it[$k]) && $it[$k] !== '' && $it[$k] !== null && is_numeric($it[$k])) $o[$k] = (int)$it[$k];
   foreach (['pick', 'feat', 'hidden'] as $k) if (!empty($it[$k])) $o[$k] = true;
-  $moods = array_values(array_intersect((array)($it['moods'] ?? []), ['date', 'rain', 'kids', 'wood', 'night', 'free'])); if ($moods) $o['moods'] = $moods;
+  $moods = array_values(array_intersect((array)($it['moods'] ?? []), ['date', 'friends', 'kids', 'solo', 'rain', 'wood', 'night', 'free'])); if ($moods) $o['moods'] = $moods;
   if (!empty($it['tags']) && is_array($it['tags'])) $o['tags'] = array_slice(array_map(fn($t) => mb_substr((string)$t, 0, 40), $it['tags']), 0, 4);
   $ph = [];
   foreach ((array)($it['photos'] ?? []) as $p) {

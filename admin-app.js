@@ -3,7 +3,7 @@
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const CATS={food:'Кафе и рестораны',bar:'Бары',culture:'Музеи, театры, кино',church:'Храмы',nature:'Парки',fun:'Развлечения и спорт',shop:'Магазины и подарки',sight:'Достопримечательности',stay:'Где жить'};
-const MOODS={date:'Свидание',rain:'Под крышей',kids:'С детьми',wood:'Деревянный Томск',night:'Вечер и ночь',free:'Бесплатно'};
+const MOODS={date:'Вдвоём',friends:'С друзьями',kids:'С детьми',solo:'Одному',night:'Вечером',rain:'Под крышей',wood:'Деревянный Томск',free:'Бесплатно'};
 const CENTER=[56.4846,84.948];
 const S={db:null,reports:[],backups:[],gd:true,tab:'places',sel:null,dirty:false,f:{q:'',cat:'',pick:false,hidden:false,nohours:false,nophoto:false}};
 

@@ -35,7 +35,7 @@ function sceneOf(v){const k=((v.kind||'')+' '+v.name).toLowerCase();switch(v.cat
   case'culture':return/театр|концерт|филармон|кино/.test(k)?(/кино/.test(k)?'cinema':'concert'):/галер/.test(k)?'gallery':'museum';
   case'church':return'church';case'nature':return/набереж/.test(k)?'river':'garden';case'fun':return/батут|верёв|верев|скалод|экстрим|фитнес|спорт/.test(k)?'climb':'fair';
   case'shop':return'market';default:return'house'}}
-function toPlace(v){const mo=v.moods||[];const gx=(v.lon-84.957)*61646,gy=(v.lat-56.4755)*111351;
+function toPlace(v){const mo=v.moods||[];/* moods нужны подбору */const gx=(v.lon-84.957)*61646,gy=(v.lat-56.4755)*111351;
   const tags=v.tags&&v.tags.length?v.tags:[v.kind||'Место'].concat(mo.map(m=>VMOOD[m]).filter(t=>t&&t!==v.kind).slice(0,1));
   const ph=(v.photos||[]).map(f=>[f.src,f.credit||'',f.license||'',f.link||'']);
   // мини-карта: свои координаты у первых мест, остальным — приблизительно
@@ -43,7 +43,7 @@ function toPlace(v){const mo=v.moods||[];const gx=(v.lon-84.957)*61646,gy=(v.lat
   return{id:v.id,name:v.name,cat:MCAT[v.cat]||'unusual',vcat:v.cat,kind:v.kind||'',tags,scene:v.scene||sceneOf(v),indoor:mo.includes('rain')||['food','bar','culture','shop'].includes(v.cat),
     price:v.price!=null?v.price:(['nature','sight','church'].includes(v.cat)?0:null),addr:v.addr||'',mins:v.mins||VMINS[v.cat]||60,kids:mo.includes('kids'),rom:mo.includes('date'),
     desc:v.desc||'',why:v.why||'',hours:v.hours||'',phone:v.phone||'',web:v.web||'',prices:v.prices||'',checked:v.checked||'',src:v.src||'',cuisine:v.cuisine||'',
-    feat:!!v.feat,pick:!!v.pick,ph:ph[0]||null,photos:ph,x:mx,y:my,gx:Math.round(gx),gy:Math.round(gy)}}
+    feat:!!v.feat,pick:!!v.pick,moods:mo,ph:ph[0]||null,photos:ph,x:mx,y:my,gx:Math.round(gx),gy:Math.round(gy)}}
 function applyVenues(V){ALLV=V.items.filter(v=>!v.hidden).map(toPlace);
   PLACES=ALLV.filter(p=>p.pick).sort((a,b)=>(b.feat?1:0)-(a.feat?1:0));
   CATALOG=ALLV.map(p=>[p.name,p.vcat,p.kind,p.gx,p.gy,p.addr,p.hours,p.phone,p.web,p.cuisine,p.id,p.ph?p.ph[0]:''])}
@@ -576,7 +576,7 @@ const HERO=!document.getElementById('hero2')?{init(){},suggest:{w:'in'}}:(()=>{
     el('liveSub').textContent=c.hol?`Сегодня: ${HOL[c.hol].t}`:nh&&nh.days<=30?`До праздника «${HOL[nh.k].t}» ${nh.days} ${plural(nh.days,['день','дня','дней'])}`:'';
     const wxp={rain:['Дождь: места под крышей',{w:'in'}],storm:['Гроза: музей или кофейня',{w:'in'}],snow:['Снег: где тепло и вкусно',{w:'in'}],fog:['Туман: уютные места под крышей',{w:'in'}]}[c.wx]
       ||(dk>.5?['Ночью: виды на огни Томи',{cat:'nature'}]:c.name==='golden'?['Золотой час: успейте к закату',{cat:'nature'}]:['Хорошая погода: куда прогуляться',{w:'out'}]);
-    el('heroGoTxt').textContent=wxp[0];HERO.suggest=wxp[1];if(el('wxTxt'))el('wxTxt').textContent=wxp[0];
+    HERO.suggest=wxp[1];if(el('wxTxt'))el('wxTxt').textContent=wxp[0];
     el('hero2').classList.toggle('dark',dk>.5);
     FX.set(c,dk);syncPanel();if(reduce)staticFrame()}
 
@@ -653,7 +653,7 @@ const HERO=!document.getElementById('hero2')?{init(){},suggest:{w:'in'}}:(()=>{
     el('livePill').addEventListener('click',()=>{const p=el('livePanel');p.hidden=!p.hidden;el('livePill').setAttribute('aria-expanded',!p.hidden)});
     el('liveClose').addEventListener('click',()=>{el('livePanel').hidden=true;el('livePill').setAttribute('aria-expanded',false)});
     el('liveReset').addEventListener('click',()=>{S.ov={time:null,wx:null,hol:null};apply()});
-    el('heroGo').addEventListener('click',()=>applyFilter(HERO.suggest,true));
+    el('heroGo').addEventListener('click',()=>{const r=document.getElementById('pickRes');if(r)r.scrollIntoView({behavior:'smooth'})});
     apply();fetchWeather();setInterval(apply,60000);setInterval(fetchWeather,15*60000);
     if(!reduce)requestAnimationFrame(frame);else staticFrame()}
   return{init,suggest:{w:'in'}}})();
@@ -677,7 +677,7 @@ const OH=(()=>{const D=['Su','Mo','Tu','We','Th','Fr','Sa'],RU=['вс','пн','�
       const sp=[];(rest.match(/\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2}/g)||[]).forEach(t=>{const[a,b]=t.split('-').map(x=>x.trim().split(':').map(Number));let o=a[0]*60+a[1],c=b[0]*60+b[1];if(c<=o)c+=1440;sp.push([o,c])});
       if(!sp.length)return{raw:s};days.forEach(d=>week[d]=sp);any=true}
     return any?{week}:{raw:s}}
-  const fm=m=>{m%=1440;return Math.floor(m/60)+':'+String(m%60).padStart(2,'0')};
+  const fm=m=>{m%=1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')};
   function nowT(){const d=new Date(Date.now()+(7*60+new Date().getTimezoneOffset())*60000);return{d:d.getDay(),m:d.getHours()*60+d.getMinutes()}}
   function status(s){const P=parse(s);if(!P||!P.week)return null;if(P.all)return{open:true,txt:'Круглосуточно'};const{d,m}=nowT();
     for(const[o,c]of P.week[d])if(m>=o&&m<c)return{open:true,txt:'Открыто до '+fm(c)};
@@ -727,9 +727,9 @@ function matchPlace(p){
 function placeCard(p){
   const inR=route.includes(p.id);
   return `<article class="card" data-open="${p.id}" tabindex="0">
-    <div class="media"><div style="position:absolute;inset:0;${tint(p.id)}">${scene(p.scene)}</div>${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="В избранное">${ico('heart')}</button></div>
+    <div class="media"><div style="position:absolute;inset:0;${tint(p.id)}">${scene(p.scene)}</div>${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="Хочу сходить">${ico('heart')}</button></div>
     <div class="card-body"><h3>${VSLUG[p.id]?`<a class="card-link" href="${ROOT}mesto/${VSLUG[p.id]}/">${p.name}</a>`:p.name}</h3><p class="meta">${p.tags.join(' · ')}</p>
-    <div class="foot"><span class="price">${p.price==null?'':priceTxt(p.price)}</span><button class="add" data-add="${p.id}" aria-pressed="${inR}">${inR?'✓ В маршруте':'+ Маршрут'}</button></div></div></article>`;
+    <div class="foot"><span class="price">${p.price==null?'':priceTxt(p.price)}</span><span class="card-st">${p.hours&&OH.status(p.hours)?OH.status(p.hours).txt:''}</span></div></div></article>`;
 }
 function renderPlaces(){
   const list=PLACES.filter(matchPlace);
@@ -753,14 +753,14 @@ $('#morePlaces').addEventListener('click',()=>{F.showAll=!F.showAll;renderPlaces
 $('#rainBtn').addEventListener('click',()=>applyFilter(HERO.suggest,true));
 $('#searchForm').addEventListener('submit',e=>{e.preventDefault();if(PAGE!=='places'){goPlaces({q:$('#q').value.trim()});return}F.q=$('#q').value.trim();F.cat=null;F.fav=false;renderAll();$('#places').scrollIntoView({behavior:'smooth'})});
 $('#searchJump').addEventListener('click',()=>{if(!document.getElementById('q')){location.href=ROOT+'mesta/#all';return}window.scrollTo({top:0,behavior:'smooth'});setTimeout(()=>$('#q').focus(),300)});
-$('#favBtn').addEventListener('click',()=>{if(!favs.size){toast('Нажмите ♡ на карточке, чтобы сохранить место');return}applyFilter({fav:true},true)});
+$('#favBtn').addEventListener('click',()=>{if(!favs.size){toast('Нажмите ♡ на карточке — место попадёт в список «Хочу сходить»');return}applyFilter({fav:true},true)});
 $('#menuBtn').addEventListener('click',()=>$('#nav').classList.toggle('open'));
 $('#nav').addEventListener('click',e=>{if(e.target.tagName==='A')$('#nav').classList.remove('open')});
 $('#loginBtn').addEventListener('click',()=>toast('Вход появится во второй версии'));
 
 /* global clicks: fav / add / open */
 document.addEventListener('click',e=>{
-  const f=e.target.closest('[data-fav]');if(f){e.stopPropagation();const id=f.dataset.fav;favs.has(id)?favs.delete(id):favs.add(id);store.set('favs',[...favs]);toast(favs.has(id)?'Добавлено в избранное':'Убрано из избранного');renderAll();if(f.closest('.sheet'))openSheet(id);return}
+  const f=e.target.closest('[data-fav]');if(f){e.stopPropagation();const id=f.dataset.fav;favs.has(id)?favs.delete(id):favs.add(id);store.set('favs',[...favs]);toast(favs.has(id)?'Сохранили в «Хочу сходить»':'Убрали из «Хочу сходить»');renderAll();if(f.closest('.sheet'))openSheet(id);return}
   const a=e.target.closest('[data-add]');if(a){e.stopPropagation();toggleRoute(a.dataset.add);if(a.closest('.sheet'))openSheet(a.dataset.add);if(a.closest('.pop'))showPop(a.dataset.add);return}
   const o=e.target.closest('[data-open]');if(o&&VSLUG[o.dataset.open]&&!e.target.closest('.sheet')){if(!e.target.closest('a'))location.href=ROOT+'mesto/'+VSLUG[o.dataset.open]+'/';return}if(o&&!e.target.closest('.sheet')){openSheet(o.dataset.open)}
 });
@@ -770,11 +770,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeD
 function openSheet(id){
   const p=byId(id);if(!p)return;const inR=route.includes(id);
   const yurl='https://yandex.ru/maps/?text='+encodeURIComponent('Томск, '+p.name+', '+p.addr);
-  $('#sheet').innerHTML=`<button class="x" id="sheetX" aria-label="Закрыть">${ico('x')}</button><div class="media">${scene(p.scene)}${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="В избранное" style="right:54px">${ico('heart')}</button></div>
+  $('#sheet').innerHTML=`<button class="x" id="sheetX" aria-label="Закрыть">${ico('x')}</button><div class="media">${scene(p.scene)}${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="Хочу сходить" style="right:54px">${ico('heart')}</button></div>
   <div class="card-body"><p class="meta">${CATS.find(c=>c.id===p.cat).name}${p.demo?' · демо-заведение':''}</p><h3>${p.name}</h3>${VSLUG[p.id]?`<p><a class="btn btn-primary" style="text-decoration:none" href="${ROOT}mesto/${VSLUG[p.id]}/">Страница места →</a></p>`:''}${p.why?`<p class="desc"><b>${p.why}.</b></p>`:''}<p class="desc">${p.desc}</p>
   <div class="facts"><div>Что это<b>${p.tags[0]}</b></div><div>Вход<b>${priceTxt(p.price)}</b></div><div>Займёт<b>${fmtMins(p.mins)}</b></div></div>
   <div class="where">${ico('pin')}${p.addr}</div>${infoBlock(p)}${phCredit(p)}
-  <div class="plan-actions"><button class="btn btn-primary" data-add="${p.id}">${inR?'✓ В маршруте':'Добавить в маршрут'}</button>${p.demo?'':`<a class="btn btn-ghost" href="${yurl}" target="_blank" rel="noopener">${ico('ext')}Яндекс Карты</a>`}</div></div>`;
+  <div class="plan-actions"><button class="btn btn-primary" data-fav="${p.id}">${favs.has(p.id)?'♥ В списке «Хочу сходить»':'♡ Хочу сходить'}</button>${p.demo?'':`<a class="btn btn-ghost" href="${yurl}" target="_blank" rel="noopener">${ico('ext')}Яндекс Карты</a>`}</div></div>`;
   $('#sheet').classList.add('open');$('#scrim').classList.add('open');$('#sheetX').onclick=closeSheet;
 }
 function infoBlock(p){const st=p.hours?OH.status(p.hours):null;let h='';
@@ -885,7 +885,7 @@ function showPop(id){
   document.querySelectorAll('.pin').forEach(x=>x.classList.toggle('on',x.dataset.pin===id));
   const inR=route.includes(id);
   $('#popWrap').innerHTML=`<div class="pop" style="left:${left}px;top:${top}px"><button class="x" aria-label="Закрыть">${ico('x')}</button><div class="media">${scene(p.scene)}${phImg(p)}</div>
-    <div class="card-body"><h3>${p.name}</h3><div class="where">${ico('pin')}${p.addr}</div><div class="foot"><span class="price">${p.tags[0]}</span><button class="add" data-open="${p.id}">Открыть</button><button class="add" data-add="${p.id}" aria-pressed="${inR}" style="margin-left:0">${inR?'✓':'+ Маршрут'}</button></div></div></div>`;
+    <div class="card-body"><h3>${p.name}</h3><div class="where">${ico('pin')}${p.addr}</div><div class="foot"><span class="price">${p.tags[0]}</span><button class="add" data-open="${p.id}">Открыть</button></div></div></div>`;
 }
 function hidePop(){popId=null;const w=$('#popWrap');if(w)w.innerHTML='';document.querySelectorAll('.pin.on').forEach(x=>x.classList.remove('on'))}
 
@@ -955,7 +955,71 @@ $('#scrim').addEventListener('click',closeReport);document.addEventListener('key
 {const m=location.hash.match(/^#report=(.*)$/);if(m)setTimeout(()=>openReport(decodeURIComponent(m[1])),300)}
 
 fetch(ROOT+'data/venues.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(V=>{if(!V||!V.items)return;window.VRAW=V;applyVenues(V);renderAll();renderCatalog();renderMap();renderRoute();safe(renderStamps);if(!plan.length)safe(roll);document.dispatchEvent(new Event('venues'))}).catch(()=>{});
+
+/* ===== подбор: с кем и когда ===== */
+const PK={who:null,when:'now',seed:0};
+try{const s=JSON.parse(localStorage.getItem('tomsk:pick')||'null');if(s){PK.who=s.who||null;PK.when=s.when||'now'}}catch(e){}
+const PK_WHO={date:'вдвоём',friends:'с друзьями',kids:'с детьми',solo:'одному'};
+const PK_WHEN={now:'прямо сейчас',eve:'вечером',wknd:'в выходные'};
+const PK_PAGE={date:'s-devushkoj',friends:'s-druzyami',kids:'s-detmi',eve:'vecherom',wknd:'na-vyhodnyh'};
+const PK_GROUP=p=>['food','bar'].includes(p.vcat)?'eat':['nature','sight','church'].includes(p.vcat)?'walk':'do';
+function tomskNow(){const d=new Date(Date.now()+(7*60+new Date().getTimezoneOffset())*60000);return{d:d.getDay(),m:d.getHours()*60+d.getMinutes()}}
+function openAt(h,day,m){const P=OH.parse(h);if(!P||!P.week)return null;if(P.all)return true;
+  for(const[o,c]of P.week[day])if(m>=o&&m<c)return true;const y=(day+6)%7;for(const[o,c]of P.week[y])if(c>1440&&m<c-1440)return true;return false}
+// без часов работы: примерные рамки по типу места
+const PK_GUESS={food:[600,1320],bar:[960,1560],nature:[420,1380],sight:[420,1380],church:[480,1140],culture:[600,1140],fun:[600,1260],shop:[600,1200]};
+function fitsWhen(p,when){
+  const night=(p.moods||[]).includes('night');
+  const at=(d,m)=>{const r=p.hours?openAt(p.hours,d,m):null;if(r!==null)return r;const g=PK_GUESS[p.vcat];if(!g)return false;
+    if(['nature','sight'].includes(p.vcat)&&m>=1140&&!night)return false;return m>=g[0]&&m<g[1]};
+  if(when==='now'){const t=tomskNow();return at(t.d,t.m)&&at(t.d,(t.m+45)%1440)}
+  if(when==='eve'){const t=tomskNow();if(['culture','fun','church','sight','nature','shop'].includes(p.vcat)&&!night)return false;return at(t.d,1200)}
+  return at(6,780)||at(0,780)}
+function rnd(seed,s){let h=seed*2654435761>>>0;for(const c of s)h=Math.imul(h^c.charCodeAt(0),2246822519)>>>0;h^=h>>>15;return(h>>>0)/4294967296}
+function pickList(){
+  const bad=HERO.suggest&&HERO.suggest.w==='in'&&PK.when!=='wknd';
+  const pool=PLACES.filter(p=>p.vcat!=='stay'&&(p.vcat!=='shop'||(p.moods||[]).some(m=>m==='solo'||m==='date'))&&(!PK.who||(p.moods||[]).includes(PK.who)));
+  let ok=pool.filter(p=>fitsWhen(p,PK.when));
+  if(bad){const dry=ok.filter(p=>p.indoor);if(dry.length>=4)ok=dry}
+  const sc=p=>rnd(PK.seed+1,p.id)*1.4+(p.feat?.15:0)+(p.photos&&p.photos.length?.1:0)+(p.why?.1:0)+(bad&&p.indoor?.5:0)+(PK.when==='eve'&&(p.moods||[]).includes('night')?.4:0);
+  const by={eat:[],walk:[],do:[]};ok.map(p=>[p,sc(p)]).sort((a,b)=>b[1]-a[1]).forEach(([p])=>by[PK_GROUP(p)].push(p));
+  const order=PK.when==='eve'?['eat','do','walk']:bad?['do','eat','walk']:['walk','eat','do'];
+  const out=[];for(let r=0;out.length<6&&r<6;r++)for(const g of order){if(by[g][r]&&out.length<6)out.push(by[g][r])}
+  return{list:out,total:ok.length}}
+function pickCard(p){const st=p.hours?OH.status(p.hours):null;const href=VSLUG[p.id]?`${ROOT}mesto/${VSLUG[p.id]}/`:null;
+  return `<article class="card pk-card" data-open="${p.id}" tabindex="0">
+    <div class="media"><div style="position:absolute;inset:0;${tint(p.id)}">${scene(p.scene)}</div>${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="Хочу сходить">${ico('heart')}</button>
+      <span class="pk-kind">${p.kind||p.tags[0]||''}</span></div>
+    <div class="card-body"><h3>${href?`<a class="card-link" href="${href}">${p.name}</a>`:p.name}</h3>${p.why||p.desc?`<p class="pk-why">${(p.why||p.desc.split('. ')[0]).replace(/\.$/,'')}</p>`:''}
+    <div class="foot"><span class="price">${p.price==null?'':priceTxt(p.price)}</span>${st?`<span class="pk-st ${st.open?'on':'off'}">${st.txt}</span>`:''}</div></div></article>`}
+function renderPick(){
+  document.querySelectorAll('#pick [data-k]').forEach(g=>g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(PK[g.dataset.k]===b.dataset.v))));
+  const grid=document.getElementById('pkGrid');if(!grid)return;
+  if(!PLACES.length){grid.innerHTML='<div class="empty">Подбираем места…</div>';return}
+  const{list,total}=pickList();
+  const who=PK.who?PK_WHO[PK.who]+' ':'',when=PK_WHEN[PK.when];
+  $('#pkTitle').textContent=(who?'Куда сходить '+who:'Куда сходить ')+when;
+  const t=tomskNow();
+  $('#pkSub').textContent=!list.length?'':PK.when==='now'?`Открыто сейчас и подходит по погоде · ${total} ${plural(total,['вариант','варианта','вариантов'])}`:
+    PK.when==='eve'?`Работает вечером, после 20:00 · ${total} ${plural(total,['вариант','варианта','вариантов'])}`:`Открыто в субботу или воскресенье днём · ${total} ${plural(total,['вариант','варианта','вариантов'])}`;
+  const pg=PK_PAGE[PK.who]||PK_PAGE[PK.when];const l=$('#pkLink');l.href=ROOT+'kuda-shodit/'+(pg?pg+'/':'');
+  l.firstChild.textContent=PK_PAGE[PK.who]?`Все идеи: куда сходить ${PK_WHO[PK.who].replace('вдвоём','с девушкой')} `:pg?`Все идеи: куда сходить ${when} `:'Все идеи ';
+  $('#pkMore').hidden=total<=6;
+  grid.innerHTML=list.length?list.map(pickCard).join(''):`<div class="empty">${PK.when==='now'&&(t.m<420||t.m>1380)?'Ночью почти всё закрыто. Посмотрите, что можно запланировать на вечер или выходные.':'Под эти условия ничего не нашлось. Попробуйте другой вариант.'}
+    <div style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn btn-ghost" data-pk="eve">Вечером</button><button class="btn btn-ghost" data-pk="wknd">В выходные</button></div></div>`}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('#pick [data-k] button');
+  const q=e.target.closest('[data-pk]');
+  if(b){const k=b.parentNode.dataset.k;PK[k]=k==='who'&&PK.who===b.dataset.v?null:b.dataset.v}else if(q){PK.when=q.dataset.pk}else if(e.target.closest('#pkMore')){PK.seed++}else return;
+  try{localStorage.setItem('tomsk:pick',JSON.stringify({who:PK.who,when:PK.when}))}catch(e){}
+  renderPick();
+  if(b||q){const r=document.getElementById('pickRes');if(r&&r.getBoundingClientRect().top>innerHeight-160)r.scrollIntoView({behavior:'smooth'})}
+});
+document.addEventListener('venues',renderPick);
+
 function renderAll(){renderPlaces();renderEvents();const c=$('#favCount');c.textContent=favs.size;c.hidden=!favs.size}
 window.addEventListener('resize',()=>{if(popId)showPop(popId)});
-[HERO.init,renderDates,renderAll,renderRoute,renderMap,renderStamps].forEach(safe);if(PLACES.length)safe(roll);
+[HERO.init,renderDates,renderAll,renderPick,renderMap,renderStamps].forEach(safe);if(PLACES.length)safe(roll);
 if(PAGE==='places'){F.showAll=true;const P=new URLSearchParams(location.search);try{const f=JSON.parse(P.get('f')||'null');if(f){applyFilter(f,false);if(f.q){CF.q=f.q;$('#catQ').value=f.q;renderCatalog()}}}catch(e){}}
+
+document.querySelectorAll('[data-st]').forEach(e=>{const s=OH.status(e.dataset.st);if(s){e.textContent=s.txt;e.classList.add(s.open?'on':'off')}});

@@ -1,5 +1,2362 @@
 [
-  {"id": "shatr", "slug": "dom-s-shatrom"},
-  {"id": "kraev", "slug": "kraevedcheskij-muzej"},
-  {"id": "p62", "slug": "snegiri"}
+{
+"id": "nab",
+"slug": "naberezhnaya-tomi"
+},
+{
+"id": "shatr",
+"slug": "dom-s-shatrom"
+},
+{
+"id": "kraev",
+"slug": "kraevedcheskij-muzej"
+},
+{
+"id": "bot",
+"slug": "sibirskij-botanicheskij-sad-tgu"
+},
+{
+"id": "lager",
+"slug": "lagernyj-sad"
+},
+{
+"id": "roshcha",
+"slug": "universitetskaya-roshcha"
+},
+{
+"id": "dragon",
+"slug": "dom-s-drakonami"
+},
+{
+"id": "art",
+"slug": "tomskij-hudozhestvennyj-muzej"
+},
+{
+"id": "chekhov",
+"slug": "pamyatnik-chehovu"
+},
+{
+"id": "gorsad",
+"slug": "gorodskoj-sad"
+},
+{
+"id": "p0",
+"slug": "voskresenskaya-gora"
+},
+{
+"id": "p1",
+"slug": "novo-sobornaya-ploshchad"
+},
+{
+"id": "p2",
+"slug": "ploshchad-lenina"
+},
+{
+"id": "p3",
+"slug": "kamennyj-most"
+},
+{
+"id": "p5",
+"slug": "pamyatnik-schastyu"
+},
+{
+"id": "p6",
+"slug": "pamyatnik-tapochkam"
+},
+{
+"id": "p7",
+"slug": "lyagushka-puteshestvennica"
+},
+{
+"id": "p8",
+"slug": "mladenec-v-kapuste"
+},
+{
+"id": "p9",
+"slug": "pamyatnik-kirovu"
+},
+{
+"id": "p10",
+"slug": "tatarskaya-sloboda"
+},
+{
+"id": "p11",
+"slug": "ulica-kuznecova"
+},
+{
+"id": "p12",
+"slug": "dom-iskusstv-usadba-shishkova"
+},
+{
+"id": "p13",
+"slug": "dom-za-rubl-na-pushkina-24"
+},
+{
+"id": "p14",
+"slug": "dom-kryachkova"
+},
+{
+"id": "p15",
+"slug": "gubernskaya-apteka"
+},
+{
+"id": "p17",
+"slug": "skver-basni-krylova"
+},
+{
+"id": "p18",
+"slug": "memorial-na-kashtachnoj-gore"
+},
+{
+"id": "p19",
+"slug": "iverskaya-chasovnya"
+},
+{
+"id": "p20",
+"slug": "znamenskaya-cerkov"
+},
+{
+"id": "p21",
+"slug": "petropavlovskij-sobor"
+},
+{
+"id": "p22",
+"slug": "polskij-kostel"
+},
+{
+"id": "p23",
+"slug": "lyuteranskaya-cerkov-svyatoj-marii"
+},
+{
+"id": "p24",
+"slug": "bogorodice-alekseevskij-monastyr"
+},
+{
+"id": "p25",
+"slug": "belaya-mechet"
+},
+{
+"id": "p26",
+"slug": "memorialnyj-muzej-sledstvennaya-tyurma-nkvd"
+},
+{
+"id": "p27",
+"slug": "muzej-slavyanskoj-mifologii"
+},
+{
+"id": "p28",
+"slug": "muzej-professorskaya-kvartira"
+},
+{
+"id": "p29",
+"slug": "muzej-derevyannogo-zodchestva"
+},
+{
+"id": "p30",
+"slug": "tochka-gravitacii"
+},
+{
+"id": "p31",
+"slug": "zoologicheskij-muzej-tgu"
+},
+{
+"id": "p32",
+"slug": "tomskij-planetarij"
+},
+{
+"id": "p33",
+"slug": "detskij-muzej-volshebnaya-strana"
+},
+{
+"id": "p34",
+"slug": "muzej-istorii-pozharnoj-ohrany"
+},
+{
+"id": "p35",
+"slug": "anatomicheskij-muzej-sibgmu"
+},
+{
+"id": "p36",
+"slug": "tomskij-tyuz"
+},
+{
+"id": "p37",
+"slug": "teatr-kukly-i-aktera-skomoroh"
+},
+{
+"id": "p38",
+"slug": "teatr-zhivyh-kukol-2-ku"
+},
+{
+"id": "p39",
+"slug": "tomskaya-filarmoniya"
+},
+{
+"id": "p40",
+"slug": "teatr-versiya"
+},
+{
+"id": "p41",
+"slug": "buff-sad"
+},
+{
+"id": "p42",
+"slug": "igumenskij-sad"
+},
+{
+"id": "p43",
+"slug": "mihajlovskaya-roshcha"
+},
+{
+"id": "p44",
+"slug": "kulaginskij-skver"
+},
+{
+"id": "p45",
+"slug": "teatralnyj-skver"
+},
+{
+"id": "p46",
+"slug": "berezovaya-roshcha"
+},
+{
+"id": "p47",
+"slug": "skver-u-rechnogo-vokzala"
+},
+{
+"id": "p48",
+"slug": "pryatki-park"
+},
+{
+"id": "p49",
+"slug": "batutnyj-centr-jordan"
+},
+{
+"id": "p50",
+"slug": "ekstrim-park-vavilon"
+},
+{
+"id": "p51",
+"slug": "semejnyj-park-aktivizion"
+},
+{
+"id": "p52",
+"slug": "akvapark-zhasmin"
+},
+{
+"id": "p53",
+"slug": "ledovyj-dvorec-kristall"
+},
+{
+"id": "p54",
+"slug": "matrix-vr"
+},
+{
+"id": "p55",
+"slug": "razvlekatelnyj-centr-fakel"
+},
+{
+"id": "p56",
+"slug": "kuhterin"
+},
+{
+"id": "p57",
+"slug": "vechnyj-zov"
+},
+{
+"id": "p58",
+"slug": "narym"
+},
+{
+"id": "p59",
+"slug": "stroganina-bar"
+},
+{
+"id": "p60",
+"slug": "sibirskaya-trapeza"
+},
+{
+"id": "p61",
+"slug": "reka-827"
+},
+{
+"id": "p62",
+"slug": "snegiri"
+},
+{
+"id": "p63",
+"slug": "snegiri-pizza-grill"
+},
+{
+"id": "p64",
+"slug": "italy"
+},
+{
+"id": "p65",
+"slug": "gosti"
+},
+{
+"id": "p66",
+"slug": "baget-omlet"
+},
+{
+"id": "p67",
+"slug": "gastrobistro-nova"
+},
+{
+"id": "p68",
+"slug": "make-love-pizza"
+},
+{
+"id": "p69",
+"slug": "mama-ya-doma"
+},
+{
+"id": "p70",
+"slug": "peshkom-postoyu"
+},
+{
+"id": "p71",
+"slug": "hochu-puri"
+},
+{
+"id": "p72",
+"slug": "istanbul"
+},
+{
+"id": "p73",
+"slug": "ugolek"
+},
+{
+"id": "p74",
+"slug": "kafedra"
+},
+{
+"id": "p75",
+"slug": "erofej-petrovich"
+},
+{
+"id": "p76",
+"slug": "rebro"
+},
+{
+"id": "p77",
+"slug": "sibagro-gurme"
+},
+{
+"id": "p78",
+"slug": "osobnyak"
+},
+{
+"id": "p79",
+"slug": "gobi"
+},
+{
+"id": "p80",
+"slug": "poly-bistro"
+},
+{
+"id": "p81",
+"slug": "radhika"
+},
+{
+"id": "p82",
+"slug": "panda"
+},
+{
+"id": "p83",
+"slug": "molchanie-yagnyat"
+},
+{
+"id": "p84",
+"slug": "zheltok"
+},
+{
+"id": "p85",
+"slug": "break-me-fast"
+},
+{
+"id": "p86",
+"slug": "a-my-tut-plyushkami-baluemsya"
+},
+{
+"id": "p87",
+"slug": "pumpkin"
+},
+{
+"id": "p88",
+"slug": "torta"
+},
+{
+"id": "p89",
+"slug": "mindajk-coffee"
+},
+{
+"id": "p90",
+"slug": "dzhezva-kofe-na-peske"
+},
+{
+"id": "p91",
+"slug": "rocket-coffee"
+},
+{
+"id": "p92",
+"slug": "territoriya-kofe"
+},
+{
+"id": "p93",
+"slug": "bulanzhe"
+},
+{
+"id": "p94",
+"slug": "starbooks"
+},
+{
+"id": "p95",
+"slug": "pro-kraft"
+},
+{
+"id": "p96",
+"slug": "clever-irish-pub"
+},
+{
+"id": "p97",
+"slug": "harat-s-pub"
+},
+{
+"id": "p98",
+"slug": "galereya"
+},
+{
+"id": "p99",
+"slug": "rockhub"
+},
+{
+"id": "p100",
+"slug": "hall-bar"
+},
+{
+"id": "p101",
+"slug": "south-spot"
+},
+{
+"id": "p102",
+"slug": "beerfolio"
+},
+{
+"id": "p103",
+"slug": "nastroenie"
+},
+{
+"id": "p104",
+"slug": "nirvana"
+},
+{
+"id": "p105",
+"slug": "knizhnyj-magazin-petr-makushin"
+},
+{
+"id": "p106",
+"slug": "bukinisticheskij-magazin-muzej-suzdalskij"
+},
+{
+"id": "p107",
+"slug": "sibirskij-kedr"
+},
+{
+"id": "p109",
+"slug": "krasnaya-zvezda"
+},
+{
+"id": "p110",
+"slug": "abazhur"
+},
+{
+"id": "p111",
+"slug": "kuhterin-otel"
+},
+{
+"id": "p112",
+"slug": "magistrat"
+},
+{
+"id": "p113",
+"slug": "skandinaviya"
+},
+{
+"id": "p114",
+"slug": "moment"
+},
+{
+"id": "p115",
+"slug": "gostinica-tomsk"
+},
+{
+"id": "o725a58da",
+"slug": "cosmo-beer"
+},
+{
+"id": "o1eec9744",
+"slug": "dark-time"
+},
+{
+"id": "o3f728c9c",
+"slug": "hookah-lounge-bar"
+},
+{
+"id": "oc9f906dd",
+"slug": "infotecs-academy"
+},
+{
+"id": "o87b45c66",
+"slug": "invino"
+},
+{
+"id": "o69dfd67b",
+"slug": "jaws-spot"
+},
+{
+"id": "od9708674",
+"slug": "the-burger-lab"
+},
+{
+"id": "o97132fa6",
+"slug": "alkopolis"
+},
+{
+"id": "o00428895",
+"slug": "barin"
+},
+{
+"id": "o1c68661b",
+"slug": "bistro-soyuz"
+},
+{
+"id": "o6a1b33e9",
+"slug": "brodvej"
+},
+{
+"id": "o8fe78ead",
+"slug": "globus"
+},
+{
+"id": "odcfaf027",
+"slug": "dzhon-golt"
+},
+{
+"id": "o564f88ac",
+"slug": "zavod"
+},
+{
+"id": "oe1e3a796",
+"slug": "zakusochnaya"
+},
+{
+"id": "of6bff8a7",
+"slug": "zvezdnyj"
+},
+{
+"id": "o9f842bf0",
+"slug": "johan-pivohan"
+},
+{
+"id": "oe6a92beb",
+"slug": "johan-pivohan-pr-kirova-58"
+},
+{
+"id": "obf574e8f",
+"slug": "kabinet-redkostej"
+},
+{
+"id": "o65bcda12",
+"slug": "kanarejka"
+},
+{
+"id": "oe3e73fea",
+"slug": "sibirskij-pab"
+},
+{
+"id": "odd1db8f3",
+"slug": "sunduk"
+},
+{
+"id": "oceb6fbd1",
+"slug": "u-kryugera"
+},
+{
+"id": "o5556ff55",
+"slug": "harats"
+},
+{
+"id": "ob8a59562",
+"slug": "sherlok-laudzh-bar"
+},
+{
+"id": "o1252a353",
+"slug": "shizgara"
+},
+{
+"id": "ob84394a6",
+"slug": "yasen-hmel"
+},
+{
+"id": "o805a8cd0",
+"slug": "tomskaya-horalnaya-sinagoga"
+},
+{
+"id": "ob0055c20",
+"slug": "hram-svyatitelya-feodosiya-chernigovskogo"
+},
+{
+"id": "o42a07cb3",
+"slug": "hram-svyatogo-aleksandra-nevskogo"
+},
+{
+"id": "o144993d1",
+"slug": "cerkov-proslavleniya"
+},
+{
+"id": "of717fd20",
+"slug": "aelita"
+},
+{
+"id": "o34481c80",
+"slug": "biblioteka-im-s-ya-marshaka"
+},
+{
+"id": "o73e21750",
+"slug": "biblioteka-imeni-pushkina"
+},
+{
+"id": "o199cd559",
+"slug": "dom-semi"
+},
+{
+"id": "od3281e54",
+"slug": "kinomaks"
+},
+{
+"id": "o859e81d4",
+"slug": "kolcevaya"
+},
+{
+"id": "o8e95d0e5",
+"slug": "kompyuternyj-mir"
+},
+{
+"id": "o53ef6517",
+"slug": "lada"
+},
+{
+"id": "obdc456b2",
+"slug": "nauchnaya-biblioteka-tomskogo-gosudarstvennogo-universiteta"
+},
+{
+"id": "o106a5c09",
+"slug": "nauchno-medicinskaya-biblioteka-sibgmu"
+},
+{
+"id": "oeda6831c",
+"slug": "nauchno-tehnicheskaya-biblioteka-tpu"
+},
+{
+"id": "o915b2be4",
+"slug": "severnaya"
+},
+{
+"id": "o5bb71227",
+"slug": "teatr-dramy"
+},
+{
+"id": "oa137b754",
+"slug": "teatralnaya-kvartira"
+},
+{
+"id": "o12e74df0",
+"slug": "tomskaya-oblastnaya-detsko-yunosheskaya-biblioteka"
+},
+{
+"id": "o539f9d16",
+"slug": "tomskij-oblastnoj-kraevedcheskij-muzej"
+},
+{
+"id": "o46f5c083",
+"slug": "fregat"
+},
+{
+"id": "oa60f227a",
+"slug": "centralnaya"
+},
+{
+"id": "o4e050b2a",
+"slug": "cerkovno-istoricheskij-muzej"
+},
+{
+"id": "o037b5ed0",
+"slug": "energetik"
+},
+{
+"id": "o6fcd40e3",
+"slug": "yunost"
+},
+{
+"id": "o40cc0099",
+"slug": "ferma"
+},
+{
+"id": "odcc0210d",
+"slug": "baba-roma"
+},
+{
+"id": "o0c3d0697",
+"slug": "baba-roma-pr-frunze-25"
+},
+{
+"id": "o13c21262",
+"slug": "baba-roma-ul-gogolya-55"
+},
+{
+"id": "o85c55b15",
+"slug": "baba-roma-krasnoarmejskaya-ul-106"
+},
+{
+"id": "oa9337328",
+"slug": "baba-roma-komsomolskij-pr-48"
+},
+{
+"id": "od96bea43",
+"slug": "baba-roma-pr-lenina-80"
+},
+{
+"id": "o6a2d7ef0",
+"slug": "baskin-robbins"
+},
+{
+"id": "ocbedfa7b",
+"slug": "beerloga"
+},
+{
+"id": "oebff4175",
+"slug": "bonito"
+},
+{
+"id": "o04fe85f1",
+"slug": "bundogs"
+},
+{
+"id": "o6f1a7bfa",
+"slug": "burgerlux"
+},
+{
+"id": "o994bcbd9",
+"slug": "chicko"
+},
+{
+"id": "oa389c4ed",
+"slug": "chupito"
+},
+{
+"id": "o478e974b",
+"slug": "coffee-like"
+},
+{
+"id": "o66a5ed4c",
+"slug": "coffee-like-pr-frunze-92v"
+},
+{
+"id": "o8764f58b",
+"slug": "coffee-like-krasnoarmejskaya-ul-101"
+},
+{
+"id": "ocda908f6",
+"slug": "coffee-like-pr-lenina-119a"
+},
+{
+"id": "o02ddefc0",
+"slug": "coffee-like-ul-79-j-gvardejskoj-divizii-12b"
+},
+{
+"id": "oe5a75854",
+"slug": "coffee-like-ul-beringa-10"
+},
+{
+"id": "o01cc6349",
+"slug": "doner-master"
+},
+{
+"id": "o6a92158f",
+"slug": "d-ner-master"
+},
+{
+"id": "o52dbd344",
+"slug": "gangsters-sushi"
+},
+{
+"id": "o1c1632ce",
+"slug": "give-me-two"
+},
+{
+"id": "o020c9e01",
+"slug": "gussi"
+},
+{
+"id": "oecf8973f",
+"slug": "harucha"
+},
+{
+"id": "o4d6bdcbb",
+"slug": "import"
+},
+{
+"id": "oc0e1d792",
+"slug": "kafedra-pr-lenina-79"
+},
+{
+"id": "oe069ed50",
+"slug": "kannam-chicken"
+},
+{
+"id": "oa15abc65",
+"slug": "klaus-cafe"
+},
+{
+"id": "o9080f46f",
+"slug": "make-love-pizza-komsomolskij-pr-14a"
+},
+{
+"id": "oc03a1d40",
+"slug": "max-grill"
+},
+{
+"id": "o1e60b4e0",
+"slug": "maya-pizza"
+},
+{
+"id": "o1eaeae51",
+"slug": "maya-pizza-irkutskij-trakt-42"
+},
+{
+"id": "ofd7b20a5",
+"slug": "meat-tap"
+},
+{
+"id": "oe51c79f1",
+"slug": "medium-please"
+},
+{
+"id": "oafbf3209",
+"slug": "mr-roll"
+},
+{
+"id": "ocb03966b",
+"slug": "paradox-coffee"
+},
+{
+"id": "o1fe8f14a",
+"slug": "paradox-coffee-pr-lenina-37"
+},
+{
+"id": "o4bcba57b",
+"slug": "paradox-coffee-krasnyj-per-10a"
+},
+{
+"id": "o24619eb5",
+"slug": "party-pizza"
+},
+{
+"id": "o135ba899",
+"slug": "pastamama"
+},
+{
+"id": "o3828e540",
+"slug": "pine-ridge"
+},
+{
+"id": "o4aa1054a",
+"slug": "pomodoro"
+},
+{
+"id": "ob228b3cc",
+"slug": "pugscoffee-corp"
+},
+{
+"id": "o9477f413",
+"slug": "quua"
+},
+{
+"id": "o261a744c",
+"slug": "rebro-pr-lenina-77a"
+},
+{
+"id": "o3b0b1866",
+"slug": "rocket-coffee-kievskaya-ul-147"
+},
+{
+"id": "ob7287d42",
+"slug": "rocket-coffee-kofejnya"
+},
+{
+"id": "o3f1d78a3",
+"slug": "rocket-coffee-kofejnya-ul-entuziastov-45"
+},
+{
+"id": "o0663f141",
+"slug": "rostic-s"
+},
+{
+"id": "oceedf93f",
+"slug": "rostic-s-pr-lenina-51a"
+},
+{
+"id": "o7c917766",
+"slug": "rostic-s-ul-elizarovyh-13"
+},
+{
+"id": "o5b1ce51e",
+"slug": "rostic-s-pr-mira-30"
+},
+{
+"id": "o9270fbab",
+"slug": "rostic-s-ul-beringa-10"
+},
+{
+"id": "oe946ba7d",
+"slug": "santa-monica"
+},
+{
+"id": "o56b6aaa7",
+"slug": "sbl"
+},
+{
+"id": "oea7c57e7",
+"slug": "surf-coffee"
+},
+{
+"id": "o94d987a5",
+"slug": "sushi-king"
+},
+{
+"id": "ofdd8c394",
+"slug": "sweet-concept"
+},
+{
+"id": "o336a6a88",
+"slug": "velvet"
+},
+{
+"id": "oeed4b90b",
+"slug": "yoki-toki"
+},
+{
+"id": "o7a6b3567",
+"slug": "yourtime-kofe-vafli"
+},
+{
+"id": "oca88d1c8",
+"slug": "antonov-dvor"
+},
+{
+"id": "oa78f4d5b",
+"slug": "antonov-dvor-kievskaya-ul-147"
+},
+{
+"id": "o49319fa9",
+"slug": "antonov-dvor-ul-dzerzhinskogo-33"
+},
+{
+"id": "oe93bf3ad",
+"slug": "antonov-dvor-pr-frunze-129"
+},
+{
+"id": "oe30a645f",
+"slug": "antonov-dvor-sibirskaya-ul-111b"
+},
+{
+"id": "odc8430be",
+"slug": "antonov-dvor-vokzalnaya-ul-27"
+},
+{
+"id": "o2d212202",
+"slug": "antonov-dvor-sibirskaya-ul-56"
+},
+{
+"id": "o761da19a",
+"slug": "antonov-dvor-ul-gerasimenko-1-13"
+},
+{
+"id": "of0c63e62",
+"slug": "antonov-dvor-ul-ivana-chernyh-117a"
+},
+{
+"id": "o2e50a6b2",
+"slug": "antrekot"
+},
+{
+"id": "o79990d40",
+"slug": "antrekot-ul-rozy-lyuksemburg-16"
+},
+{
+"id": "o19d5ea5e",
+"slug": "assorti"
+},
+{
+"id": "oe7f37f34",
+"slug": "astoriya"
+},
+{
+"id": "oe3ba4148",
+"slug": "baj-kazan"
+},
+{
+"id": "o750f2811",
+"slug": "bambuk"
+},
+{
+"id": "o517e40be",
+"slug": "barviha"
+},
+{
+"id": "ofc096047",
+"slug": "bezumno"
+},
+{
+"id": "ocae07954",
+"slug": "bezumno-krutaya-shaurma"
+},
+{
+"id": "obcfd5d7d",
+"slug": "bezumno-krutaya-shaurma-pr-frunze-57"
+},
+{
+"id": "oeffb2332",
+"slug": "bezumno-krutaya-shaurma-pr-frunze-152"
+},
+{
+"id": "o5dc0a39a",
+"slug": "bezumno-krutaya-shaurma-pr-frunze-224"
+},
+{
+"id": "o9105017c",
+"slug": "bezumno-krutaya-shaurma-komsomolskij-pr-39-4"
+},
+{
+"id": "o10d64659",
+"slug": "bezumno-shaurma"
+},
+{
+"id": "o17c7f5a4",
+"slug": "belka"
+},
+{
+"id": "o9f805fce",
+"slug": "bereg-2018"
+},
+{
+"id": "o3805615c",
+"slug": "bon-kafe"
+},
+{
+"id": "o24e942b9",
+"slug": "buffet"
+},
+{
+"id": "o9ca7b0a0",
+"slug": "bublik"
+},
+{
+"id": "o2145a4d0",
+"slug": "bulanzhe-ul-nahimova-2"
+},
+{
+"id": "o06abea26",
+"slug": "bulanzhe-pr-lenina-133"
+},
+{
+"id": "o5b75ea63",
+"slug": "bulochnaya"
+},
+{
+"id": "o2bab97d1",
+"slug": "bulvar"
+},
+{
+"id": "of6584885",
+"slug": "burger-king"
+},
+{
+"id": "off37d4f9",
+"slug": "burger-king-asfaltovyj-per-8"
+},
+{
+"id": "o0502323b",
+"slug": "buuza"
+},
+{
+"id": "o691f9769",
+"slug": "buhara"
+},
+{
+"id": "of0f8a4a4",
+"slug": "vegetarianskoe-kafe-radhika"
+},
+{
+"id": "o15e53fa6",
+"slug": "vizit"
+},
+{
+"id": "o7094b96d",
+"slug": "vkusno"
+},
+{
+"id": "obf45977a",
+"slug": "vkusno-ul-lebedeva-57"
+},
+{
+"id": "o0979f477",
+"slug": "vkusno-i-tochka"
+},
+{
+"id": "o96b6b118",
+"slug": "vkusnyashki-ot-manyashki"
+},
+{
+"id": "o51ec68c6",
+"slug": "vostochnaya-kuhnya"
+},
+{
+"id": "o51330a43",
+"slug": "vostochnaya-kuhnya-ul-nahimova-8-s1"
+},
+{
+"id": "oe3001ceb",
+"slug": "galereya-vkusa"
+},
+{
+"id": "od0b17c1d",
+"slug": "gruzinskaya-pekarnya"
+},
+{
+"id": "ob3af91bc",
+"slug": "gruziya-i-vino"
+},
+{
+"id": "oc065368a",
+"slug": "dva-batona"
+},
+{
+"id": "oc277cce6",
+"slug": "delo-v-kreme"
+},
+{
+"id": "o989e80ae",
+"slug": "dodo-picca"
+},
+{
+"id": "ofb40d258",
+"slug": "dodo-picca-pr-frunze-77"
+},
+{
+"id": "oc331ef17",
+"slug": "dodo-picca-pr-lenina-97"
+},
+{
+"id": "o79105f5e",
+"slug": "dodo-picca-irkutskij-trakt-70"
+},
+{
+"id": "o3f105668",
+"slug": "dyhanie-voka"
+},
+{
+"id": "o2145557b",
+"slug": "dyhanie-voka-pr-lenina-54b"
+},
+{
+"id": "o84c9471b",
+"slug": "elan"
+},
+{
+"id": "o67638278",
+"slug": "eli-u-eli"
+},
+{
+"id": "o5355d6df",
+"slug": "esh-sushi"
+},
+{
+"id": "o3fa8b2b5",
+"slug": "zhar-pechka"
+},
+{
+"id": "ocfa512af",
+"slug": "zharim-varim"
+},
+{
+"id": "o220933db",
+"slug": "zharko"
+},
+{
+"id": "odb22ee53",
+"slug": "zastole"
+},
+{
+"id": "o9157c1e6",
+"slug": "zdes-vam-ne-tam"
+},
+{
+"id": "o90e827ef",
+"slug": "zolotaya-dolina"
+},
+{
+"id": "o653b8ed2",
+"slug": "zolotaya-dolina-ul-mechnikova-10"
+},
+{
+"id": "o1cc086a7",
+"slug": "italy-ul-belinskogo-28-1"
+},
+{
+"id": "ob32d3435",
+"slug": "inzhir"
+},
+{
+"id": "o0c7b911d",
+"slug": "intort"
+},
+{
+"id": "oac3274b0",
+"slug": "italiano-picca"
+},
+{
+"id": "oe2d0ccb8",
+"slug": "kak-doma"
+},
+{
+"id": "o3149d97a",
+"slug": "karat"
+},
+{
+"id": "o04db0e15",
+"slug": "kafe-bufe"
+},
+{
+"id": "odfe8142d",
+"slug": "kafe-shef"
+},
+{
+"id": "o3425ffbb",
+"slug": "kafeterius"
+},
+{
+"id": "ofbb7177b",
+"slug": "kincugi"
+},
+{
+"id": "o1b0f66fc",
+"slug": "kolobok-ru-krasnoarmejskaya-ul-151-1"
+},
+{
+"id": "o4c47b948",
+"slug": "konfetka"
+},
+{
+"id": "o1f65cdea",
+"slug": "konfetka-ul-lebedeva-12"
+},
+{
+"id": "od872d6e9",
+"slug": "korica"
+},
+{
+"id": "o8163e224",
+"slug": "kofan"
+},
+{
+"id": "o5a042fdd",
+"slug": "kofe-chaj"
+},
+{
+"id": "o6cba4bc7",
+"slug": "kofevarka"
+},
+{
+"id": "ocbc5b64b",
+"slug": "lavka-svet-zhu"
+},
+{
+"id": "o4d988d6c",
+"slug": "magazin-razlivnogo-piva-chehiya-i-kafe-konditerskaya"
+},
+{
+"id": "oa910929b",
+"slug": "marrakesh"
+},
+{
+"id": "o8856cc5a",
+"slug": "mashenkiny-pirogi"
+},
+{
+"id": "o73e66abe",
+"slug": "mayak"
+},
+{
+"id": "o0e2d93be",
+"slug": "me-ga-sushi"
+},
+{
+"id": "oddfe7e08",
+"slug": "miks"
+},
+{
+"id": "o3203387c",
+"slug": "milana-banketnyj-zal"
+},
+{
+"id": "o48d71112",
+"slug": "minutka"
+},
+{
+"id": "o8561b218",
+"slug": "mir"
+},
+{
+"id": "o589ac5aa",
+"slug": "mir-sushi"
+},
+{
+"id": "o39edd24c",
+"slug": "muslima"
+},
+{
+"id": "oc0fdbd65",
+"slug": "myasoroob"
+},
+{
+"id": "oe1f717a3",
+"slug": "narodnoe-sobranie"
+},
+{
+"id": "o7478f253",
+"slug": "nasha-kuhnya"
+},
+{
+"id": "ob38c4292",
+"slug": "nasha-pekarnya"
+},
+{
+"id": "o0770aae9",
+"slug": "nasha-pekarnya-ul-mayakovskogo-9"
+},
+{
+"id": "o0ff3b3f5",
+"slug": "nyam-nyam"
+},
+{
+"id": "o7f59fdaa",
+"slug": "osh"
+},
+{
+"id": "oba03f3e6",
+"slug": "panda-pr-lenina-60"
+},
+{
+"id": "o1f942e90",
+"slug": "panda-semejnyj-restoran"
+},
+{
+"id": "o79611e98",
+"slug": "papa-dzhons"
+},
+{
+"id": "o606e0b3a",
+"slug": "pekarnya-n71-larec"
+},
+{
+"id": "o58cc1b25",
+"slug": "pekarnya-korochka"
+},
+{
+"id": "o0e1ad699",
+"slug": "pekarnya-piroga"
+},
+{
+"id": "o054d98eb",
+"slug": "pekarnya-hlebberi"
+},
+{
+"id": "o8f93ac85",
+"slug": "pekarskij-dvorik"
+},
+{
+"id": "oc7e986a5",
+"slug": "peki-lola"
+},
+{
+"id": "ob2d644a1",
+"slug": "perchini"
+},
+{
+"id": "o4c8f56db",
+"slug": "petrushka"
+},
+{
+"id": "o139b0682",
+"slug": "pechemsya-o-kazhdom"
+},
+{
+"id": "o8ff6a66a",
+"slug": "piroga"
+},
+{
+"id": "o77389dee",
+"slug": "pirozhkovaya"
+},
+{
+"id": "oa1556ea4",
+"slug": "piter"
+},
+{
+"id": "o8a46087f",
+"slug": "picca-ru"
+},
+{
+"id": "ob26429ba",
+"slug": "picce-rio"
+},
+{
+"id": "o2add7953",
+"slug": "picce-rio-krasnoarmejskaya-ul-31"
+},
+{
+"id": "o70791b89",
+"slug": "praline"
+},
+{
+"id": "obf075c11",
+"slug": "pro-kofe"
+},
+{
+"id": "o01147f05",
+"slug": "pryanosti-i-radosti"
+},
+{
+"id": "o495cf09c",
+"slug": "phiphi"
+},
+{
+"id": "ob58c34ac",
+"slug": "rada-i-k"
+},
+{
+"id": "o5cf5c6da",
+"slug": "retro"
+},
+{
+"id": "o124c5dc6",
+"slug": "rostovskaya-shaurma"
+},
+{
+"id": "ocd59d87c",
+"slug": "rubin"
+},
+{
+"id": "o5990d867",
+"slug": "rublevka"
+},
+{
+"id": "o79d55552",
+"slug": "sasha-varit"
+},
+{
+"id": "o530eb1c7",
+"slug": "sdoba"
+},
+{
+"id": "o196dbdfe",
+"slug": "sdoba-ul-usova-44a"
+},
+{
+"id": "of4e8ede6",
+"slug": "sdoba-komsomolskij-pr-58a"
+},
+{
+"id": "ode77c285",
+"slug": "sdoba-kievskaya-ul-109-10"
+},
+{
+"id": "o790eb6e8",
+"slug": "sdoba-pr-frunze-100a"
+},
+{
+"id": "oe283d46b",
+"slug": "semejnoe-kafe"
+},
+{
+"id": "o712b4509",
+"slug": "ser-kurush"
+},
+{
+"id": "od20b1e55",
+"slug": "sibirskie-bliny"
+},
+{
+"id": "oeb26734a",
+"slug": "sibirskie-bliny-pr-lenina-41"
+},
+{
+"id": "oe0b79d19",
+"slug": "sibirskie-bliny-ul-nahimova-15a-2"
+},
+{
+"id": "o4eae6038",
+"slug": "sibirskie-bliny-pr-lenina-1"
+},
+{
+"id": "od1081292",
+"slug": "sibirskie-bliny-pr-lenina-36"
+},
+{
+"id": "ob81d303b",
+"slug": "sibirskie-bliny-kievskaya-ul-13"
+},
+{
+"id": "o0bccf515",
+"slug": "sibirskie-bliny-ul-shevchenko-23a"
+},
+{
+"id": "ofbcd39a7",
+"slug": "sibirskie-bliny-pl-lenina-8a-str4"
+},
+{
+"id": "o50232a97",
+"slug": "sibir"
+},
+{
+"id": "ob4447674",
+"slug": "sibir-imbir"
+},
+{
+"id": "o963ecb0d",
+"slug": "sladkarnica"
+},
+{
+"id": "occe7e693",
+"slug": "sladkoezhka"
+},
+{
+"id": "o77b018a2",
+"slug": "slon"
+},
+{
+"id": "o4aba3b07",
+"slug": "snegiri-pizza-grill-pr-lenina-1v"
+},
+{
+"id": "o19db0ee1",
+"slug": "soft-loft"
+},
+{
+"id": "o4a7f9d98",
+"slug": "sochno-moshchno"
+},
+{
+"id": "o034dfd26",
+"slug": "soyuz"
+},
+{
+"id": "oc9289653",
+"slug": "staryj-cherdak"
+},
+{
+"id": "o33268ebf",
+"slug": "stolovaya"
+},
+{
+"id": "oe2d12b7f",
+"slug": "stolovaya-ul-fedora-lytkina-3b"
+},
+{
+"id": "of763d65a",
+"slug": "stolovaya-shkolnyj-per-6"
+},
+{
+"id": "ob8af3acf",
+"slug": "stolovaya-berdskaya-ul-20"
+},
+{
+"id": "ob152179a",
+"slug": "stolovaya-12-30"
+},
+{
+"id": "o15e507c8",
+"slug": "stolovaya-ni-tgu"
+},
+{
+"id": "oe23e88aa",
+"slug": "stolovaya-sssr"
+},
+{
+"id": "oec9f9477",
+"slug": "stolovaya-tgpu"
+},
+{
+"id": "oe71a3cbe",
+"slug": "stolovaya-tgu"
+},
+{
+"id": "o87872d01",
+"slug": "strana-gulliveriya"
+},
+{
+"id": "o68703341",
+"slug": "sup-kultura"
+},
+{
+"id": "o763a5f89",
+"slug": "sushi-sell"
+},
+{
+"id": "o8d860169",
+"slug": "sushi-darom"
+},
+{
+"id": "o7fa27397",
+"slug": "sushi-dzhet"
+},
+{
+"id": "o8e86a6d5",
+"slug": "sushi-dzhet-ul-suvorova-1a"
+},
+{
+"id": "ob300c122",
+"slug": "sushi-kot"
+},
+{
+"id": "o3a261d24",
+"slug": "sushi-more"
+},
+{
+"id": "od4fb88e0",
+"slug": "sushi-ume"
+},
+{
+"id": "o59810e86",
+"slug": "sushi-kit"
+},
+{
+"id": "o4b684235",
+"slug": "schastest"
+},
+{
+"id": "o24591948",
+"slug": "syr-bor"
+},
+{
+"id": "o138018fc",
+"slug": "sensej"
+},
+{
+"id": "obf48f762",
+"slug": "tajga"
+},
+{
+"id": "o5c99bf66",
+"slug": "tamnushki"
+},
+{
+"id": "oc8efbddd",
+"slug": "tantuni"
+},
+{
+"id": "oc6b622f5",
+"slug": "tvoya-bulochnaya"
+},
+{
+"id": "o4afddd70",
+"slug": "tvoya-bulochnaya-ul-elizarovyh-46-1"
+},
+{
+"id": "oab41c826",
+"slug": "territoriya-kofe-ul-usova-9b"
+},
+{
+"id": "o75a939f3",
+"slug": "testo"
+},
+{
+"id": "o172c0c0a",
+"slug": "testo-pr-kirova-5-s8"
+},
+{
+"id": "o9b9fc280",
+"slug": "timyan"
+},
+{
+"id": "o2bf9123a",
+"slug": "tomichka"
+},
+{
+"id": "od15a513f",
+"slug": "tomichka-ul-kulagina-6b"
+},
+{
+"id": "o119b4999",
+"slug": "tomichka-pr-frunze-119-5-s8"
+},
+{
+"id": "o9b591959",
+"slug": "torta-ul-mariny-cvetaevoj-32"
+},
+{
+"id": "o20941888",
+"slug": "torta-ul-gogolya-55"
+},
+{
+"id": "o4b5bed30",
+"slug": "torta-pr-kirova-5st13"
+},
+{
+"id": "o496022d4",
+"slug": "torta-2"
+},
+{
+"id": "o9308ccd5",
+"slug": "torta-ul-pushkina-61-1"
+},
+{
+"id": "o4ebaae12",
+"slug": "ubojnaya-fobojnaya"
+},
+{
+"id": "o9cb6f47d",
+"slug": "ubojnaya-fobojnaya-ul-gagarina-4-str-1"
+},
+{
+"id": "oc5ceca70",
+"slug": "ukromnoe-mestechko"
+},
+{
+"id": "odb373b8e",
+"slug": "usadba-razgulyaj"
+},
+{
+"id": "o6b5544b2",
+"slug": "fajz"
+},
+{
+"id": "o20af49d0",
+"slug": "ferganskaya-kuhnya"
+},
+{
+"id": "o43f17b30",
+"slug": "fishka"
+},
+{
+"id": "of6fc1094",
+"slug": "fresh-roll"
+},
+{
+"id": "o1e3d291b",
+"slug": "hardi-gardi"
+},
+{
+"id": "o61c22484",
+"slug": "hachapuri-mariko"
+},
+{
+"id": "o5f9fd484",
+"slug": "hinkali-gali"
+},
+{
+"id": "o90b0b6c7",
+"slug": "hinkali-tun"
+},
+{
+"id": "o4b13c194",
+"slug": "hlebosol"
+},
+{
+"id": "o1a4b270a",
+"slug": "hlebushko"
+},
+{
+"id": "o8b00af19",
+"slug": "chajnaya-obitel"
+},
+{
+"id": "oeb472b1a",
+"slug": "charodej"
+},
+{
+"id": "o3a9d5ef5",
+"slug": "cheburek-mi"
+},
+{
+"id": "o108d747d",
+"slug": "cheburekmi"
+},
+{
+"id": "oa30e477a",
+"slug": "chestnaya-kuhnya"
+},
+{
+"id": "o61b4ffe6",
+"slug": "chokolatte"
+},
+{
+"id": "o011e2cf6",
+"slug": "chernyj-bob"
+},
+{
+"id": "o4388c342",
+"slug": "shale"
+},
+{
+"id": "oef7ffeb9",
+"slug": "shampur"
+},
+{
+"id": "o81d7ac5a",
+"slug": "shauroom"
+},
+{
+"id": "o28c42a29",
+"slug": "shaurma-gril"
+},
+{
+"id": "ofbd6e5fa",
+"slug": "shaurma-gril-akademicheskij-pr-9"
+},
+{
+"id": "o2ae873b1",
+"slug": "shashlyk"
+},
+{
+"id": "o62dcafe8",
+"slug": "shashlykoff"
+},
+{
+"id": "oc7ecb0cf",
+"slug": "shashlykoff-krasnoarmejskaya-ul-101a"
+},
+{
+"id": "o44a7f5da",
+"slug": "shashlychnaya"
+},
+{
+"id": "o2d6ace54",
+"slug": "shashlychnyj-dom"
+},
+{
+"id": "o26f49ce0",
+"slug": "shejk"
+},
+{
+"id": "ob2cb3754",
+"slug": "shelkovyj-put"
+},
+{
+"id": "ob6b6137f",
+"slug": "edem"
+},
+{
+"id": "o4785cba6",
+"slug": "elit-roll"
+},
+{
+"id": "o0c061ce5",
+"slug": "eskimos"
+},
+{
+"id": "o2de800b7",
+"slug": "eskimos-pr-lenina-55-1"
+},
+{
+"id": "o0ba2a6c0",
+"slug": "eskimos-ul-olega-koshevogo-73"
+},
+{
+"id": "ob3ee69fb",
+"slug": "eskimos-pr-frunze-222"
+},
+{
+"id": "o2e3652a9",
+"slug": "yuzhane"
+},
+{
+"id": "o32419334",
+"slug": "yuzhane-ul-karla-marksa-23a"
+},
+{
+"id": "ob2463965",
+"slug": "yuzhnoe"
+},
+{
+"id": "o8b70484e",
+"slug": "yablochnaya-stolovaya"
+},
+{
+"id": "ob4ed6964",
+"slug": "elka"
+},
+{
+"id": "oe347f097",
+"slug": "elka-pr-lenina-8a-str3"
+},
+{
+"id": "oe1e00c98",
+"slug": "iquest"
+},
+{
+"id": "o5656ed5e",
+"slug": "akademiya-tanca"
+},
+{
+"id": "o976a8d06",
+"slug": "altaj"
+},
+{
+"id": "o4b961c68",
+"slug": "banya-9"
+},
+{
+"id": "o75fe696f",
+"slug": "banya-6"
+},
+{
+"id": "oca008d6a",
+"slug": "barrakuda"
+},
+{
+"id": "oa99eb335",
+"slug": "burevestnik"
+},
+{
+"id": "o4f9a9b4c",
+"slug": "delfin"
+},
+{
+"id": "od186625c",
+"slug": "drajv"
+},
+{
+"id": "oab8d798b",
+"slug": "ibica"
+},
+{
+"id": "oa3c4a7cf",
+"slug": "imperial"
+},
+{
+"id": "oafa9c7e7",
+"slug": "kameliya"
+},
+{
+"id": "oe91226d9",
+"slug": "kasatka"
+},
+{
+"id": "oa9752a86",
+"slug": "neptun"
+},
+{
+"id": "oed8d6bb2",
+"slug": "ozdorovitelnyj-centr-na-plehanova"
+},
+{
+"id": "ob94e0008",
+"slug": "podpole"
+},
+{
+"id": "o633a0809",
+"slug": "prestizh"
+},
+{
+"id": "o79b33639",
+"slug": "sajgon"
+},
+{
+"id": "o8f35085d",
+"slug": "sovet"
+},
+{
+"id": "o74a10ee4",
+"slug": "uyut"
+},
+{
+"id": "oc10c2b78",
+"slug": "fitosauna-relaks"
+},
+{
+"id": "odeaa467d",
+"slug": "shangri-la"
+},
+{
+"id": "ocea75003",
+"slug": "big-city"
+},
+{
+"id": "o5ccf0b43",
+"slug": "infokus"
+},
+{
+"id": "o204df0db",
+"slug": "tommy-giftshop"
+},
+{
+"id": "o608a0383",
+"slug": "bum"
+},
+{
+"id": "o10be91f9",
+"slug": "gum"
+},
+{
+"id": "o9a4db488",
+"slug": "detskij-park"
+},
+{
+"id": "oefbc5368",
+"slug": "kosmos"
+},
+{
+"id": "o89e16197",
+"slug": "krasnyj-ekspress"
+},
+{
+"id": "o086d6a42",
+"slug": "leto"
+},
+{
+"id": "oc67c8727",
+"slug": "mantram"
+},
+{
+"id": "oe43e9ec9",
+"slug": "megapolis"
+},
+{
+"id": "o385e4302",
+"slug": "miramiks"
+},
+{
+"id": "o5154ac21",
+"slug": "na-vokzalnoj"
+},
+{
+"id": "o69b3c514",
+"slug": "ooo-umnica"
+},
+{
+"id": "o2ba50f20",
+"slug": "podarki-suveniry"
+},
+{
+"id": "of8bb3542",
+"slug": "pochtalon"
+},
+{
+"id": "o7a8f2a1b",
+"slug": "sadko"
+},
+{
+"id": "ob4937b6f",
+"slug": "suvenirnyj-dvorik"
+},
+{
+"id": "o1b1857a8",
+"slug": "suveniry"
+},
+{
+"id": "od3989553",
+"slug": "tajnaya-komnata"
+},
+{
+"id": "odac74537",
+"slug": "tommi"
+},
+{
+"id": "o8e1acec0",
+"slug": "tomskie-tovary"
+},
+{
+"id": "od40388f9",
+"slug": "uchebnik"
+},
+{
+"id": "o571e6ffe",
+"slug": "uchebniki"
+},
+{
+"id": "o924fbbf7",
+"slug": "cum"
+},
+{
+"id": "o872cd4fc",
+"slug": "chitaj-gorod"
+},
+{
+"id": "oaf22bcca",
+"slug": "chitaj-gorod-pr-lenina-104"
+},
+{
+"id": "o4f6f23c4",
+"slug": "chitaj-gorod-komsomolskij-pr-13b"
+},
+{
+"id": "o94ac125c",
+"slug": "etnosibir"
+},
+{
+"id": "o0825cef6",
+"slug": "vodonapornaya-bashnya"
+},
+{
+"id": "o8dd828ea",
+"slug": "first-apart-hotel"
+},
+{
+"id": "ofd01743a",
+"slug": "los-i-les"
+},
+{
+"id": "oc1aa8e3c",
+"slug": "oldtown"
+},
+{
+"id": "o50e178ab",
+"slug": "avrora"
+},
+{
+"id": "o7e799371",
+"slug": "ajsavan"
+},
+{
+"id": "o0a110380",
+"slug": "akademiya"
+},
+{
+"id": "oe641e7d8",
+"slug": "anikinskaya-zaimka"
+},
+{
+"id": "o7b61503a",
+"slug": "artplaza"
+},
+{
+"id": "obf3738d0",
+"slug": "asti-rums"
+},
+{
+"id": "ob8523312",
+"slug": "atmosfera"
+},
+{
+"id": "o2b4748d3",
+"slug": "afinskij-kvartal"
+},
+{
+"id": "o06dc4941",
+"slug": "afrika"
+},
+{
+"id": "oe66f2da3",
+"slug": "bajk-post-mc-sovdep-tomsk"
+},
+{
+"id": "o82183fe5",
+"slug": "baston"
+},
+{
+"id": "oc688ccc4",
+"slug": "baston-ul-gercena-21a"
+},
+{
+"id": "o9b4ef9de",
+"slug": "belveder"
+},
+{
+"id": "oa237490b",
+"slug": "bon-apart"
+},
+{
+"id": "o35fb7a5e",
+"slug": "velkom"
+},
+{
+"id": "o1b0fd26e",
+"slug": "galereya-bolshaya-podgornaya-ul-2a"
+},
+{
+"id": "oca3ff6f1",
+"slug": "garantiya"
+},
+{
+"id": "o7379548e",
+"slug": "gogol"
+},
+{
+"id": "ocf1486eb",
+"slug": "gorodskoj-dom"
+},
+{
+"id": "ob1079389",
+"slug": "gostevoj-dom-anikinskaya-zaimka"
+},
+{
+"id": "oa3fdc036",
+"slug": "grant-i-ko"
+},
+{
+"id": "oa218e38a",
+"slug": "dom-na-ushajke"
+},
+{
+"id": "o29be0740",
+"slug": "dom-ohotnika"
+},
+{
+"id": "o492efd67",
+"slug": "drezden"
+},
+{
+"id": "ocfb8e0c2",
+"slug": "zander"
+},
+{
+"id": "oade342e1",
+"slug": "zarechnaya"
+},
+{
+"id": "o00972bc4",
+"slug": "idilliya"
+},
+{
+"id": "o76802119",
+"slug": "kak-doma-i-tochka"
+},
+{
+"id": "od5b7b6ee",
+"slug": "kalejdoskop"
+},
+{
+"id": "o9d21bcec",
+"slug": "kerch"
+},
+{
+"id": "o3c49c67b",
+"slug": "klassik"
+},
+{
+"id": "o134ac793",
+"slug": "kovcheg"
+},
+{
+"id": "ofde16d64",
+"slug": "kupecheskij-dom"
+},
+{
+"id": "o0a5a1a57",
+"slug": "lider"
+},
+{
+"id": "o5038c845",
+"slug": "mandarin"
+},
+{
+"id": "o92b9e689",
+"slug": "marmarita"
+},
+{
+"id": "oc19ccdb4",
+"slug": "mirvej"
+},
+{
+"id": "ob96e9b31",
+"slug": "monomah"
+},
+{
+"id": "o70b0ad2d",
+"slug": "moroshka"
+},
+{
+"id": "od6f15fa8",
+"slug": "oazis"
+},
+{
+"id": "oe3a277c5",
+"slug": "oktyabrskaya"
+},
+{
+"id": "o7ae76264",
+"slug": "pazl"
+},
+{
+"id": "ofa015427",
+"slug": "parad-park"
+},
+{
+"id": "o6afd6933",
+"slug": "paradiz"
+},
+{
+"id": "o907575b6",
+"slug": "prostornyj"
+},
+{
+"id": "o90b8a8e1",
+"slug": "randevu"
+},
+{
+"id": "oc390885e",
+"slug": "sedmoe-nebo"
+},
+{
+"id": "o266aeb87",
+"slug": "sogdiana"
+},
+{
+"id": "o7bde6fa8",
+"slug": "sport-otel"
+},
+{
+"id": "o1f87df86",
+"slug": "toyan"
+},
+{
+"id": "oa9b8caa0",
+"slug": "universitetskaya"
+},
+{
+"id": "od8b9840a",
+"slug": "uchebnaya"
+},
+{
+"id": "o33422fe8",
+"slug": "favorit"
+},
+{
+"id": "o6eddc5d0",
+"slug": "horoshie-lyudi"
+},
+{
+"id": "o9cbf645d",
+"slug": "hostel-kak-doma"
+},
+{
+"id": "oac4a086a",
+"slug": "centralnyj"
+},
+{
+"id": "o132907f0",
+"slug": "chehov"
+},
+{
+"id": "o72acba70",
+"slug": "elegant"
+},
+{
+"id": "o850ba919",
+"slug": "yuniversiti-hostel"
+}
 ]

@@ -26,7 +26,7 @@ const RW = {T:13,P:12,S:10,t:9,Q:8,R:8,r:7,u:7,l:6,p:6,c:5,s:4,f:2.4,x:2.4,k:2.4
 const GREEN = new Set(['park','grass','wood','scrub','square','allot','cemetery','wetland']);
 function inPoly(x, y, poly) { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c } return c }
 function miniMap(v) {
-  const [cx, cy] = VENUE.xy(v), W = 640, H = 420, x0 = cx - W/2, y1 = cy + H/2, x1 = cx + W/2, y0 = cy - H/2;
+  const [cx, cy] = VENUE.xy(v), W = 560, H = 380, x0 = cx - W/2, y1 = cy + H/2, x1 = cx + W/2, y0 = cy - H/2;
   const hit = bb => bb[2] > x0 - 20 && bb[0] < x1 + 20 && bb[3] > y0 - 20 && bb[1] < y1 + 20;
   const P = pts => 'M' + pts.map(([x, y]) => `${Math.round(x - x0)} ${Math.round(y1 - y)}`).join('L');
   let s = `<svg viewBox="0 0 ${W} ${H}" class="mm" role="img" aria-label="Карта квартала: ${v.name.replace(/"/g, '')}"><rect class="mm-land" width="${W}" height="${H}"/>`;
@@ -34,13 +34,13 @@ function miniMap(v) {
   AR.forEach(a => { if (!hit(a.bb)) return; const d = a.r.map(P).join('Z') + 'Z'; if (a.k === 'water') w += d; else if (GREEN.has(a.k)) g += d });
   if (g) s += `<path class="mm-green" d="${g}"/>`; if (w) s += `<path class="mm-water" d="${w}"/>`;
   const byW = {}, wl = [];
-  RD.forEach(r => { if (!hit(r.bb)) return; if (/^w/.test(r.t)) { wl.push(P(r.p)); return } const k = RW[r.t] || 4; (byW[k] = byW[k] || []).push(P(r.p)) });
+  RD.forEach(r => { if (!hit(r.bb)) return; if (/^w/.test(r.t)) { wl.push(P(r.p)); return } if ('fxk'.includes(r.t)) return; const k = RW[r.t] || 4; (byW[k] = byW[k] || []).push(P(r.p)) });
   if (wl.length) s += `<path class="mm-river" d="${wl.join('')}"/>`;
   const ws = Object.keys(byW).map(Number).sort((a, b) => a - b);
   ws.forEach(k => s += `<path class="mm-casing" stroke-width="${k + 2.5}" d="${byW[k].join('')}"/>`);
   ws.forEach(k => s += `<path class="mm-road" stroke-width="${k}" d="${byW[k].join('')}"/>`);
   let bl = '', hl = '', best = null, bd = 30;
-  B.forEach(b => { if (!hit(b.bb)) return; const d = b.r.map(P).join('Z') + 'Z';
+  B.forEach(b => { if (!hit(b.bb) || (b.bb[2]-b.bb[0])*(b.bb[3]-b.bb[1]) < 40) return; const d = b.r.map(P).join('Z') + 'Z';
     const inside = inPoly(cx, cy, b.r[0]); const c = [(b.bb[0]+b.bb[2])/2, (b.bb[1]+b.bb[3])/2], dd = Math.hypot(c[0]-cx, c[1]-cy);
     if (inside) { best = {d, dd: -1} } else if (!best || best.dd > 0) { if (dd < bd && (!best || dd < best.dd)) best = {d, dd} }
     bl += d });
@@ -62,7 +62,7 @@ const out = {};
 for (const {id, slug} of PAGES) {
   const v = items.find(o => o.id === id); if (!v) { console.error('нет места', id); continue }
   const url = `${SITE}mesto/${slug}/`, mapSvg = miniMap(v);
-  out[id] = {slug, name: v.name, title: `${v.name} — ${VENUE.CAT1[v.cat] ? VENUE.CAT1[v.cat].toLowerCase() : 'место'} в Томске: адрес, часы работы, как добраться`,
+  out[id] = {slug, name: v.name, title: `${v.name} — ${(v.kind || VENUE.CAT1[v.cat] || 'место').toLowerCase()} в Томске: адрес, часы работы, как добраться`,
     desc: VENUE.metaDesc(v), body: VENUE.render(v, {...X, mapSvg}), jsonld: VENUE.jsonld(v, X, url), image: (photosOf(v)[0] || [])[0] || ''};
 }
 process.stdout.write(JSON.stringify(out));

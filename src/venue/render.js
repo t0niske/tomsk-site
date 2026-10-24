@@ -66,6 +66,33 @@
       .map(o => [o, hasGeo(v)&&hasGeo(o)?dist(v,o):Infinity]).sort((a, b) => (b[0].pageSlug ? 1 : 0) - (a[0].pageSlug ? 1 : 0) || a[1] - b[1]).slice(0, n).map(x => x[0]);
   }
 
+  /* кухня: теги OpenStreetMap → по-русски; незнакомые латинские теги не показываем */
+  const CUISINE = {coffee_shop:'кофейня',coffee:'кофе',asian:'азиатская',russian:'русская',sushi:'суши',pizza:'пицца',italian_pizza:'пицца',regional:'местная',local:'местная',
+    burger:'бургеры',shawarma:'шаурма',kebab:'кебаб','shish-kebab':'шашлык',chicken:'курица',italian:'итальянская',ice_cream:'мороженое',international:'интернациональная',
+    oriental:'восточная',georgian:'грузинская',european:'европейская',steak_house:'стейки',sandwich:'сэндвичи',japanese:'японская',thai:'тайская',cake:'торты',grill:'гриль',
+    chinese:'китайская',baking:'выпечка',confectionery:'кондитерская',pancake:'блины',crepe:'блины',pasta:'паста',turkish:'турецкая',meat:'мясная',hot_dog:'хот-доги',
+    mexican:'мексиканская',fries:'картофель фри',mongolian:'монгольская',ramen:'рамен',mediterranean:'средиземноморская',seafood:'морепродукты',indian:'индийская',
+    breakfast:'завтраки',caucasian:'кавказская',bubble_tea:'бабл-ти',american:'американская',french:'французская',korean:'корейская',uzbek:'узбекская',vegetarian:'вегетарианская'};
+  const cuisineRu = c => [...new Set(String(c || '').split(/[;,]/).map(x => x.trim()).filter(Boolean)
+    .map(x => CUISINE[x.toLowerCase().replace(/\s+/g, '_')] || (/[а-яё]/i.test(x) ? x.toLowerCase() : '')).filter(Boolean))];
+
+  /* филиалы сети: у нескольких страниц одно название — различаем по адресу */
+  const normName = s => String(s || '').toLowerCase().replace(/ё/g, 'е').replace(/[^0-9a-zа-я]/g, '');
+  const byName = new WeakMap();   // список мест → {название: места со страницей}; считаем один раз на список
+  const namesakes = (v, items) => {
+    if (!items) return [];
+    let m = byName.get(items);
+    if (!m) { m = new Map(); items.forEach(o => { if (!o.pageSlug) return; const k = normName(o.name); if (!m.has(k)) m.set(k, []); m.get(k).push(o) }); byName.set(items, m) }
+    return (m.get(normName(v.name)) || []).filter(o => o.id !== v.id);
+  };
+  const isBranch = (v, items) => !!v.addr && namesakes(v, items).length > 0;
+  const kindOf = v => (v.kind || CAT1[v.cat] || 'место').toLowerCase();
+  // в базе есть и пригород: «кафе в Томске», но «кафе, с. Зоркальцево»
+  const inCity = v => !v.city || v.city === 'Томск' ? ' в Томске' : ', ' + v.city;
+  function pageTitle(v, items) {
+    return `${v.name}${isBranch(v, items) ? ', ' + v.addr : ''} — ${kindOf(v)}${inCity(v)}: адрес, часы работы, как добраться`;
+  }
+
   const priceLine = v => v.price === 0 ? 'Бесплатно' : v.price != null ? `от ${v.price} ₽` : '';
   const minsTxt = m => { if (!m) return ''; const h = Math.floor(m/60), r = m % 60; return '≈ ' + (h ? h + ' ч' + (r ? ' ' + r + ' мин' : '') : r + ' мин') };
   const telHref = p => 'tel:' + String(p).split(/[;,]/)[0].replace(/[^\d+]/g, '');
@@ -82,7 +109,7 @@
 
   function render(v, X) {
     const photos = X.photos(v), look = lines(v.look), tips = lines(v.tips), about = paras(v.about);
-    const lookTitle = LOOK[v.cat] || 'Что посмотреть';
+    const lookTitle = LOOK[v.cat] || 'Что посмотреть', branch = isBranch(v, X.items);
     const tags = (v.moods || []).filter(m => !(m === 'free' && v.price === 0)).map(m => MOOD[m]).filter(Boolean);
     const price = priceLine(v), mins = minsTxt(v.mins), located=hasGeo(v);
     const query=encodeURIComponent([v.city||'Томск',v.name,v.addr].filter(Boolean).join(', '));
@@ -103,9 +130,9 @@
     const html = `
 <header class="v-head"><div class="wrap">${crumbs}
   <span class="tag">${esc(v.kind || CAT1[v.cat] || 'Место')}</span>
-  <h1>${esc(v.name)}</h1>
+  <h1>${esc(v.name)}${branch ? ` <span class="v-h1-sub">${I('pin')}${esc(v.addr)}</span>` : ''}</h1>
   ${v.why ? `<p class="v-why">${esc(v.why)}</p>` : ''}
-  ${v.addr ? `<p class="v-addr">${I('pin')}<span>${esc(v.addr)}</span><a href="#how">Как попасть ↓</a></p>` : ''}
+  ${v.addr && !branch ? `<p class="v-addr">${I('pin')}<span>${esc(v.addr)}</span><a href="#how">Как попасть ↓</a></p>` : ''}
   <div class="v-badges"><span class="v-badge v-status" id="vStatus" hidden></span>${price ? `<span class="v-badge">${I('rub')}${price}</span>` : ''}${mins ? `<span class="v-badge">${I('time')}${mins}</span>` : ''}${tags.map(t => `<span class="v-badge v-mood">${t}</span>`).join('')}</div>
   <div class="v-actions">
     <button class="btn v-fav" data-fav="${esc(v.id)}" aria-pressed="false">${I('heart')}<span>Хочу сходить</span></button>
@@ -116,7 +143,7 @@
 <div class="wrap v-grid">
   <div class="v-main">
     ${gallery}
-    ${v.desc ? `<p class="v-lead">${esc(v.desc)}</p>` : `<p class="v-lead">${esc(v.kind || CAT1[v.cat] || 'Место')}${v.addr ? ' — ' + esc(v.addr) : ''}.${v.cuisine ? ' Кухня: ' + esc(String(v.cuisine).replace(/;/g, ', ').replace(/_/g, ' ')) + '.' : ''}</p>`}
+    ${v.desc ? `<p class="v-lead">${esc(v.desc)}</p>` : `<p class="v-lead">${esc(v.kind || CAT1[v.cat] || 'Место')}${v.addr ? ' — ' + esc(v.addr) : ''}.${cuisineRu(v.cuisine).length ? ' Кухня: ' + esc(cuisineRu(v.cuisine).join(', ')) + '.' : ''}</p>`}
     ${about.length ? `<section class="v-sec"><h2>Подробнее</h2>${about.map(p => `<p>${esc(p)}</p>`).join('')}</section>` : ''}
     ${look.length ? `<section class="v-sec"><h2>${lookTitle}</h2><ul class="v-list">${look.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
     ${tips.length ? `<section class="v-sec v-tips"><h2>Советы</h2><ul>${tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
@@ -158,11 +185,32 @@ ${sim.length ? `<section class="wrap v-more"><h2>Похожие места</h2><
     return JSON.stringify(o).replace(/</g,'\\u003c');
   }
 
-  function metaDesc(v) {
-    const parts = [v.why, v.desc].filter(Boolean).join('. ').replace(/\.\./g, '.');
-    const tail = [v.addr, v.hours ? 'часы работы' : '', 'как добраться'].filter(Boolean).join(', ');
-    return (`${v.name} — ${(v.kind || CAT1[v.cat] || 'место').toLowerCase()}. ${parts}`.slice(0, 200).replace(/\s+\S*$/, '') + (tail ? `. ${tail}.` : '')).replace(/\s+/g, ' ');
+  // описание для поисковиков: текст обрезается только если не влезает, и по границе слова с «…»
+  function metaDesc(v, items) {
+    let text = [v.why, v.desc].map(s => String(s || '').trim().replace(/[.!?…\s]+$/, '')).filter(Boolean).join('. ');
+    if (text.length > 150) text = text.slice(0, 151).replace(/\s+\S*$/, '').replace(/[\s,;:.—–-]+$/, '') + '…';
+    else if (text) text += '.';
+    const cu = cuisineRu(v.cuisine);
+    if (!text && cu.length) text = `Кухня: ${cu.join(', ')}.`;
+    const tail = [v.hours ? 'часы работы' : '', v.phone ? 'телефон' : '', 'как добраться'].filter(Boolean).join(', ');
+    const where = v.addr ? `Адрес: ${v.addr}; ${tail}.` : tail[0].toUpperCase() + tail.slice(1) + '.';
+    return `${v.name}${isBranch(v, items) ? ', ' + v.addr : ''} — ${kindOf(v)}${inCity(v)}. ${text ? text + ' ' : ''}${where}`.replace(/\s+/g, ' ');
   }
 
-  G.VENUE = {render, jsonld, metaDesc, parseHours, CAT1, CATN, xy};
+  /* места, которые нужны странице для перерисовки в браузере без всей базы: «Рядом» (n), «Похожие» (s) в том же порядке,
+     что при сборке, и один филиал (для адреса в заголовке). См. relatedX — как их использовать. */
+  function related(v, X) {
+    const short = o => ({id:o.id,name:o.name,kind:o.kind,cat:o.cat,lat:o.lat,lon:o.lon,pageSlug:o.pageSlug,
+      ...(o.photos && o.photos.length ? {photos:o.photos.slice(0, 1)} : {})});
+    const near = X.nearby ? X.nearby(v) : nearby(v, X.items), sim = X.similar ? X.similar(v) : similar(v, X.items);
+    const out = new Map();
+    near.forEach(([o]) => out.set(o.id, {...short(o), n:1}));
+    sim.forEach(o => out.set(o.id, {...(out.get(o.id) || short(o)), s:1}));
+    const sib = namesakes(v, X.items)[0]; if (sib && !out.has(sib.id)) out.set(sib.id, {id:sib.id,name:sib.name,pageSlug:sib.pageSlug});
+    return [...out.values()];
+  }
+  // соседи для render() из вшитого списка: те же места и порядок, расстояние — по текущим координатам места
+  const relatedX = rel => ({items: rel, nearby: v => hasGeo(v) ? rel.filter(o => o.n).map(o => [o, dist(v, o)]) : [], similar: () => rel.filter(o => o.s)});
+
+  G.VENUE = {render, jsonld, metaDesc, pageTitle, related, relatedX, parseHours, CAT1, CATN, xy};
 })(typeof module !== 'undefined' ? module.exports : window);

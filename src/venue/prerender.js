@@ -51,17 +51,50 @@ function geoQuery(features,cx,cy){
   for(let x=Math.floor((cx-300)/500);x<=Math.floor((cx+300)/500);x++)for(let y=Math.floor((cy-210)/500);y<=Math.floor((cy+210)/500);y++)for(let f of ix.cells.get(x+','+y)||[])found.add(f);
   return [...found];
 }
+const rawById = new Map(V.items.map(o => [o.id, o]));
+// обрезка по прямоугольнику [xa, ya, xb, yb]: многоугольник — Сазерленд — Ходжмен, линия — по отрезкам (Лян — Барски)
+function clipRing(ring, [xa, ya, xb, yb]) {
+  const edges = [[p => p[0] >= xa, (p, q) => [xa, p[1] + (q[1]-p[1]) * (xa-p[0]) / (q[0]-p[0])]], [p => p[0] <= xb, (p, q) => [xb, p[1] + (q[1]-p[1]) * (xb-p[0]) / (q[0]-p[0])]],
+                 [p => p[1] >= ya, (p, q) => [p[0] + (q[0]-p[0]) * (ya-p[1]) / (q[1]-p[1]), ya]], [p => p[1] <= yb, (p, q) => [p[0] + (q[0]-p[0]) * (yb-p[1]) / (q[1]-p[1]), yb]]];
+  let out = ring;
+  for (const [inside, cut] of edges) {
+    const src = out; out = [];
+    for (let i = 0; i < src.length; i++) { const p = src[i], q = src[(i + 1) % src.length];
+      if (inside(q)) { if (!inside(p)) out.push(cut(p, q)); out.push(q) } else if (inside(p)) out.push(cut(p, q)) }
+    if (!out.length) break;
+  }
+  return out;
+}
+function clipLine(pts, [xa, ya, xb, yb]) {
+  const parts = []; let cur = null;
+  for (let i = 1; i < pts.length; i++) {
+    const [px, py] = pts[i-1], dx = pts[i][0] - px, dy = pts[i][1] - py; let t0 = 0, t1 = 1, ok = true;
+    for (const [p, q] of [[-dx, px - xa], [dx, xb - px], [-dy, py - ya], [dy, yb - py]]) {
+      if (p === 0) { if (q < 0) { ok = false; break } continue }
+      const t = q / p; if (p < 0) { if (t > t1) { ok = false; break } if (t > t0) t0 = t } else { if (t < t0) { ok = false; break } if (t < t1) t1 = t }
+    }
+    if (!ok) { cur = null; continue }
+    const a = [px + t0 * dx, py + t0 * dy], b = [px + t1 * dx, py + t1 * dy];
+    if (!cur || t0 > 0) { cur = [a]; parts.push(cur) }
+    cur.push(b); if (t1 < 1) cur = null;
+  }
+  return parts;
+}
 function miniMap(v) {
   if(!valid(v))return '';
   const [cx, cy] = VENUE.xy(v), W = 560, H = 380, x0 = cx - W/2, y1 = cy + H/2, x1 = cx + W/2, y0 = cy - H/2;
   const hit = bb => bb[2] > x0 - 20 && bb[0] < x1 + 20 && bb[3] > y0 - 20 && bb[1] < y1 + 20;
   const P = pts => 'M' + pts.map(([x, y]) => `${Math.round(x - x0)} ${Math.round(y1 - y)}`).join('L');
+  const box = [x0 - 20, y0 - 20, x1 + 20, y1 + 20];
   let s = `<svg viewBox="0 0 ${W} ${H}" class="mm" role="img" aria-label="Карта квартала: ${v.name.replace(/"/g, '')}"><rect class="mm-land" width="${W}" height="${H}"/>`;
   let g = '', w = '';
-  geoQuery(AR,cx,cy).forEach(a => { if (!hit(a.bb)) return; const d = a.r.map(P).join('Z') + 'Z'; if (a.k === 'water') w += d; else if (GREEN.has(a.k)) g += d });
+  // большие площади (река, парки) обрезаем по кадру, иначе в каждую страницу попадает контур всей Томи
+  geoQuery(AR,cx,cy).forEach(a => { if (!hit(a.bb)) return; const d = a.r.map(r => clipRing(r, box)).filter(r => r.length > 2).map(P).join('Z'); if (!d) return;
+    if (a.k === 'water') w += d + 'Z'; else if (GREEN.has(a.k)) g += d + 'Z' });
   if (g) s += `<path class="mm-green" d="${g}"/>`; if (w) s += `<path class="mm-water" d="${w}"/>`;
   const byW = {}, wl = [];
-  geoQuery(RD,cx,cy).forEach(r => { if (!hit(r.bb)) return; if (/^w/.test(r.t)) { wl.push(P(r.p)); return } if ('fxk'.includes(r.t)) return; const k = RW[r.t] || 4; (byW[k] = byW[k] || []).push(P(r.p)) });
+  geoQuery(RD,cx,cy).forEach(r => { if (!hit(r.bb)) return; const parts = clipLine(r.p, box).map(P); if (!parts.length) return;
+    if (/^w/.test(r.t)) { wl.push(...parts); return } if ('fxk'.includes(r.t)) return; const k = RW[r.t] || 4; (byW[k] = byW[k] || []).push(...parts) });
   if (wl.length) s += `<path class="mm-river" d="${wl.join('')}"/>`;
   const ws = Object.keys(byW).map(Number).sort((a, b) => a - b);
   ws.forEach(k => s += `<path class="mm-casing" stroke-width="${k + 2.5}" d="${byW[k].join('')}"/>`);
@@ -89,7 +122,7 @@ function miniMap(v) {
 for (const {id, slug} of PAGES) {
   const v = byId.get(id); if (!v) { console.error('нет места', id); continue }
   const url = `${SITE}mesto/${slug}/`, mapSvg = miniMap(v);
-  const page = {slug, name: v.name, title: `${v.name} — ${(v.kind || VENUE.CAT1[v.cat] || 'место').toLowerCase()}: адрес, часы работы, как добраться`,
-    desc: VENUE.metaDesc(v), body: VENUE.render(v, {...X, mapSvg}), jsonld: VENUE.jsonld(v, X, url), image: (photosOf(v)[0] || [])[0] || ''};
+  const page = {slug, name: v.name, title: VENUE.pageTitle(v, items), desc: VENUE.metaDesc(v, items), body: VENUE.render(v, {...X, mapSvg}),
+    jsonld: VENUE.jsonld(v, X, url), image: (photosOf(v)[0] || [])[0] || '', hours: v.hours || '', rel: VENUE.related(v, X), raw: rawById.get(id)};
   fs.writeSync(1,JSON.stringify({id,page})+'\n');
 }

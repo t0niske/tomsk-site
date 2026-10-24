@@ -24,6 +24,11 @@ function save_all($db) {
   $tmp = DATA . '.tmp';
   file_put_contents($tmp, json_encode($db, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
   rename($tmp, DATA);
+  // страница места (mesto/<адрес>/) берёт свежие данные из data/v/<id>.json; файлы новых страниц создаёт сборка
+  foreach ($db['items'] as $it) {
+    $f = __DIR__ . '/data/v/' . preg_replace('/[^A-Za-z0-9_-]/', '', (string)($it['id'] ?? '')) . '.json';
+    if (is_file($f)) file_put_contents($f, json_encode($it, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+  }
 }
 function with_lock($fn) { $l = fopen(__DIR__ . '/data/.lock', 'c'); flock($l, LOCK_EX); try { return $fn(); } finally { flock($l, LOCK_UN); fclose($l); } }
 

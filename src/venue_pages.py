@@ -6,7 +6,7 @@
 Запускать после src/pages.py (нужен assets/site.js). Текст страницы рисует src/venue/render.js —
 тот же код в браузере перерисовывает страницу из свежего data/venues.json.
 """
-import json, os, subprocess, sys, re, html
+import hashlib, html, json, os, re, shutil, subprocess, sys
 from datetime import date
 sys.path.insert(0, os.path.dirname(__file__))
 import pages
@@ -19,6 +19,7 @@ VENUE_CSS = r'''
 .v-head .wrap{padding-block:clamp(20px,3.4vw,40px) 24px}
 .v-head .tag{display:inline-block;transform:rotate(-2deg);background:var(--yellow);color:#111;border:2px solid #111;border-radius:10px;padding:2px 10px;font-weight:800;font-size:13px;margin-bottom:12px;box-shadow:3px 3px 0 #111}
 .v-head h1{overflow-wrap:anywhere;font-family:var(--font-display);font-weight:900;font-size:clamp(28px,4.6vw,58px);line-height:.98;letter-spacing:-.03em;text-transform:uppercase;margin:0;max-width:22ch}
+.v-head h1 .v-h1-sub{display:flex;align-items:center;gap:6px;margin-top:10px;font-family:var(--font-body);font-weight:800;font-size:clamp(16px,1.8vw,22px);line-height:1.2;letter-spacing:0;text-transform:none}.v-h1-sub .ico{width:20px;height:20px;flex:none}
 .v-why{margin:12px 0 0;font-size:clamp(16px,1.6vw,19px);font-weight:600;max-width:60ch}
 .v-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .v-badge{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:2px solid var(--line);border-radius:999px;background:var(--surface);font-weight:700;font-size:14px}
@@ -101,15 +102,20 @@ def build(single, out):
     css = open(css_path, encoding='utf-8').read()
     if '/* ===== страница заведения' not in css:
         open(css_path, 'a', encoding='utf-8').write(VENUE_CSS)
-    # скрипт страницы заведения: отрисовка + поведение в браузере
-    open(os.path.join(out, 'assets', 'venue.js'), 'w', encoding='utf-8').write(
-        open(os.path.join(HERE, 'venue', 'render.js'), encoding='utf-8').read() + '\n' +
-        open(os.path.join(HERE, 'venue', 'client.js'), encoding='utf-8').read())
+    # скрипт страницы заведения: отрисовка + поведение в браузере; ?v= — чтобы браузеры не держали старую версию
+    venue_js = (open(os.path.join(HERE, 'venue', 'render.js'), encoding='utf-8').read() + '\n' +
+                open(os.path.join(HERE, 'venue', 'client.js'), encoding='utf-8').read())
+    open(os.path.join(out, 'assets', 'venue.js'), 'w', encoding='utf-8').write(venue_js)
+    venue_ver = hashlib.sha256(venue_js.encode('utf-8')).hexdigest()[:12]
     plist = os.path.join(HERE, 'venue', 'pages.json')
     PL = json.load(open(plist, encoding='utf-8'))
     js = open(site_js, encoding='utf-8').read()
     js = re.sub(r'const VSLUG=\{.*?\};', lambda m: 'const VSLUG=' + json.dumps({p['id']: p['slug'] for p in PL}, ensure_ascii=False) + ';', js, count=1)
     open(site_js, 'w', encoding='utf-8').write(js)
+    # свежие данные каждого места для страницы в браузере (admin.php обновляет их при сохранении)
+    vdir = os.path.join(out, 'data', 'v')
+    shutil.rmtree(vdir, ignore_errors=True)
+    os.makedirs(vdir)
     process = subprocess.Popen(['node', os.path.join(HERE, 'venue', 'prerender.js'), os.path.join(out, 'data', 'venues.json'), site_js,
                                 os.path.join(out, 'tomsk-data.json'), plist, pages.SITE_URL],
                                stdout=subprocess.PIPE, text=True, encoding='utf-8')
@@ -118,14 +124,17 @@ def build(single, out):
         entry = json.loads(line)
         vid, p = entry['id'], entry['page']
         R[vid] = {'slug': p['slug']}
+        open(os.path.join(vdir, vid + '.json'), 'w', encoding='utf-8').write(json.dumps(p['raw'], ensure_ascii=False, separators=(',', ':')))
         root = '../../'
         head = (f'<script type="application/ld+json">{p["jsonld"]}</script>\n'
                 + (f'<meta property="og:image" content="{html.escape(p["image"] if p["image"].startswith("http") else pages.SITE_URL + p["image"], quote=True)}">\n' if p['image'] else ''))
-        body = f'<article id="venue" data-id="{vid}">{p["body"]}</article>'
+        rel = json.dumps(p['rel'], ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+        body = (f'<article id="venue" data-id="{vid}" data-hours="{html.escape(p["hours"], quote=True)}">{p["body"]}</article>\n'
+                f'<script type="application/json" id="vRel">{rel}</script>')
         document = pages.shell(title=html.escape(p['title'], quote=True), desc=html.escape(p['desc'], quote=True),
                                root=root, page=f'mesto/{p["slug"]}/', active='places', body=body, head_extra=head)
         document = document.replace(f'<script src="{root}assets/site.js" defer></script>',
-                                    f'<script src="{root}assets/site.js" defer></script>\n<script src="{root}assets/venue.js" defer></script>')
+                                    f'<script src="{root}assets/site.js" defer></script>\n<script src="{root}assets/venue.js?v={venue_ver}" defer></script>')
         d = os.path.join(out, 'mesto', p['slug'])
         os.makedirs(d, exist_ok=True)
         open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(document)

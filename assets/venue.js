@@ -55,12 +55,12 @@
   const dist = (a, b) => { const p = xy(a), q = xy(b); return Math.hypot(p[0]-q[0], p[1]-q[1]) };
   const walkMin = m => Math.max(1, Math.round(m * 1.3 / 75));   // по улицам ~ в 1,3 раза длиннее прямой, 75 м/мин
   function nearby(v, items, n = 6) {
-    return items.filter(o => o.id !== v.id && !o.hidden && o.lat && (o.pick || o.origin === 'editor' || o.pageSlug))
+    return items.filter(o => o.id !== v.id && !o.hidden && o.origin !== 'supplier' && o.lat && (o.pick || o.origin === 'editor' || o.pageSlug))
       .map(o => [o, dist(v, o)]).filter(([, d]) => d < 1200).sort((a, b) => a[1] - b[1]).slice(0, n);
   }
   function similar(v, items, n = 4) {
     const group = {food:['food','bar'],bar:['bar','food'],culture:['culture'],church:['church','sight'],sight:['sight','church'],nature:['nature'],fun:['fun'],shop:['shop'],stay:['stay']}[v.cat] || [v.cat];
-    return items.filter(o => o.id !== v.id && !o.hidden && group.includes(o.cat) && (o.pick || o.pageSlug))
+    return items.filter(o => o.id !== v.id && !o.hidden && o.origin !== 'supplier' && group.includes(o.cat) && (o.pick || o.pageSlug))
       .map(o => [o, dist(v, o)]).sort((a, b) => (b[0].pageSlug ? 1 : 0) - (a[0].pageSlug ? 1 : 0) || a[1] - b[1]).slice(0, n).map(x => x[0]);
   }
 
@@ -112,7 +112,7 @@
 <div class="wrap v-grid">
   <div class="v-main">
     ${gallery}
-    ${v.desc ? `<p class="v-lead">${esc(v.desc)}</p>` : ''}
+    ${v.desc ? `<p class="v-lead">${esc(v.desc)}</p>` : `<p class="v-lead">${esc(v.kind || CAT1[v.cat] || 'Место')} в Томске${v.addr ? ', ' + esc(v.addr) : ''}.${v.cuisine ? ' Кухня: ' + esc(String(v.cuisine).replace(/;/g, ', ').replace(/_/g, ' ')) + '.' : ''}</p>`}
     ${about.length ? `<section class="v-sec"><h2>Подробнее</h2>${about.map(p => `<p>${esc(p)}</p>`).join('')}</section>` : ''}
     ${look.length ? `<section class="v-sec"><h2>${lookTitle}</h2><ul class="v-list">${look.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
     ${tips.length ? `<section class="v-sec v-tips"><h2>Советы</h2><ul>${tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
@@ -126,6 +126,7 @@
       ${v.hours ? `<h3>${I('clock')}Часы работы</h3>${hoursTable(v.hours)}` : ''}
       ${v.prices ? `<h3>${I('rub')}Цены</h3><p class="v-prices">${esc(v.prices)}</p>` : ''}
       <p class="v-checked">${v.checked ? `Информация проверена ${esc(v.checked.split('-').reverse().join('.'))}${v.src ? ` · источник: <a href="${esc(v.src)}" target="_blank" rel="noopener">${esc(webLabel(v.src).split('/')[0])}</a>` : ''}.` : 'Часы и цены могут меняться — уточняйте перед визитом.'}
+        ${v.origin === 'osm' ? '<br>Адрес, часы и контакты — по данным <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© участники OpenStreetMap</a>.' : ''}
         <button class="lnk" data-report="${esc(v.name)}">${I('flag')}Нашли ошибку?</button></p>
     </div>
   </aside>

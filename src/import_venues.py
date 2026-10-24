@@ -47,6 +47,9 @@ SKIP_NAMES_NO_ADDR={'Памятная доска','Декоративный об
     'Сооружение','Информационно-навигационный барельеф','Значимые деревья','Поклонный крест',
     'Едет кофе, киоск по продаже кофе','33 пингвина, киоск мороженого','Ye Dao, точка азиатского стрит-фуда','Rocky boxer, игровой автомат',
     'Otello, сервис бронирования отелей по всему миру','Бугельный подъёмник, Горнолыжные подъёмники'}
+# чистка базы: магазины, услуги, госорганы, секции и прочее не про досуг — виды целиком и отдельные записи
+SKIP=json.loads((Path(__file__).parent/'import_skip.json').read_text(encoding='utf-8'))
+SKIP_KINDS|=set(SKIP['kinds']); SKIP_IDS=set(SKIP['ids'])
 def category(text):
     for cat,rule in RULES:
         if re.search(rule,text.lower()): return cat
@@ -85,6 +88,7 @@ def main():
                social={k:r[k].strip() for k in ['whatsapp','viber','telegram','facebook','instagram','vkontakte','odnoklassniki','youtube','twitter','skype','icq','googleplus','linkedin','pinterest'] if r[k].strip()})
         stable='|'.join([name,addr,str(lat),str(lon)])
         source_id='s'+hashlib.sha256(stable.encode()).hexdigest()[:16]
+        if source_id in SKIP_IDS: report['skipped_rows']+=1;continue
         dup=by_id.get(source_id)
         for old in index.get(norm(name),[]):
             if dup is not None: break

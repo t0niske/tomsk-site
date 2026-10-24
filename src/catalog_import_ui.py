@@ -35,3 +35,12 @@ rep("if(L.length)h+=", """if(p.email)L.push('<span class="credit">'+esc(p.email)
 s=s.replace("$('#drawer').classList","document.querySelector('#drawer')?.classList")
 p.write_text(s,encoding='utf-8')
 print('Supplier catalogue UI ready')
+
+# Version the generated script so existing visitors receive this catalogue update.
+import hashlib, re
+version=hashlib.sha256(s.encode('utf-8')).hexdigest()[:12]
+for html in ROOT.rglob('*.html'):
+    if 'src' in html.relative_to(ROOT).parts: continue
+    content=html.read_text(encoding='utf-8')
+    updated=re.sub(r'(assets/site\.js)(?:\?v=[a-zA-Z0-9]+)?', r'\1?v='+version,content)
+    if updated!=content: html.write_text(updated,encoding='utf-8')

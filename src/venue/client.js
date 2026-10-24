@@ -2,7 +2,7 @@
    и перерисовка из свежей базы (правки из админки видны без пересборки сайта). */
 (function () {
   const el = document.getElementById('venue'); if (!el) return;
-  const id = el.dataset.id, SL = JSON.parse(document.getElementById('vSlugs').textContent || '{}');
+  const id = el.dataset.id, SL = typeof VSLUG !== 'undefined' ? VSLUG : JSON.parse(document.getElementById('vSlugs')?.textContent || '{}');
   const COLOR = {food:'#FFC9A6',bar:'#FFC9A6',culture:'#D9C8F0',church:'#D9C8F0',nature:'#C9F2D2',fun:'#FFC3D0',shop:'#F2DDC9',sight:'#B9E4FF',stay:'#B9E4FF'};
   const photosOf = v => (v.photos && v.photos.length ? v.photos.map(f => [f.src, f.credit || '', f.license || '', f.link || '']) : (PHOTOS[v.id] || PHOTOS[v.name] ? [PHOTOS[v.id] || PHOTOS[v.name]] : []));
   function update() {

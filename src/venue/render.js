@@ -1,10 +1,10 @@
 /* Страница заведения: одна функция отрисовки для сборки (node) и для обновления в браузере.
    В браузере после загрузки свежего data/venues.json страница перерисовывается — правки из админки видны сразу. */
 (function (G) {
-  const CATN = {food:'Кафе и рестораны',bar:'Бары',culture:'Музеи и театры',church:'Храмы',nature:'Парки и прогулки',fun:'Развлечения',shop:'Магазины',sight:'Достопримечательности',stay:'Где жить'};
-  const CAT1 = {food:'Кафе',bar:'Бар',culture:'Музей',church:'Храм',nature:'Парк',fun:'Развлечения',shop:'Магазин',sight:'Достопримечательность',stay:'Гостиница'};
+  const CATN = {other:'Организации и услуги',food:'Кафе и рестораны',bar:'Бары',culture:'Музеи и театры',church:'Храмы',nature:'Парки и прогулки',fun:'Развлечения',shop:'Магазины',sight:'Достопримечательности',stay:'Где жить'};
+  const CAT1 = {other:'Организация',food:'Кафе',bar:'Бар',culture:'Музей',church:'Храм',nature:'Парк',fun:'Развлечения',shop:'Магазин',sight:'Достопримечательность',stay:'Гостиница'};
   // фильтр раздела «Места» для хлебных крошек
-  const CATF = {food:{cat:'food'},bar:{cat:'food'},culture:{cat:'culture'},church:{cat:'culture'},nature:{cat:'nature'},fun:{cat:'fun'},shop:{cat:'shop'},sight:{cat:'unusual'},stay:{cat:'unusual'}};
+  const CATF = {other:{cat:'other'},food:{cat:'food'},bar:{cat:'food'},culture:{cat:'culture'},church:{cat:'culture'},nature:{cat:'nature'},fun:{cat:'fun'},shop:{cat:'shop'},sight:{cat:'unusual'},stay:{cat:'unusual'}};
   const LOOK = {food:'Что попробовать',bar:'Что попробовать',culture:'Что посмотреть',church:'Что посмотреть',nature:'Чем заняться',fun:'Чем заняться',shop:'Что купить',sight:'На что обратить внимание',stay:'Что внутри'};
   const MOOD = {date:'Вдвоём',friends:'С друзьями',kids:'С детьми',solo:'Одному',night:'Вечером',rain:'В дождь',wood:'Деревянный Томск',free:'Бесплатно'};
   const SCHEMA = {food:'Restaurant',bar:'BarOrPub',culture:'Museum',church:'PlaceOfWorship',nature:'Park',fun:'EntertainmentBusiness',shop:'Store',sight:'TouristAttraction',stay:'Hotel'};
@@ -26,7 +26,7 @@
   /* часы работы в формате OpenStreetMap → по дням недели */
   const D = ['Su','Mo','Tu','We','Th','Fr','Sa'], RU = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'], ORD = [1,2,3,4,5,6,0];
   function parseHours(s) {
-    if (!s) return null; s = s.trim(); const week = [[],[],[],[],[],[],[]];
+    if (!s) return null; s = s.trim(); if (/[а-яё]/i.test(s)) return {raw:s}; const week = [[],[],[],[],[],[],[]];
     if (/^24\/7$/.test(s)) return {week: week.map(() => [[0,1440]]), all: true};
     let any = false;
     for (let part of s.split(/;|\|\|/)) {
@@ -54,14 +54,16 @@
   const xy = v => [(v.lon - 84.957) * 61646, (v.lat - 56.4755) * 111351];
   const dist = (a, b) => { const p = xy(a), q = xy(b); return Math.hypot(p[0]-q[0], p[1]-q[1]) };
   const walkMin = m => Math.max(1, Math.round(m * 1.3 / 75));   // по улицам ~ в 1,3 раза длиннее прямой, 75 м/мин
+  const hasGeo = v => Number.isFinite(v.lat) && Number.isFinite(v.lon);
   function nearby(v, items, n = 6) {
-    return items.filter(o => o.id !== v.id && !o.hidden && o.origin !== 'supplier' && o.lat && (o.pick || o.origin === 'editor' || o.pageSlug))
+    if (!hasGeo(v)) return [];
+    return items.filter(o => o.id !== v.id && !o.hidden && hasGeo(o) && (o.pick || o.origin === 'editor' || o.pageSlug))
       .map(o => [o, dist(v, o)]).filter(([, d]) => d < 1200).sort((a, b) => a[1] - b[1]).slice(0, n);
   }
   function similar(v, items, n = 4) {
     const group = {food:['food','bar'],bar:['bar','food'],culture:['culture'],church:['church','sight'],sight:['sight','church'],nature:['nature'],fun:['fun'],shop:['shop'],stay:['stay']}[v.cat] || [v.cat];
-    return items.filter(o => o.id !== v.id && !o.hidden && o.origin !== 'supplier' && group.includes(o.cat) && (o.pick || o.pageSlug))
-      .map(o => [o, dist(v, o)]).sort((a, b) => (b[0].pageSlug ? 1 : 0) - (a[0].pageSlug ? 1 : 0) || a[1] - b[1]).slice(0, n).map(x => x[0]);
+    return items.filter(o => o.id !== v.id && !o.hidden && group.includes(o.cat) && (o.pick || o.pageSlug))
+      .map(o => [o, hasGeo(v)&&hasGeo(o)?dist(v,o):Infinity]).sort((a, b) => (b[0].pageSlug ? 1 : 0) - (a[0].pageSlug ? 1 : 0) || a[1] - b[1]).slice(0, n).map(x => x[0]);
   }
 
   const priceLine = v => v.price === 0 ? 'Бесплатно' : v.price != null ? `от ${v.price} ₽` : '';
@@ -82,19 +84,21 @@
     const photos = X.photos(v), look = lines(v.look), tips = lines(v.tips), about = paras(v.about);
     const lookTitle = LOOK[v.cat] || 'Что посмотреть';
     const tags = (v.moods || []).filter(m => !(m === 'free' && v.price === 0)).map(m => MOOD[m]).filter(Boolean);
-    const price = priceLine(v), mins = minsTxt(v.mins);
-    const yandex = `https://yandex.ru/maps/?rtext=~${v.lat},${v.lon}&rtt=pd`, gis = `https://2gis.ru/routeSearch/rsType/pedestrian/to/${v.lon},${v.lat}`;
+    const price = priceLine(v), mins = minsTxt(v.mins), located=hasGeo(v);
+    const query=encodeURIComponent([v.city||'Томск',v.name,v.addr].filter(Boolean).join(', '));
+    const yandex = located?`https://yandex.ru/maps/?rtext=~${v.lat},${v.lon}&rtt=pd`:`https://yandex.ru/maps/?text=${query}`, gis = located?`https://2gis.ru/routeSearch/rsType/pedestrian/to/${v.lon},${v.lat}`:`https://2gis.ru/tomsk/search/${query}`;
     const [mx, my] = xy(v);
     const crumbs = `<ol class="crumbs"><li><a href="${X.root || './'}">Главная</a></li><li><a href="${X.root}mesta/">Места</a></li><li><a href="${X.root}mesta/?f=${encodeURIComponent(JSON.stringify(CATF[v.cat] || {}))}">${CATN[v.cat] || 'Места'}</a></li><li><span>${esc(v.name)}</span></li></ol>`;
     const gallery = photos.length ? `<figure class="v-photo"><img src="${esc(X.url(photos[0][0]))}" alt="${esc(v.name)}" referrerpolicy="no-referrer">${photos[0][1] || photos[0][3] ? `<figcaption>Фото: ${photos[0][3] ? `<a href="${esc(photos[0][3])}" target="_blank" rel="noopener">${esc(photos[0][1] || 'источник')}</a>` : esc(photos[0][1])}${photos[0][2] ? ', ' + esc(photos[0][2]) : ''}</figcaption>` : ''}</figure>
       ${photos.length > 1 ? `<div class="v-thumbs">${photos.slice(1, 7).map(p => `<a href="${esc(p[3] || X.url(p[0]))}" target="_blank" rel="noopener"><img src="${esc(X.url(p[0]))}" alt="" loading="lazy" referrerpolicy="no-referrer"></a>`).join('')}</div>` : ''}`
       : `<figure class="v-photo v-nophoto" style="background:${X.color[v.cat] || '#E6E0CF'}"><span>${esc(v.name)}</span><figcaption>Фото пока нет. Если вы владелец — <button class="lnk" data-report="${esc(v.name)}">пришлите снимки</button>.</figcaption></figure>`;
-    const near = nearby(v, X.items);
-    const sim = similar(v, X.items).filter(o => !near.some(([n]) => n.id === o.id));
+    const near = X.nearby ? X.nearby(v) : nearby(v, X.items);
+    const sim = (X.similar ? X.similar(v) : similar(v, X.items)).filter(o => !near.some(([n]) => n.id === o.id));
     const contacts = [
       v.addr ? `<li>${I('pin')}<span>${esc(v.addr)}</span></li>` : '',
       v.phone ? `<li>${I('phone')}<span>${String(v.phone).split(/[;,]\s*/).map(p => `<a href="${telHref(p)}">${esc(p)}</a>`).join('<br>')}</span></li>` : '',
       v.web ? `<li>${I('web')}<span><a href="${esc(v.web)}" target="_blank" rel="noopener">${esc(webLabel(v.web))}</a></span></li>` : ''
+      ,v.email ? `<li>${I('web')}<span>${esc(v.email)}</span></li>` : ''
     ].join('');
     const html = `
 <header class="v-head"><div class="wrap">${crumbs}
@@ -112,7 +116,7 @@
 <div class="wrap v-grid">
   <div class="v-main">
     ${gallery}
-    ${v.desc ? `<p class="v-lead">${esc(v.desc)}</p>` : `<p class="v-lead">${esc(v.kind || CAT1[v.cat] || 'Место')} в Томске${v.addr ? ', ' + esc(v.addr) : ''}.${v.cuisine ? ' Кухня: ' + esc(String(v.cuisine).replace(/;/g, ', ').replace(/_/g, ' ')) + '.' : ''}</p>`}
+    ${v.desc ? `<p class="v-lead">${esc(v.desc)}</p>` : `<p class="v-lead">${esc(v.kind || CAT1[v.cat] || 'Место')}${v.addr ? ' — ' + esc(v.addr) : ''}.${v.cuisine ? ' Кухня: ' + esc(String(v.cuisine).replace(/;/g, ', ').replace(/_/g, ' ')) + '.' : ''}</p>`}
     ${about.length ? `<section class="v-sec"><h2>Подробнее</h2>${about.map(p => `<p>${esc(p)}</p>`).join('')}</section>` : ''}
     ${look.length ? `<section class="v-sec"><h2>${lookTitle}</h2><ul class="v-list">${look.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
     ${tips.length ? `<section class="v-sec v-tips"><h2>Советы</h2><ul>${tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul></section>` : ''}
@@ -120,12 +124,14 @@
   <aside class="v-side">
     <div class="v-card" id="how">
       <h2>Как попасть</h2>
-      <a class="v-map" href="${X.root}map.html#poi=${Math.round(mx)},${Math.round(my)}" aria-label="Открыть на карте Томска">${X.mapSvg || ''}<span class="v-map-btn">Открыть на карте →</span></a>
+      ${located ? `<a class="v-map" href="${X.root}map.html#poi=${Math.round(mx)},${Math.round(my)}" aria-label="Открыть на карте Томска">${X.mapSvg || ''}<span class="v-map-btn">Открыть на карте →</span></a>` : '<p class="v-raw">Координаты уточняются. Найдите место по адресу в картах ниже.</p>'}
       <ul class="v-contacts">${contacts}</ul>
       <div class="v-go"><a class="btn" href="${yandex}" target="_blank" rel="noopener">Яндекс Карты</a><a class="btn" href="${gis}" target="_blank" rel="noopener">2ГИС</a></div>
       ${v.hours ? `<h3>${I('clock')}Часы работы</h3>${hoursTable(v.hours)}` : ''}
+      ${v.payment ? `<h3>Оплата</h3><p class="v-prices">${esc(v.payment)}</p>` : ''}
       ${v.prices ? `<h3>${I('rub')}Цены</h3><p class="v-prices">${esc(v.prices)}</p>` : ''}
       <p class="v-checked">${v.checked ? `Информация проверена ${esc(v.checked.split('-').reverse().join('.'))}${v.src ? ` · источник: <a href="${esc(v.src)}" target="_blank" rel="noopener">${esc(webLabel(v.src).split('/')[0])}</a>` : ''}.` : 'Часы и цены могут меняться — уточняйте перед визитом.'}
+        ${v.origin === 'supplier' ? '<br>Сведения из предоставленной базы. Актуальность уточняйте у заведения.' : ''}
         ${v.origin === 'osm' ? '<br>Адрес, часы и контакты — по данным <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© участники OpenStreetMap</a>.' : ''}
         <button class="lnk" data-report="${esc(v.name)}">${I('flag')}Нашли ошибку?</button></p>
     </div>
@@ -139,22 +145,23 @@ ${sim.length ? `<section class="wrap v-more"><h2>Похожие места</h2><
 
   function jsonld(v, X, pageUrl) {
     const photos = X.photos(v);
-    const o = {'@context':'https://schema.org','@type':SCHEMA[v.cat] || 'Place',name:v.name,url:pageUrl,
-      address:{'@type':'PostalAddress',addressLocality:'Томск',addressCountry:'RU',...(v.addr ? {streetAddress:v.addr} : {})},
+    const o = {'@context':'https://schema.org','@type':v.origin==='supplier'?'Place':SCHEMA[v.cat] || 'Place',name:v.name,url:pageUrl,
+      address:{'@type':'PostalAddress',addressLocality:v.city||'Томск',addressCountry:'RU',...(v.addr ? {streetAddress:v.addr} : {})},
       geo:{'@type':'GeoCoordinates',latitude:v.lat,longitude:v.lon}};
+    if (!hasGeo(v)) delete o.geo;
     if (v.desc || v.why) o.description = v.desc || v.why;
     if (v.phone) o.telephone = String(v.phone).split(/[;,]/)[0].trim();
     if (v.web) o.sameAs = v.web;
     if (photos.length) o.image = /^https?:/.test(photos[0][0]) ? photos[0][0] : X.site + photos[0][0];
-    if (v.hours && /^[A-Za-z]/.test(v.hours)) o.openingHours = v.hours.split(/\s*;\s*/);
+    if (v.origin!=='supplier' && v.hours && /^[A-Za-z]/.test(v.hours)) o.openingHours = v.hours.split(/\s*;\s*/);
     if (v.price === 0 && ['nature','sight','church','culture'].includes(v.cat)) o.isAccessibleForFree = true;
-    return JSON.stringify(o);
+    return JSON.stringify(o).replace(/</g,'\\u003c');
   }
 
   function metaDesc(v) {
     const parts = [v.why, v.desc].filter(Boolean).join('. ').replace(/\.\./g, '.');
     const tail = [v.addr, v.hours ? 'часы работы' : '', 'как добраться'].filter(Boolean).join(', ');
-    return (`${v.name} — ${(CAT1[v.cat] || 'место').toLowerCase()} в Томске. ${parts}`.slice(0, 200).replace(/\s+\S*$/, '') + (tail ? `. ${tail}.` : '')).replace(/\s+/g, ' ');
+    return (`${v.name} — ${(v.kind || CAT1[v.cat] || 'место').toLowerCase()}. ${parts}`.slice(0, 200).replace(/\s+\S*$/, '') + (tail ? `. ${tail}.` : '')).replace(/\s+/g, ' ');
   }
 
   G.VENUE = {render, jsonld, metaDesc, parseHours, CAT1, CATN, xy};

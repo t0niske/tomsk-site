@@ -33,14 +33,21 @@ rep("if(L.length)h+=", """if(p.email)L.push('<span class="credit">'+esc(p.email)
   if(p.payment)h+='<p class="credit">Оплата: '+esc(p.payment)+'</p>';
   if(L.length)h+=""")
 s=s.replace("$('#drawer').classList","document.querySelector('#drawer')?.classList")
+rep('<h3><button class="vname" data-open="${v[10]}">${esc(v[0])}</button></h3>',
+    '<h3>${VSLUG[v[10]]?`<a class="vname" href="${ROOT}mesto/${VSLUG[v[10]]}/">${esc(v[0])}</a>`:`<button class="vname" data-open="${v[10]}">${esc(v[0])}</button>`}</h3>')
 p.write_text(s,encoding='utf-8')
 print('Supplier catalogue UI ready')
 
-# Version the generated script so existing visitors receive this catalogue update.
-import hashlib, re
-version=hashlib.sha256(s.encode('utf-8')).hexdigest()[:12]
-for html in ROOT.rglob('*.html'):
-    if 'src' in html.relative_to(ROOT).parts: continue
-    content=html.read_text(encoding='utf-8')
-    updated=re.sub(r'(assets/site\.js)(?:\?v=[a-zA-Z0-9]+)?', r'\1?v='+version,content)
-    if updated!=content: html.write_text(updated,encoding='utf-8')
+from pathlib import Path
+import hashlib,re
+from concurrent.futures import ThreadPoolExecutor
+ROOT=Path(__file__).resolve().parents[1]
+versions={name:hashlib.sha256((ROOT/'assets'/name).read_bytes()).hexdigest()[:12] for name in ['site.js','venue.js','site.css']}
+def update_document(document):
+    content=document.read_text(encoding='utf-8')
+    updated=re.sub(r'assets/(site\.js|venue\.js|site\.css)(?:\?v=[a-zA-Z0-9]+)?',
+                   lambda m:'assets/'+m[1]+'?v='+versions[m[1]],content)
+    if updated!=content:document.write_text(updated,encoding='utf-8')
+documents=[p for p in ROOT.rglob('*.html') if 'src' not in p.relative_to(ROOT).parts]
+with ThreadPoolExecutor(max_workers=16) as pool:list(pool.map(update_document,documents))
+print('Versioned documents:',len(documents))

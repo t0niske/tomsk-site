@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Список страниц заведений (src/venue/pages.json): места редакции и заведения OpenStreetMap
-с адресом и хотя бы одним контактом (часы, телефон или сайт). Записи из сторонних баз страниц не получают.
+с адресом и хотя бы одним контактом (часы, телефон или сайт). Добавленные из CSV записи также получают страницы, включая записи без координат.
 Уже выданные адреса страниц сохраняются.   python3 src/venue/select_pages.py"""
 import json, math, os, re
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -20,6 +20,8 @@ ed = [v for v in V if v.get('origin') == 'editor' and not v.get('hidden')]
 osm = [v for v in V if v.get('origin') == 'osm' and not v.get('hidden') and v.get('addr') and (v.get('hours') or v.get('phone') or v.get('web'))
        and v['cat'] != 'other' and v.get('kind') not in SKIP and not re.match(r'^\d', v['name']) and not re.search(r'доставк|аренда|\.ru$|пят[её]рочка', v['name'].lower()) and not any(dist(v, e) < 150 and norm(v['name'])[:5] == norm(e['name'])[:5] for e in ed)]
 chosen = ed + osm
+selected={v['id'] for v in chosen}
+chosen += [v for v in V if not v.get('hidden') and v['id'] not in selected and (v.get('origin')=='supplier' or v.get('importRows'))]
 have = {p['id']: p['slug'] for p in old}
 used = set(have.values())
 out = []
@@ -34,4 +36,4 @@ for v in chosen:
         s = f'{base}-{k}'; k += 1
     used.add(s); out.append({'id': v['id'], 'slug': s})
 json.dump(out, open(P, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
-print('страниц:', len(out), '| редакция:', len(ed), '| OpenStreetMap:', len(osm))
+print('страниц:', len(out), '| редакция:', len(ed), '| OpenStreetMap:', len(osm), '| добавленная база:', len(chosen)-len(ed)-len(osm))

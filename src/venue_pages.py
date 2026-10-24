@@ -6,7 +6,7 @@
 Запускать после src/pages.py (нужен assets/site.js). Текст страницы рисует src/venue/render.js —
 тот же код в браузере перерисовывает страницу из свежего data/venues.json.
 """
-import json, os, subprocess, sys
+import json, os, subprocess, sys, re, html
 from datetime import date
 sys.path.insert(0, os.path.dirname(__file__))
 import pages
@@ -18,7 +18,7 @@ VENUE_CSS = r'''
 .v-head{border-bottom:var(--bd);background:var(--surface-2)}
 .v-head .wrap{padding-block:clamp(20px,3.4vw,40px) 24px}
 .v-head .tag{display:inline-block;transform:rotate(-2deg);background:var(--yellow);color:#111;border:2px solid #111;border-radius:10px;padding:2px 10px;font-weight:800;font-size:13px;margin-bottom:12px;box-shadow:3px 3px 0 #111}
-.v-head h1{font-family:var(--font-display);font-weight:900;font-size:clamp(28px,4.6vw,58px);line-height:.98;letter-spacing:-.03em;text-transform:uppercase;margin:0;max-width:22ch}
+.v-head h1{overflow-wrap:anywhere;font-family:var(--font-display);font-weight:900;font-size:clamp(28px,4.6vw,58px);line-height:.98;letter-spacing:-.03em;text-transform:uppercase;margin:0;max-width:22ch}
 .v-why{margin:12px 0 0;font-size:clamp(16px,1.6vw,19px);font-weight:600;max-width:60ch}
 .v-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .v-badge{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:2px solid var(--line);border-radius:999px;background:var(--surface);font-weight:700;font-size:14px}
@@ -37,7 +37,7 @@ VENUE_CSS = r'''
 .v-photo img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
 .v-photo figcaption{font-size:12px;color:var(--ink-2);padding:8px 14px;border-top:var(--bd);background:var(--surface)}
 .v-photo figcaption a{color:inherit}
-.v-nophoto{display:flex;flex-direction:column}.v-nophoto>span{display:grid;place-items:center;aspect-ratio:16/8;font-family:var(--font-display);font-weight:900;font-size:clamp(22px,3vw,34px);text-transform:uppercase;color:#111;text-align:center;padding:20px}
+.v-nophoto{display:flex;flex-direction:column}.v-nophoto>span{overflow-wrap:anywhere;display:grid;place-items:center;aspect-ratio:16/8;font-family:var(--font-display);font-weight:900;font-size:clamp(22px,3vw,34px);text-transform:uppercase;color:#111;text-align:center;padding:20px}
 .v-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:12px}
 .v-thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border:2px solid var(--line);border-radius:14px;display:block}
 .v-lead{font-size:clamp(17px,1.7vw,20px);line-height:1.5;font-weight:500;margin:24px 0 0;max-width:65ch}
@@ -108,27 +108,33 @@ def build(single, out):
     plist = os.path.join(HERE, 'venue', 'pages.json')
     PL = json.load(open(plist, encoding='utf-8'))
     js = open(site_js, encoding='utf-8').read()
-    js = js.replace('const VSLUG={};', 'const VSLUG=' + json.dumps({p['id']: p['slug'] for p in PL}, ensure_ascii=False) + ';', 1)
+    js = re.sub(r'const VSLUG=\{.*?\};', lambda m: 'const VSLUG=' + json.dumps({p['id']: p['slug'] for p in PL}, ensure_ascii=False) + ';', js, count=1)
     open(site_js, 'w', encoding='utf-8').write(js)
-    res = subprocess.run(['node', os.path.join(HERE, 'venue', 'prerender.js'), os.path.join(out, 'data', 'venues.json'), site_js,
-                          os.path.join(out, 'tomsk-data.json'), plist, pages.SITE_URL], capture_output=True, text=True, check=True)
-    if res.stderr: print(res.stderr, file=sys.stderr)
-    R = json.loads(res.stdout)
-    slugs = json.dumps({k: v['slug'] for k, v in R.items()}, ensure_ascii=False)
-    for vid, p in R.items():
+    process = subprocess.Popen(['node', os.path.join(HERE, 'venue', 'prerender.js'), os.path.join(out, 'data', 'venues.json'), site_js,
+                                os.path.join(out, 'tomsk-data.json'), plist, pages.SITE_URL],
+                               stdout=subprocess.PIPE, text=True, encoding='utf-8')
+    R = {}
+    for line in process.stdout:
+        entry = json.loads(line)
+        vid, p = entry['id'], entry['page']
+        R[vid] = {'slug': p['slug']}
         root = '../../'
         head = (f'<script type="application/ld+json">{p["jsonld"]}</script>\n'
-                + (f'<meta property="og:image" content="{p["image"] if p["image"].startswith("http") else pages.SITE_URL + p["image"]}">\n' if p['image'] else ''))
-        body = (f'<article id="venue" data-id="{vid}">{p["body"]}</article>\n'
-                f'<script type="application/json" id="vSlugs">{slugs}</script>')
-        html = pages.shell(title=p['title'], desc=p['desc'].replace('"', '&quot;'), root=root, page=f'mesto/{p["slug"]}/', active='places', body=body, head_extra=head)
-        html = html.replace(f'<script src="{root}assets/site.js" defer></script>',
-                            f'<script src="{root}assets/site.js" defer></script>\n<script src="{root}assets/venue.js" defer></script>')
+                + (f'<meta property="og:image" content="{html.escape(p["image"] if p["image"].startswith("http") else pages.SITE_URL + p["image"], quote=True)}">\n' if p['image'] else ''))
+        body = f'<article id="venue" data-id="{vid}">{p["body"]}</article>'
+        document = pages.shell(title=html.escape(p['title'], quote=True), desc=html.escape(p['desc'], quote=True),
+                               root=root, page=f'mesto/{p["slug"]}/', active='places', body=body, head_extra=head)
+        document = document.replace(f'<script src="{root}assets/site.js" defer></script>',
+                                    f'<script src="{root}assets/site.js" defer></script>\n<script src="{root}assets/venue.js" defer></script>')
         d = os.path.join(out, 'mesto', p['slug'])
         os.makedirs(d, exist_ok=True)
-        open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(html)
+        open(os.path.join(d, 'index.html'), 'w', encoding='utf-8').write(document)
+    if process.wait():
+        raise RuntimeError('Venue prerender failed')
+    if len(R) != len(PL):
+        raise RuntimeError(f'Expected {len(PL)} venue pages, received {len(R)}')
     # карта сайта для поисковиков
-    urls = ['', 'mesta/', 'sobytiya/', 'podborki/', 'derevyannyj-tomsk/', 'udivi-menya/', 'o-proekte/', 'map.html'] + [f'mesto/{p["slug"]}/' for p in R.values()]
+    urls = ['', 'mesta/', 'sobytiya/', 'derevyannyj-tomsk/', 'o-proekte/', 'map.html'] + [f'mesto/{p["slug"]}/' for p in R.values()]
     today = date.today().isoformat()
     open(os.path.join(out, 'sitemap.xml'), 'w', encoding='utf-8').write(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -137,4 +143,4 @@ def build(single, out):
 
 
 if __name__ == '__main__':
-    print('venue pages:', build(sys.argv[1], sys.argv[2]))
+    print('venue pages:', len(build(sys.argv[1], sys.argv[2])))

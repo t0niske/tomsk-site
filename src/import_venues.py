@@ -38,6 +38,8 @@ RULES=[
  ('fun',r'детск|спорт|work out|тренаж|фитнес|аттракцион|развлеч|танц|квест|батут|саун|бани|бань|кальян|паровых коктейлей|боулинг|бильярд|караоке|игров|праздник|конн|каток|катки|турист|экскурс|клуб|йог|бассейн|рыбал|прокат|охот'),
  ('shop',r'магазин|торгов|сувенир|подар|рынок|изделия|цвет|товар')
 ]
+# безымянные городские объекты: тысячи одинаковых «Детская площадка» без адреса — на сайт не берём
+SKIP_KINDS={'Детские площадки','Площадки Work Out','Спортивные площадки','Уличные тренажёры','Теннисные столы','Беседки','Стрит-арт'}
 def category(text):
     for cat,rule in RULES:
         if re.search(rule,text.lower()): return cat
@@ -62,6 +64,7 @@ def main():
         except (ValueError,TypeError):lat=lon=None
         if not name: raise ValueError('Empty name at CSV row '+str(rownum))
         kind=r['Подрубрика'].split(',')[0].strip() or r['Рубрика'].split(',')[0].strip()
+        if kind in SKIP_KINDS: report['skipped_rows']+=1;continue
         tags=[x.strip() for x in r['Подрубрика'].split(',') if x.strip()]
         cat=category(kind or r['Рубрика'])
         rawhours=r['Время работы'].strip()

@@ -5,7 +5,7 @@ const VENUE = require('./render.js').VENUE;
 const [VJ, SJ, TJ, PJ, SITE] = process.argv.slice(2);
 const V = JSON.parse(fs.readFileSync(VJ, 'utf8'));
 const siteJs = fs.readFileSync(SJ, 'utf8');
-const PHOTOS = JSON.parse(siteJs.match(/const PHOTOS=(\{.*?\});\n/s)[1]);
+const PHOTOS = JSON.parse(siteJs.match(/const PHOTOS=(\{.*?\});\r?\n/s)[1]);
 const PAGES = JSON.parse(fs.readFileSync(PJ, 'utf8'));
 const SL = Object.fromEntries(PAGES.map(p => [p.id, p.slug]));
 const items = V.items.filter(v => !v.hidden).map(v => ({...v, pageSlug: SL[v.id] || null}));

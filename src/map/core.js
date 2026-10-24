@@ -21,7 +21,7 @@ const IC={
 const ico=(k,c='ico')=>`<svg class="${c}" viewBox="0 0 24 24"><path d="${IC[k]}"/></svg>`;
 
 /* --- категории POI --- */
-const PCAT={
+const PCAT={other:{t:'Другие организации',c:'#637282',i:'star'},
   sight:{t:'Достопримечательности',c:'#1D5A42',i:'star'},culture:{t:'Музеи и театры',c:'#7A4FA0',i:'col'},church:{t:'Храмы',c:'#B8892E',i:'church'},
   food:{t:'Кафе и рестораны',c:'#DB7F33',i:'cup'},bar:{t:'Бары',c:'#B5462E',i:'beer'},nature:{t:'Парки и скверы',c:'#2E8A5C',i:'leaf'},
   fun:{t:'Развлечения и спорт',c:'#D2456A',i:'ball'},shop:{t:'Магазины и подарки',c:'#8A4B2A',i:'bag'},stay:{t:'Где жить',c:'#2C7DB8',i:'bed'}
@@ -116,19 +116,34 @@ async function loadData(onProgress){
   return DATA}
 
 const PHOTOS={};
-function applyVenues(V){const nn=s=>(s||'').toLowerCase().replace(/ё/g,'е').replace(/[^0-9a-zа-я]/g,'');
-  V.items.forEach(v=>{const x=(v.lon-84.957)*61646,y=(v.lat-56.4755)*111351;const ph=v.photos&&v.photos[0]?[v.photos[0].src,v.photos[0].credit||'',v.photos[0].license||'',v.photos[0].link||'']:null;
+function applyVenues(V){
+  const nn=s=>(s||'').toLowerCase().replace(/ё/g,'е').replace(/[^0-9a-zа-я]/g,'');
+  const bins=new Map(),cell=100,key=(x,y)=>Math.floor(x/cell)+','+Math.floor(y/cell);
+  const put=p=>{const k=key(p.x,p.y);if(!bins.has(k))bins.set(k,[]);bins.get(k).push(p)};
+  DATA.pois.forEach(put);
+  const around=(x,y)=>{const out=[];let a=Math.floor(x/cell),b=Math.floor(y/cell);
+    for(let i=a-1;i<=a+1;i++)for(let j=b-1;j<=b+1;j++)out.push(...(bins.get(i+','+j)||[]));return out};
+  const removed=new Set();
+  V.items.forEach(v=>{
+    if(!Number.isFinite(v.lon)||!Number.isFinite(v.lat))return;
+    const x=(v.lon-84.957)*61646,y=(v.lat-56.4755)*111351;
+    const ph=v.photos&&v.photos[0]?[v.photos[0].src,v.photos[0].credit||'',v.photos[0].license||'',v.photos[0].link||'']:null;
     if(ph){PHOTOS[v.id]=ph;PHOTOS[v.name]=ph}
-    const same=p=>Math.hypot(p.x-x,p.y-y)<45&&nn(p.t.name).slice(0,5)===nn(v.name).slice(0,5);
-    if(v.hidden){DATA.pois=DATA.pois.filter(p=>!same(p));return}
-    if(CUR.some(c=>Math.hypot(c.x-x,c.y-y)<60&&nn(c.name).slice(0,6)===nn(v.name).slice(0,6)))return;
-    let p=DATA.pois.find(same)||DATA.pois.find(p=>Math.hypot(p.x-x,p.y-y)<8);
-    if(!p){p={x,y,t:{},cat:v.cat};DATA.pois.push(p)}
-    p.x=x;p.y=y;p.cat=PCAT[v.cat]?v.cat:p.cat;p.vid=v.id;
-    p.t=Object.assign({},p.t,{name:v.name});if(v.hours)p.t.opening_hours=v.hours;if(v.phone)p.t.phone=v.phone;if(v.web)p.t.website=v.web;if(v.cuisine)p.t.cuisine=v.cuisine;
+    const candidates=around(x,y).filter(p=>!removed.has(p));
+    const same=p=>Math.hypot(p.x-x,p.y-y)<45&&nn(p.t.name)===nn(v.name);
+    if(v.hidden){candidates.filter(same).forEach(p=>removed.add(p));return}
+    if(CUR.some(c=>Math.hypot(c.x-x,c.y-y)<60&&nn(c.name)===nn(v.name)))return;
+    let p=candidates.find(same);
+    if(!p){p={x,y,t:{},cat:PCAT[v.cat]?v.cat:'other'};DATA.pois.push(p);put(p)}
+    p.x=x;p.y=y;p.cat=PCAT[v.cat]?v.cat:'other';p.vid=v.id;p.origin=v.origin||'osm';p.kind=v.kind||'';
+    p.t=Object.assign({},p.t,{name:v.name});
+    if(v.hours)p.t.opening_hours=v.hours;if(v.phone)p.t.phone=v.phone;if(v.web)p.t.website=v.web;if(v.cuisine)p.t.cuisine=v.cuisine;
     if(v.addr){p.t['addr:street']=v.addr;delete p.t['addr:housenumber']}
     if(v.pick||v.desc||ph)p.pick={name:v.name,kind:v.kind||'',addr:v.addr||'',why:v.why||'',desc:v.desc||'',moods:v.moods||[],price:v.prices||(v.price===0?'Бесплатно':v.price?'от '+v.price+' ₽':''),web:v.web||'',ph};
-    else delete p.pick})}
+    else delete p.pick;
+  });
+  DATA.pois=DATA.pois.filter(p=>!removed.has(p));
+}
 
 /* высота рельефа: билинейная интерполяция (мелкая сетка в центре, грубая — по всему городу) */
 function elevAt(x,y){const E=DATA.elev,E2=DATA.elev2;

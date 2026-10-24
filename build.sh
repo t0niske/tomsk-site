@@ -10,3 +10,5 @@ rm -rf podborki udivi-menya
 python3 src/pages.py src/tomsk.html .
 python3 src/venue_pages.py src/tomsk.html .
 python3 src/scenarios.py src/tomsk.html .
+
+python3 src/catalog_import_ui.py

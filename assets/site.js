@@ -27,7 +27,8 @@ const CATCOLOR = {food:'#DB7F33',culture:'#7A4FA0',nature:'#2E8A5C',fun:'#D2456A
 
 const VENUES0={"v":1,"items":[]};
 let PLACES=[],ALLV=[],CATALOG=[];
-const MCAT={food:'food',bar:'food',culture:'culture',church:'culture',nature:'nature',fun:'fun',shop:'shop',sight:'unusual',stay:'unusual'};
+CATS.push({id:'other',name:'Организации и услуги'});
+const MCAT={other:'other',food:'food',bar:'food',culture:'culture',church:'culture',nature:'nature',fun:'fun',shop:'shop',sight:'unusual',stay:'unusual'};
 const VMINS={food:75,bar:90,culture:90,church:20,nature:60,sight:20,fun:120,shop:30,stay:30};
 const VMOOD={date:'Свидание',rain:'Под крышей',kids:'С детьми',wood:'Деревянный Томск',night:'Вечер',free:'Бесплатно'};
 function sceneOf(v){const k=((v.kind||'')+' '+v.name).toLowerCase();switch(v.cat){
@@ -35,15 +36,15 @@ function sceneOf(v){const k=((v.kind||'')+' '+v.name).toLowerCase();switch(v.cat
   case'culture':return/театр|концерт|филармон|кино/.test(k)?(/кино/.test(k)?'cinema':'concert'):/галер/.test(k)?'gallery':'museum';
   case'church':return'church';case'nature':return/набереж/.test(k)?'river':'garden';case'fun':return/батут|верёв|верев|скалод|экстрим|фитнес|спорт/.test(k)?'climb':'fair';
   case'shop':return'market';default:return'house'}}
-function toPlace(v){const mo=v.moods||[];/* moods нужны подбору */const gx=(v.lon-84.957)*61646,gy=(v.lat-56.4755)*111351;
+function toPlace(v){const mo=v.moods||[];/* moods нужны подбору */const hasGeo=Number.isFinite(v.lon)&&Number.isFinite(v.lat),gx=hasGeo?(v.lon-84.957)*61646:null,gy=hasGeo?(v.lat-56.4755)*111351:null;
   const tags=v.tags&&v.tags.length?v.tags:[v.kind||'Место'].concat(mo.map(m=>VMOOD[m]).filter(t=>t&&t!==v.kind).slice(0,1));
   const ph=(v.photos||[]).map(f=>[f.src,f.credit||'',f.license||'',f.link||'']);
   // мини-карта: свои координаты у первых мест, остальным — приблизительно
   const mx=v.mx!=null?v.mx:Math.max(30,Math.min(970,611+gx*.0678-gy*.0325)),my=v.my!=null?v.my:Math.max(25,Math.min(415,267+gx*.0315-gy*.0277));
   return{id:v.id,name:v.name,cat:MCAT[v.cat]||'unusual',vcat:v.cat,kind:v.kind||'',tags,scene:v.scene||sceneOf(v),indoor:mo.includes('rain')||['food','bar','culture','shop'].includes(v.cat),
-    price:v.price!=null?v.price:(['nature','sight','church'].includes(v.cat)?0:null),addr:v.addr||'',mins:v.mins||VMINS[v.cat]||60,kids:mo.includes('kids'),rom:mo.includes('date'),
-    desc:v.desc||'',why:v.why||'',hours:v.hours||'',phone:v.phone||'',web:v.web||'',prices:v.prices||'',checked:v.checked||'',src:v.src||'',cuisine:v.cuisine||'',
-    feat:!!v.feat,pick:!!v.pick,moods:mo,ph:ph[0]||null,photos:ph,x:mx,y:my,gx:Math.round(gx),gy:Math.round(gy)}}
+    price:v.price!=null?v.price:(v.origin!=='supplier'&&['nature','sight','church'].includes(v.cat)?0:null),addr:v.addr||'',mins:v.mins||(v.origin==='supplier'?null:VMINS[v.cat]||60),kids:mo.includes('kids'),rom:mo.includes('date'),
+    desc:v.desc||'',why:v.why||'',origin:v.origin||'',email:v.email||'',social:v.social||{},payment:v.payment||'',hours:v.hours||'',phone:v.phone||'',web:v.web||'',prices:v.prices||'',checked:v.checked||'',src:v.src||'',cuisine:v.cuisine||'',
+    feat:!!v.feat,pick:!!v.pick,moods:mo,ph:ph[0]||null,photos:ph,x:mx,y:my,gx:hasGeo?Math.round(gx):null,gy:hasGeo?Math.round(gy):null}}
 function applyVenues(V){ALLV=V.items.filter(v=>!v.hidden).map(toPlace);
   PLACES=ALLV.filter(p=>p.pick).sort((a,b)=>(b.feat?1:0)-(a.feat?1:0));
   CATALOG=ALLV.map(p=>[p.name,p.vcat,p.kind,p.gx,p.gy,p.addr,p.hours,p.phone,p.web,p.cuisine,p.id,p.ph?p.ph[0]:''])}
@@ -693,7 +694,7 @@ const OH=(()=>{const D=['Su','Mo','Tu','We','Th','Fr','Sa'],RU=['вс','пн','�
 const byId=id=>ALLV.find(p=>p.id===id)||PLACES.find(p=>p.id===id);
 const PHOTOS={"nab": ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Набережная_реки_Томь.jpg/960px-Набережная_реки_Томь.jpg", "Артём Полоз", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Набережная_реки_Томь.jpg"], "shatr": ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Krasnoarmeyskaya_Street_71_Tomsk.jpg/960px-Krasnoarmeyskaya_Street_71_Tomsk.jpg", "Ymblanter", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Krasnoarmeyskaya_Street_71_Tomsk.jpg"], "kraev": ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Tomsk_Regional_Museum.jpg/960px-Tomsk_Regional_Museum.jpg", "Павел Андрющенко", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Tomsk_Regional_Museum.jpg"], "lager": ["https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Лагерный_сад.jpg/960px-Лагерный_сад.jpg", "Артём Полоз", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Лагерный_сад.jpg"], "roshcha": ["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/University_Grove_TSU.JPG/960px-University_Grove_TSU.JPG", "Bogdanov-62", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:University_Grove_TSU.JPG"], "dragon": ["https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Дом_с_драконами.JPG/960px-Дом_с_драконами.JPG", "LEANSER", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Дом_с_драконами.JPG"], "art": ["https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Томский_художественный_музей.jpg/960px-Томский_художественный_музей.jpg", "Максим Вотяков", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Томский_художественный_музей.jpg"], "chekhov": ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Anton_Chekhov_statue%2C_Tomsk%2C_Russia.jpg/960px-Anton_Chekhov_statue%2C_Tomsk%2C_Russia.jpg", "Sandy Balfour", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Anton_Chekhov_statue,_Tomsk,_Russia.jpg"], "gorsad": ["https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/City_garden_IMG_4900.jpg/960px-City_garden_IMG_4900.jpg", "Figure19", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:City_garden_IMG_4900.jpg"], "Ново-Соборная площадь": ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Сквер_на_Новособорной_площади.jpg/960px-Сквер_на_Новособорной_площади.jpg", "Sv lary", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Сквер_на_Новособорной_площади.jpg"], "Площадь Ленина": ["https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Tomsk_LeninSquare.jpg/960px-Tomsk_LeninSquare.jpg", "Maximaximax", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Tomsk_LeninSquare.jpg"], "Каменный мост": ["https://upload.wikimedia.org/wikipedia/commons/4/45/Stone_bridge_(Tomsk).jpg", "Павел Андрющенко", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Stone_bridge_(Tomsk).jpg"], "Татарская слобода": ["https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Татарская_ул.%2C_д._22.jpg/960px-Татарская_ул.%2C_д._22.jpg", "Павел Андрющенко", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Татарская_ул.,_д._22.jpg"], "Дом Крячкова": ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Кирова_7_IMG_2045.jpg/960px-Кирова_7_IMG_2045.jpg", "Figure19", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Кирова_7_IMG_2045.jpg"], "Университетская роща": ["https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/University_Grove_TSU.JPG/960px-University_Grove_TSU.JPG", "Bogdanov-62", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:University_Grove_TSU.JPG"], "Иверская часовня": ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/RussiaB_2879_-_Iberian_Chapel_(4160229085).jpg/960px-RussiaB_2879_-_Iberian_Chapel_(4160229085).jpg", "Dennis G. Jarvis", "CC BY-SA 2.0", "https://commons.wikimedia.org/wiki/File:RussiaB_2879_-_Iberian_Chapel_(4160229085).jpg"], "Знаменская церковь": ["https://upload.wikimedia.org/wikipedia/commons/5/5a/Знаменская_церковь_в_Томске.jpg", "Нестеров Олег", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Знаменская_церковь_в_Томске.jpg"], "Петропавловский собор": ["https://upload.wikimedia.org/wikipedia/commons/a/a4/Петропавловская_церковь_в_Томске.jpg", "Нестеров Олег", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Петропавловская_церковь_в_Томске.jpg"], "Польский костёл": ["https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Польский-костёл-в-Томске.jpg/960px-Польский-костёл-в-Томске.jpg", "Maximaximax", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Польский-костёл-в-Томске.jpg"], "Лютеранская церковь Святой Марии": ["https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Томская-кирха-DSC35819.jpg/960px-Томская-кирха-DSC35819.jpg", "Pavel Andryushchenko", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Томская-кирха-DSC35819.jpg"], "Богородице-Алексеевский монастырь": ["https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Kazan_church_in_Tomsk.jpg/960px-Kazan_church_in_Tomsk.jpg", "Maximaximax", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Kazan_church_in_Tomsk.jpg"], "Белая мечеть": ["https://upload.wikimedia.org/wikipedia/commons/f/fc/White-Mosque-(Tomsk).jpg", "Павел Андрющенко", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:White-Mosque-(Tomsk).jpg"], "Мемориальный музей «Следственная тюрьма НКВД»": ["https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Building_44_on_Lenin_Avenue_in_the_city_of_Tomsk.JPG/960px-Building_44_on_Lenin_Avenue_in_the_city_of_Tomsk.JPG", "Bogdanov-62", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Building_44_on_Lenin_Avenue_in_the_city_of_Tomsk.JPG"], "Музей деревянного зодчества": ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Кирова_7_IMG_2045.jpg/960px-Кирова_7_IMG_2045.jpg", "Figure19", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Кирова_7_IMG_2045.jpg"], "Томский планетарий": ["https://upload.wikimedia.org/wikipedia/commons/0/09/Prospekt_Lenina_in_Tomsk%2C_82а-1.jpg", "Павел Андрющенко", "CC BY-SA 2.5", "https://commons.wikimedia.org/wiki/File:Prospekt_Lenina_in_Tomsk,_82а-1.jpg"], "Томский ТЮЗ": ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Томский_ТЮЗ_DSC51868.jpg/960px-Томский_ТЮЗ_DSC51868.jpg", "Павел Андрющенко", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Томский_ТЮЗ_DSC51868.jpg"], "Театр куклы и актёра «Скоморох»": ["https://upload.wikimedia.org/wikipedia/commons/a/a7/Соляная-4-DSN43436-Panorama.jpg", "Павел Андрющенко", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Соляная-4-DSN43436-Panorama.jpg"], "Томская филармония": ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Томская_областная_государственная_филармония.jpg/960px-Томская_областная_государственная_филармония.jpg", "Тара-Амингу", "CC0", "https://commons.wikimedia.org/wiki/File:Томская_областная_государственная_филармония.jpg"], "Буфф-сад": ["https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Buff-garden_(Tomsk).jpg/960px-Buff-garden_(Tomsk).jpg", "Максим Вотяков", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Buff-garden_(Tomsk).jpg"], "Игуменский сад": ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Игуменский_парк.jpg/960px-Игуменский_парк.jpg", "Артём Полоз", "CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:Игуменский_парк.jpg"], "Михайловская роща": ["https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Михайловская_роща_в_Томске.jpg/960px-Михайловская_роща_в_Томске.jpg", "Максим Вотяков", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Михайловская_роща_в_Томске.jpg"], "Набережная Томи": ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Набережная_реки_Томь.jpg/960px-Набережная_реки_Томь.jpg", "Артём Полоз", "CC BY-SA 3.0", "https://commons.wikimedia.org/wiki/File:Набережная_реки_Томь.jpg"]};
 const photo=p=>{const f=p.ph||PHOTOS[p.id]||PHOTOS[p.name]||null;return f?[url(f[0]),...f.slice(1)]:null};
-const phImg=p=>{const f=photo(p);return f?`<img class="ph" src="${f[0]}" alt="${p.name}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''};
+const phImg=p=>{const f=photo(p);return f?`<img class="ph" src="${f[0]}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''};
 const phCredit=p=>{const f=photo(p);if(!f||!(f[1]||f[3]))return'';return`<p class="credit">Фото: ${f[3]?`<a href="${f[3]}" target="_blank" rel="noopener">${f[1]||'источник'}</a>`:f[1]}${f[2]?', '+f[2]:''}${/wikimedia/.test(f[3]||'')?' · Wikimedia Commons':''}</p>`};
 const priceTxt=p=>p===0?'Бесплатно':p==null?'уточняйте':`от ${p} ₽`;
 const tint=id=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))%997;return id[0]==='p'?`filter:hue-rotate(${h%70-35}deg) brightness(${.9+(h%7)/30})`:''};
@@ -728,7 +729,7 @@ function placeCard(p){
   const inR=route.includes(p.id);
   return `<article class="card" data-open="${p.id}" tabindex="0">
     <div class="media"><div style="position:absolute;inset:0;${tint(p.id)}">${scene(p.scene)}</div>${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="Хочу сходить">${ico('heart')}</button></div>
-    <div class="card-body"><h3>${VSLUG[p.id]?`<a class="card-link" href="${ROOT}mesto/${VSLUG[p.id]}/">${p.name}</a>`:p.name}</h3><p class="meta">${p.tags.join(' · ')}</p>
+    <div class="card-body"><h3>${VSLUG[p.id]?`<a class="card-link" href="${ROOT}mesto/${VSLUG[p.id]}/">${esc(p.name)}</a>`:p.name}</h3><p class="meta">${p.tags.join(' · ')}</p>
     <div class="foot"><span class="price">${p.price==null?'':priceTxt(p.price)}</span><span class="card-st">${p.hours&&OH.status(p.hours)?OH.status(p.hours).txt:''}</span></div></div></article>`;
 }
 function renderPlaces(){
@@ -771,31 +772,33 @@ function openSheet(id){
   const p=byId(id);if(!p)return;const inR=route.includes(id);
   const yurl='https://yandex.ru/maps/?text='+encodeURIComponent('Томск, '+p.name+', '+p.addr);
   $('#sheet').innerHTML=`<button class="x" id="sheetX" aria-label="Закрыть">${ico('x')}</button><div class="media">${scene(p.scene)}${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="Хочу сходить" style="right:54px">${ico('heart')}</button></div>
-  <div class="card-body"><p class="meta">${CATS.find(c=>c.id===p.cat).name}${p.demo?' · демо-заведение':''}</p><h3>${p.name}</h3>${VSLUG[p.id]?`<p><a class="btn btn-primary" style="text-decoration:none" href="${ROOT}mesto/${VSLUG[p.id]}/">Страница места →</a></p>`:''}${p.why?`<p class="desc"><b>${p.why}.</b></p>`:''}<p class="desc">${p.desc}</p>
-  <div class="facts"><div>Что это<b>${p.tags[0]}</b></div><div>Вход<b>${priceTxt(p.price)}</b></div><div>Займёт<b>${fmtMins(p.mins)}</b></div></div>
-  <div class="where">${ico('pin')}${p.addr}</div>${infoBlock(p)}${phCredit(p)}
+  <div class="card-body"><p class="meta">${CATS.find(c=>c.id===p.cat).name}${p.demo?' · демо-заведение':''}</p><h3>${esc(p.name)}</h3>${VSLUG[p.id]?`<p><a class="btn btn-primary" style="text-decoration:none" href="${ROOT}mesto/${VSLUG[p.id]}/">Страница места →</a></p>`:''}${p.why?`<p class="desc"><b>${esc(p.why)}.</b></p>`:''}<p class="desc">${esc(p.desc)}</p>
+  <div class="facts"><div>Что это<b>${esc(p.tags[0]||p.kind)}</b></div><div>Вход<b>${priceTxt(p.price)}</b></div><div>Займёт<b>${fmtMins(p.mins)}</b></div></div>
+  <div class="where">${ico('pin')}${esc(p.addr)}</div>${infoBlock(p)}${phCredit(p)}
   <div class="plan-actions"><button class="btn btn-primary" data-fav="${p.id}">${favs.has(p.id)?'♥ В списке «Хочу сходить»':'♡ Хочу сходить'}</button>${p.demo?'':`<a class="btn btn-ghost" href="${yurl}" target="_blank" rel="noopener">${ico('ext')}Яндекс Карты</a>`}</div></div>`;
   $('#sheet').classList.add('open');$('#scrim').classList.add('open');$('#sheetX').onclick=closeSheet;
 }
 function infoBlock(p){const st=p.hours?OH.status(p.hours):null;let h='';
   if(p.photos&&p.photos.length>1)h+=`<div class="gal">${p.photos.slice(1,7).map(f=>`<a href="${f[0]}" target="_blank" rel="noopener"><img src="${f[0]}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.remove()"></a>`).join('')}</div>`;
-  if(p.hours)h+=`<div class="oh ${st?(st.open?'on':'off'):''}">${st?`<b>${st.txt}</b> · `:''}${OH.human(p.hours)}</div>`;
-  if(p.prices)h+=`<p class="desc" style="font-size:14px">Цены: ${p.prices}</p>`;
-  const L=[];if(p.phone)L.push(`<a class="btn btn-ghost" href="tel:${p.phone.replace(/[^+\d]/g,'')}">${p.phone}</a>`);if(p.web)L.push(`<a class="btn btn-ghost" href="${p.web}" target="_blank" rel="noopener">${ico('ext')}Сайт</a>`);
+  if(p.hours)h+=`<div class="oh ${st?(st.open?'on':'off'):''}">${st?`<b>${st.txt}</b> · `:''}${esc(OH.human(p.hours))}</div>`;
+  if(p.prices)h+=`<p class="desc" style="font-size:14px">Цены: ${esc(p.prices)}</p>`;
+  const L=[];if(p.phone)L.push(`<a class="btn btn-ghost" href="tel:${p.phone.split(/[,;]/)[0].replace(/[^+\d]/g,'')}">${esc(p.phone)}</a>`);if(p.web)L.push(`<a class="btn btn-ghost" href="${p.web}" target="_blank" rel="noopener">${ico('ext')}Сайт</a>`);
+  if(p.email)L.push('<span class="credit">'+esc(p.email)+'</span>');
+  if(p.payment)h+='<p class="credit">Оплата: '+esc(p.payment)+'</p>';
   if(L.length)h+=`<div class="plan-actions" style="margin-top:0">${L.join('')}</div>`;
-  h+=`<p class="credit">${p.checked?`Часы проверены ${p.checked.split('-').reverse().join('.')} по <a href="${p.src}" target="_blank" rel="noopener">сайту заведения</a>. `:p.hours?'Часы по данным OpenStreetMap — лучше уточнить перед визитом. ':''}<button class="linkbtn" data-report="${p.name.replace(/"/g,'&quot;')}">Это ваше место или нашли ошибку?</button></p>`;return h}
-function closeSheet(){$('#sheet').classList.remove('open');if(!$('#drawer').classList.contains('open'))$('#scrim').classList.remove('open')}
+  h+=`<p class="credit">${p.checked?`Часы проверены ${p.checked.split('-').reverse().join('.')} по <a href="${p.src}" target="_blank" rel="noopener">сайту заведения</a>. `:p.hours?(p.origin==='supplier'?'Часы из предоставленной базы — уточните перед визитом. ':p.origin==='osm'?'Часы по данным OpenStreetMap — лучше уточнить перед визитом. ':'Часы лучше уточнить перед визитом. '):''}<button class="linkbtn" data-report="${p.name.replace(/"/g,'&quot;')}">Это ваше место или нашли ошибку?</button></p>`;return h}
+function closeSheet(){$('#sheet').classList.remove('open');if(!document.querySelector('#drawer')?.classList.contains('open'))$('#scrim').classList.remove('open')}
 $('#scrim').addEventListener('click',()=>{closeSheet();closeDrawer()});
 
 /* route */
-function fmtMins(m){const h=Math.floor(m/60),r=m%60;return h?`${h} ч${r?' '+r+' мин':''}`:`${r} мин`}
+function fmtMins(m){if(m==null)return'Уточняется';const h=Math.floor(m/60),r=m%60;return h?`${h} ч${r?' '+r+' мин':''}`:`${r} мин`}
 function toggleRoute(id){const i=route.indexOf(id);if(i>=0){route.splice(i,1);toast('Убрано из маршрута')}else{route.push(id);toast('Добавлено в маршрут · '+route.length)}saveRoute()}
 function saveRoute(){store.set('route',route);renderRoute();renderPlaces();renderMap()}
 function renderRoute(){
   $('#routeFabTxt').textContent=route.length?`Мой маршрут · ${route.length}`:'Мой маршрут';
   if(!route.length){$('#routeList').innerHTML=`<div class="empty" style="padding:28px">Здесь соберётся ваш день. Нажимайте «+ Маршрут» на карточках или попросите план в блоке «Удиви меня».</div>`;$('#routeTotal').textContent='0 мин';return}
   let total=0;$('#routeList').innerHTML=route.map((id,i)=>{const p=byId(id);total+=p.mins+(i?15:0);
-    return `${i?`<div class="r-walk">≈ 15 мин в пути</div>`:''}<div class="r-item"><span class="r-num">${i+1}</span><div style="min-width:0"><b>${p.name}</b><small>${fmtMins(p.mins)} · ${priceTxt(p.price)}</small></div>
+    return `${i?`<div class="r-walk">≈ 15 мин в пути</div>`:''}<div class="r-item"><span class="r-num">${i+1}</span><div style="min-width:0"><b>${esc(p.name)}</b><small>${fmtMins(p.mins)} · ${priceTxt(p.price)}</small></div>
     <div class="r-ctrl"><button data-mv="${i},-1" aria-label="Выше">${ico('up')}</button><button data-mv="${i},1" aria-label="Ниже">${ico('down')}</button><button data-rm="${i}" aria-label="Убрать">${ico('x')}</button></div></div>`}).join('');
   $('#routeTotal').textContent='≈ '+fmtMins(total);
 }
@@ -803,8 +806,8 @@ $('#routeList').addEventListener('click',e=>{const m=e.target.closest('[data-mv]
   if(m){const [i,d]=m.dataset.mv.split(',').map(Number),j=i+d;if(j<0||j>=route.length)return;[route[i],route[j]]=[route[j],route[i]];saveRoute()}
   if(r){route.splice(+r.dataset.rm,1);saveRoute()}});
 $('#clearRoute').addEventListener('click',()=>{route=[];saveRoute()});
-function openDrawer(){$('#drawer').classList.add('open');$('#scrim').classList.add('open')}
-function closeDrawer(){$('#drawer').classList.remove('open');if(!$('#sheet').classList.contains('open'))$('#scrim').classList.remove('open')}
+function openDrawer(){document.querySelector('#drawer')?.classList.add('open');$('#scrim').classList.add('open')}
+function closeDrawer(){document.querySelector('#drawer')?.classList.remove('open');if(!$('#sheet').classList.contains('open'))$('#scrim').classList.remove('open')}
 $('#routeFab').addEventListener('click',openDrawer);$('#closeDrawer').addEventListener('click',closeDrawer);
 
 /* events */
@@ -849,7 +852,7 @@ function roll(){
   plan.push(b?{t:'14:30',l:'Перекус',p:b}:{t:'14:30',l:'Пикник',txt:'Термос чая и пирожки из пекарни',sub:'Бесплатно, если взять с собой',scene:'coffee'});
   plan.push(e?{t:e.time.slice(0,5),l:'Вечер',txt:e.title,sub:`${e.d} октября · ${e.place}`,scene:e.scene}:{t:'17:00',l:'Вечер',p:evening||a});
   $('#plan').innerHTML=plan.map(s=>{const p=s.p;return `<div class="plan-step"><div class="plan-time">${s.t}<small>${s.l}</small></div><div class="plan-thumb">${scene(p?p.scene:s.scene)}${p?phImg(p):''}</div>
-    <div style="min-width:0"><h3>${p?p.name:s.txt}</h3><p>${p?`${p.tags[0]} · ${priceTxt(p.price)} · ${fmtMins(p.mins)}`:s.sub}</p></div>${p?`<button class="add" data-open="${p.id}">Подробнее</button>`:''}</div>`}).join('');
+    <div style="min-width:0"><h3>${p?p.name:s.txt}</h3><p>${p?`${esc(p.tags[0]||p.kind)} · ${priceTxt(p.price)} · ${fmtMins(p.mins)}`:s.sub}</p></div>${p?`<button class="add" data-open="${p.id}">Подробнее</button>`:''}</div>`}).join('');
 }
 $('#rollBtn').addEventListener('click',roll);$('#rollAgain').addEventListener('click',roll);
 $('#planToRoute').addEventListener('click',()=>{let n=0;plan.forEach(s=>{if(s.p&&!route.includes(s.p.id)){route.push(s.p.id);n++}});saveRoute();toast(n?`Добавлено мест: ${n}`:'Эти места уже в маршруте');openDrawer()});
@@ -873,7 +876,7 @@ function renderMap(){
     <text x="840" y="372" fill="var(--ink-2)" font-size="12" font-style="italic" font-family="Manrope,sans-serif">р. Ушайка</text>
     <text x="760" y="120" fill="var(--ink-2)" font-size="22" font-weight="800" letter-spacing="6" font-family="Unbounded,sans-serif" opacity=".55">ТОМСК</text>
     ${routeLine}</svg>
-    ${PLACES.filter(p=>p.feat).map(p=>{const dim=mapCat&&p.cat!==mapCat;return `<button class="pin ${dim?'dim':''} ${popId===p.id?'on':''}" data-pin="${p.id}" style="left:${p.x/10}%;top:${p.y/4.4}%" aria-label="${p.name}">
+    ${PLACES.filter(p=>p.feat).map(p=>{const dim=mapCat&&p.cat!==mapCat;return `<button class="pin ${dim?'dim':''} ${popId===p.id?'on':''}" data-pin="${p.id}" style="left:${p.x/10}%;top:${p.y/4.4}%" aria-label="${esc(p.name)}">
       <svg class="shape" viewBox="0 0 36 44"><path d="M18 43s15-13.5 15-25A15 15 0 0 0 3 18c0 11.5 15 25 15 25z" fill="${CATCOLOR[p.cat]}" stroke="#fff" stroke-width="2.5"/></svg>${ico(p.cat)}</button>`}).join('')}<div id="popWrap"></div>`;
   if(popId)showPop(popId);
 }
@@ -885,7 +888,7 @@ function showPop(id){
   document.querySelectorAll('.pin').forEach(x=>x.classList.toggle('on',x.dataset.pin===id));
   const inR=route.includes(id);
   $('#popWrap').innerHTML=`<div class="pop" style="left:${left}px;top:${top}px"><button class="x" aria-label="Закрыть">${ico('x')}</button><div class="media">${scene(p.scene)}${phImg(p)}</div>
-    <div class="card-body"><h3>${p.name}</h3><div class="where">${ico('pin')}${p.addr}</div><div class="foot"><span class="price">${p.tags[0]}</span><button class="add" data-open="${p.id}">Открыть</button></div></div></div>`;
+    <div class="card-body"><h3>${esc(p.name)}</h3><div class="where">${ico('pin')}${esc(p.addr)}</div><div class="foot"><span class="price">${esc(p.tags[0]||p.kind)}</span><button class="add" data-open="${p.id}">Открыть</button></div></div></div>`;
 }
 function hidePop(){popId=null;const w=$('#popWrap');if(w)w.innerHTML='';document.querySelectorAll('.pin.on').forEach(x=>x.classList.remove('on'))}
 
@@ -905,6 +908,7 @@ $('#collGrid').addEventListener('click',e=>{const b=e.target.closest('[data-coll
 
 const MAP_URL=ROOT+'map.html';
 const CATN={food:'Кафе и рестораны',bar:'Бары',culture:'Музеи, театры, кино',fun:'Развлечения и спорт',nature:'Парки',sight:'Достопримечательности',church:'Храмы',stay:'Где жить',shop:'Магазины и подарки'};
+CATN.other='Другие организации';
 const CF={q:'',c:'',open:false,n:30};
 function vStatus(v){return v[6]?OH.status(v[6]):null}
 function catFilter(){const q=CF.q.toLowerCase().replace(/ё/g,'е').split(/\s+/).filter(Boolean);
@@ -913,8 +917,8 @@ function catFilter(){const q=CF.q.toLowerCase().replace(/ё/g,'е').split(/\s+/)
 function vRow(v,i){const st=vStatus(v);const q=encodeURIComponent(v[0]+(v[5]?', '+v[5]:''));
   return `<article class="vrow">${v[11]?`<img class="vthumb" src="${esc(v[11])}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''}<h3><button class="vname" data-open="${v[10]}">${esc(v[0])}</button></h3><div class="k">${esc(v[2])}${v[9]?' · '+esc(v[9].split(';').slice(0,2).join(', ').replace(/_/g,' ')):''}</div>
   ${v[5]?`<div class="a">${esc(v[5])}</div>`:''}${st?`<div class="s ${st.open?'on':'off'}">${st.txt}</div>`:v[6]?`<div class="a">${esc(v[6])}</div>`:''}
-  <div class="acts"><a href="${MAP_URL}#poi=${v[3]},${v[4]}" target="_blank" rel="noopener">На карте</a><a href="https://2gis.ru/tomsk/search/${q}" target="_blank" rel="noopener">2ГИС</a><a href="https://yandex.ru/maps/?text=${encodeURIComponent('Томск, ')}${q}" target="_blank" rel="noopener">Яндекс</a>
-  ${v[8]?`<a href="${esc(v[8])}" target="_blank" rel="noopener">Сайт</a>`:''}${v[7]?`<a href="tel:${v[7].replace(/[^+\d]/g,'')}">Позвонить</a>`:''}<button data-report="${esc(v[0])}">Исправить</button></div></article>`}
+  <div class="acts">${Number.isFinite(v[3])&&Number.isFinite(v[4])?`<a href="${MAP_URL}#poi=${v[3]},${v[4]}" target="_blank" rel="noopener">На карте</a>`:''}<a href="https://2gis.ru/tomsk/search/${q}" target="_blank" rel="noopener">2ГИС</a><a href="https://yandex.ru/maps/?text=${encodeURIComponent('Томск, ')}${q}" target="_blank" rel="noopener">Яндекс</a>
+  ${v[8]?`<a href="${esc(v[8])}" target="_blank" rel="noopener">Сайт</a>`:''}${v[7]?`<a href="tel:${v[7].split(/[,;]/)[0].replace(/[^+\d]/g,'')}">Позвонить</a>`:''}<button data-report="${esc(v[0])}">Исправить</button></div></article>`}
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function renderCatalog(){const L=catFilter();
   // сначала места с часами и контактами — они полезнее
@@ -949,7 +953,7 @@ function openReport(name){const el=$('#rep');el.innerHTML=`<button class="x" id=
     try{const r=await fetch(ROOT+'report.php',{method:'POST',body:new FormData(f)});const j=await r.json();if(!j.ok)throw new Error(j.error||'ошибка');
       f.innerHTML='<div class="ok">Спасибо! Мы получили данные и обновим карточку после проверки.</div>'}
     catch(err){btn.disabled=false;btn.textContent='Отправить';$('#repMsg').innerHTML='<p class="desc" style="color:#B5462E">Не получилось отправить. Форма работает, когда сайт размещён на хостинге; попробуйте позже.</p>'}})}
-function closeReport(){$('#rep').classList.remove('open');if(!$('#sheet').classList.contains('open')&&!$('#drawer').classList.contains('open'))$('#scrim').classList.remove('open')}
+function closeReport(){$('#rep').classList.remove('open');if(!$('#sheet').classList.contains('open')&&!document.querySelector('#drawer')?.classList.contains('open'))$('#scrim').classList.remove('open')}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-report]');if(!b)return;e.preventDefault();e.stopPropagation();closeSheet();openReport(b.dataset.report)},true);
 $('#scrim').addEventListener('click',closeReport);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeReport()});
 {const m=location.hash.match(/^#report=(.*)$/);if(m)setTimeout(()=>openReport(decodeURIComponent(m[1])),300)}
@@ -990,7 +994,7 @@ function pickCard(p){const st=p.hours?OH.status(p.hours):null;const href=VSLUG[p
   return `<article class="card pk-card" data-open="${p.id}" tabindex="0">
     <div class="media"><div style="position:absolute;inset:0;${tint(p.id)}">${scene(p.scene)}</div>${phImg(p)}<button class="fav" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}" aria-label="Хочу сходить">${ico('heart')}</button>
       <span class="pk-kind">${p.kind||p.tags[0]||''}</span></div>
-    <div class="card-body"><h3>${href?`<a class="card-link" href="${href}">${p.name}</a>`:p.name}</h3>${p.why||p.desc?`<p class="pk-why">${(p.why||p.desc.split('. ')[0]).replace(/\.$/,'')}</p>`:''}
+    <div class="card-body"><h3>${href?`<a class="card-link" href="${href}">${esc(p.name)}</a>`:p.name}</h3>${p.why||p.desc?`<p class="pk-why">${(p.why||p.desc.split('. ')[0]).replace(/\.$/,'')}</p>`:''}
     <div class="foot"><span class="price">${p.price==null?'':priceTxt(p.price)}</span>${st?`<span class="pk-st ${st.open?'on':'off'}">${st.txt}</span>`:''}</div></div></article>`}
 function renderPick(){
   document.querySelectorAll('#pick [data-k]').forEach(g=>g.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(PK[g.dataset.k]===b.dataset.v))));

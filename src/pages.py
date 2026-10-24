@@ -214,7 +214,7 @@ def build(out):
   <h2>Откуда данные</h2>
   <ul>
     <li><b>Описания мест</b> пишет редакция сайта.</li>
-    <li><b>Адреса, часы работы и контакты</b> — с официальных сайтов заведений и из открытой базы <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (лицензия ODbL).</li>
+    <li><b>Адреса, часы работы и контакты</b> — с официальных сайтов заведений из предоставленной владельцем сайта базы и открытой базы <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (лицензия ODbL).</li>
     <li><b>Фото</b> — Wikimedia Commons (авторы и лицензии подписаны под каждым снимком) и сами заведения.</li>
     <li><b>Карта</b> — здания и улицы OpenStreetMap, рельеф SRTM.</li>
   </ul>

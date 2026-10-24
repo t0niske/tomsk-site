@@ -1,0 +1,20 @@
+{
+  "input_rows": 9554,
+  "added": 8168,
+  "matched_rows": 1386,
+  "added_without_coordinates": 143,
+  "total_venues": 9594,
+  "categories": {
+    "other": 967,
+    "culture": 214,
+    "fun": 3407,
+    "shop": 187,
+    "bar": 108,
+    "food": 1132,
+    "stay": 193,
+    "nature": 235,
+    "sight": 1633,
+    "church": 92
+  },
+  "source_sha256": "1fccb56b6636a7330f13fc19dc019811371702cc3564d49fd17c3cd87b6c89e7"
+}

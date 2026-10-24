@@ -74,8 +74,10 @@ def main():
         except (ValueError,TypeError):lat=lon=None
         if not name: raise ValueError('Empty name at CSV row '+str(rownum))
         kind=r['Подрубрика'].split(',')[0].strip() or r['Рубрика'].split(',')[0].strip()
-        if kind in SKIP_KINDS or (name in SKIP_NAMES_NO_ADDR and not address): report['skipped_rows']+=1;continue
         tags=[x.strip() for x in r['Подрубрика'].split(',') if x.strip()]
+        # банкетный зал, записанный как «Кейтеринг» или «Доставка готовых блюд», — всё равно банкетный зал
+        if 'Банкетные залы' in tags: kind='Банкетные залы';tags=[kind]+[t for t in tags if t!=kind]
+        if kind in SKIP_KINDS or (name in SKIP_NAMES_NO_ADDR and not address): report['skipped_rows']+=1;continue
         cat=category(kind or r['Рубрика'])
         rawhours=r['Время работы'].strip()
         v=dict(name=name,cat=cat,kind=kind,addr=addr,lat=lat,lon=lon,origin='supplier',checked='',pick=False,

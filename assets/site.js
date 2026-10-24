@@ -958,7 +958,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-report]');
 $('#scrim').addEventListener('click',closeReport);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeReport()});
 {const m=location.hash.match(/^#report=(.*)$/);if(m)setTimeout(()=>openReport(decodeURIComponent(m[1])),300)}
 
-fetch(ROOT+'data/venues.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(V=>{if(!V||!V.items)return;window.VRAW=V;applyVenues(V);renderAll();renderCatalog();renderMap();renderRoute();safe(renderStamps);if(!plan.length)safe(roll);document.dispatchEvent(new Event('venues'))}).catch(()=>{});
+(document.getElementById('venue')?Promise.reject():fetch(ROOT+'data/venues.json',{cache:'no-cache'})).then(r=>r.ok?r.json():null).then(V=>{if(!V||!V.items)return;window.VRAW=V;applyVenues(V);renderAll();renderCatalog();renderMap();renderRoute();safe(renderStamps);if(!plan.length)safe(roll);document.dispatchEvent(new Event('venues'))}).catch(()=>{});
 
 /* ===== подбор: с кем и когда ===== */
 const PK={who:null,when:'now',seed:0};

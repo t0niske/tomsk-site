@@ -63,7 +63,9 @@ def site_js():
         "$('#searchForm').addEventListener('submit',e=>{e.preventDefault();if(PAGE!=='places'){goPlaces({q:$('#q').value.trim()});return}")
     rep("$('#searchJump').addEventListener('click',()=>{",
         "$('#searchJump').addEventListener('click',()=>{if(!document.getElementById('q')){location.href=ROOT+'mesta/#all';return}")
-    rep("fetch('data/venues.json',{cache:'no-store'})", "fetch(ROOT+'data/venues.json',{cache:'no-cache'})")
+    # страница заведения всю базу (~1 МБ) не грузит: свежие данные места берёт из data/v/<id>.json (venue.js)
+    rep("fetch('data/venues.json',{cache:'no-store'})",
+        "(document.getElementById('venue')?Promise.reject():fetch(ROOT+'data/venues.json',{cache:'no-cache'}))")
     rep("renderAll();renderCatalog();renderMap();renderRoute()}).catch(()=>{});",
         "renderAll();renderCatalog();renderMap();renderRoute();safe(renderStamps);if(!plan.length)safe(roll);document.dispatchEvent(new Event('venues'))}).catch(()=>{});")
     rep("const MAP_URL='map.html';", "const MAP_URL=ROOT+'map.html';")

@@ -162,6 +162,7 @@
         ${v.origin === 'osm' ? '<br>Адрес, часы и контакты — по данным <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© участники OpenStreetMap</a>.' : ''}
         <button class="lnk" data-report="${esc(v.name)}">${I('flag')}Нашли ошибку?</button></p>
     </div>
+    <div class="v-card v-pass" id="vPass" hidden></div>
   </aside>
 </div>
 ${near.length ? `<section class="wrap v-more"><h2>Рядом пешком</h2><div class="mc-grid">${near.map(([o, d]) => mini(o, X, walkMin(d) + ' мин пешком')).join('')}</div></section>` : ''}

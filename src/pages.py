@@ -9,12 +9,14 @@
   * у всех страниц общая шапка, подвал, карточка места, маршрут и форма «нашли ошибку».
 Функция shell() используется и генератором страниц заведений (src/venue_pages.py).
 """
-import os, re, sys
+import hashlib, os, re, sys
 
 SITE_URL = os.environ.get('SITE_URL', 'https://t0niske.github.io/tomsk-site/')
 
 NAV = [('kuda-shodit/', 'Куда сходить', 'ideas'), ('mesta/', 'Места', 'places'), ('sobytiya/', 'События', 'events'),
-       ('derevyannyj-tomsk/', 'Деревянный Томск', 'wood'), ('map.html', 'Карта', 'map')]
+       ('pasport/', 'Паспорт', 'passport'), ('map.html', 'Карта', 'map')]
+# скрипт «Паспорта Томска» (src/passport.py кладёт его в assets/); ?v= — чтобы браузеры не держали старую версию
+PASSPORT_VER = hashlib.sha256(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'passport', 'client.js'), 'rb').read()).hexdigest()[:12]
 
 SRC = {}
 
@@ -154,6 +156,7 @@ def shell(*, title, desc, root, page, active, body, head_extra='', live=False):
 {SRC['overlays']}
 {SRC['live'] if live else ''}
 <script src="{root}assets/site.js" defer></script>
+<script src="{root}assets/passport.js?v={PASSPORT_VER}" defer></script>
 </body>
 </html>
 '''
@@ -185,7 +188,7 @@ def build(out):
     ideas = ('<section id="ideas"><div class="wrap"><div class="sec-head"><div><h2>Идеи на любой случай</h2></div>'
              + more('kuda-shodit/', 'Все идеи') + '</div>' + scenarios.tiles('') + '</div></section>')
     promo = '''<section id="promo"><div class="wrap"><div class="promo">
-  <a class="p2" href="derevyannyj-tomsk/"><b>Деревянный Томск</b><span>Резные дома, терема и наличники. Найдите все и соберите штампы в паспорт.</span><i>Открыть паспорт →</i></a>
+  <a class="p2" href="pasport/"><b>Паспорт Томска</b><span>Кофейни, музеи, парки и бары. Приходите, отмечайтесь по геолокации и собирайте серии. Сезон «Зима в Томске» — до 31 марта.</span><i>Открыть паспорт →</i></a>
   <a class="p3" href="mesta/"><b>Выбор редакции</b><span>Все места, которые мы проверили и описали сами, и полная база заведений города.</span><i>Смотреть места →</i></a>
   <a class="p1" href="map.html"><b>Карта 2D и 3D</b><span>Весь город с домами, рельефом и заведениями. Можно облететь центр в 3D.</span><i>Открыть карту →</i></a>
 </div></div></section>'''
@@ -207,10 +210,14 @@ def build(out):
     inner('sobytiya/', 'events', 'Афиша событий Томска — Куда сходить в Томске', 'Концерты, спектакли, выставки и прогулки в Томске по дням.',
           'Афиша событий', 'Выберите день: точки под датами отмечают дни, когда что-то происходит. Афиша пока демонстрационная — скоро подключим настоящую.',
           drop_head(S['events']))
-    inner('derevyannyj-tomsk/', 'wood', 'Деревянный Томск: резные дома и паспорт прогулки — Куда сходить в Томске',
-          'Деревянное зодчество Томска: Дом с шатром, Дом с драконами, Дом с жар-птицами и другие резные дома. Паспорт со штампами.',
-          'Деревянный Томск', 'В Томске сохранилось одно из лучших в России собраний деревянного зодчества. Пройдитесь по резным домам и соберите штампы.',
-          S['passport'] + '\n<section><div class="wrap"><a class="btn btn-primary" href="../mesta/?f=%7B%22q%22%3A%22%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%22%7D">Показать деревянные дома в каталоге →</a></div></section>')
+    # деревянный Томск — одна из серий паспорта, а не отдельный раздел меню
+    wood_series = ('<section><div class="wrap promo"><a class="p2" href="../pasport/#wood"><b>Серия «Деревянный Томск»</b>'
+                   '<span>11 резных домов, улиц и музеев. Отмечайтесь в паспорте по геолокации и получите звание «Знаток наличников».</span>'
+                   '<i>Открыть серию →</i></a></div></section>')
+    inner('derevyannyj-tomsk/', 'wood', 'Деревянный Томск: резные дома и наличники — Куда сходить в Томске',
+          'Деревянное зодчество Томска: Дом с шатром, Дом с драконами, Дом с жар-птицами и другие резные дома. Серия в Паспорте Томска.',
+          'Деревянный Томск', 'В Томске сохранилось одно из лучших в России собраний деревянного зодчества. Пройдитесь по резным домам и соберите их в Паспорт Томска.',
+          wood_series + '\n<section><div class="wrap"><a class="btn btn-primary" href="../mesta/?f=%7B%22q%22%3A%22%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%22%7D">Показать деревянные дома в каталоге →</a></div></section>')
     about = '''<section><div class="wrap prose">
   <p><b>«Куда сходить в Томске»</b> — некоммерческий городской гид. Без рекламы и платных мест в выдаче: мы показываем то, что сами считаем интересным.</p>
   <h2>Откуда данные</h2>

@@ -12,5 +12,6 @@ rm -rf mesto
 python3 src/venue/select_pages.py
 python3 src/venue_pages.py src/tomsk.html .
 python3 src/scenarios.py src/tomsk.html .
+python3 src/passport.py .
 
 python3 src/catalog_import_ui.py

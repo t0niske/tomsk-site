@@ -249,7 +249,7 @@ def build(single, out):
     root = '../'
     hub = (pages.page_head(root, [('', 'Главная'), (None, 'Куда сходить')], 'Куда сходить в Томске', 'Выберите, с кем и когда, — и получите готовые идеи: только проверенные места, без рекламы.')
            + f'<section class="sc-sec"><div class="wrap">{tiles(root)}</div></section>'
-           + '<section class="sc-sec"><div class="wrap promo"><a class="p2" href="../derevyannyj-tomsk/"><b>Деревянный Томск</b><span>Резные дома, терема и наличники — главная гордость города.</span><i>Смотреть →</i></a>'
+           + '<section class="sc-sec"><div class="wrap promo"><a class="p2" href="../pasport/"><b>Паспорт Томска</b><span>Собирайте кофейни, музеи, парки и бары города. Сезон «Зима в Томске» — до 31 марта.</span><i>Открыть →</i></a>'
              '<a class="p3" href="../mesta/"><b>Выбор редакции</b><span>Все места, которые мы проверили и описали сами.</span><i>Смотреть →</i></a>'
              '<a class="p1" href="../sobytiya/"><b>Афиша</b><span>Что происходит в городе по дням.</span><i>Смотреть →</i></a></div></section>')
     os.makedirs(os.path.join(out, 'kuda-shodit'), exist_ok=True)
